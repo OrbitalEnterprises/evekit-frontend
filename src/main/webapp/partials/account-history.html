@@ -1,0 +1,180 @@
+<div class="container-fluid">
+
+<div class="row col-wrap" style="padding-top: 15px;">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <table style="border: 0px; border-collapse: collapse;">
+          <tr>
+            <td nowrap><h3 class="panel-title">Account Synchronization History for <b>{{accountName}}</b> {{loading ? "(Loading ...)" : ""}}</h3></td>
+            <td align="right" width="100%">
+              <div class="btn-group pull-right">
+                <button type="button" class="btn btn-default" ng-click="$location.url('/account/view')">Return to Account List</button>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      
+      <div class="panel-body">
+      
+      <table style="width: 100%; padding: 0px; border-collapse: separate; border-spacing: 4px; border: 0px;">
+          <tr ng-hide="!isChar">
+            <td align="center" valign="bottom" class="history-label">Sync Start</td>
+            <td align="center" valign="bottom" class="history-label">Sync End</td>
+            <td><div class="sync-history-cont"><div title="Account Status" class="history-label history-label-rot">Account Status</div></div></td>
+            <td><div class="sync-history-cont"><div title="Account Balance Status" class="history-label history-label-rot">Balance</div></div></td>
+            <td><div class="sync-history-cont"><div title="Asset List Status" class="history-label history-label-rot">Assets</div></div></td>
+            <td><div class="sync-history-cont"><div title="Blueprints Status" class="history-label history-label-rot">Blueprints</div></div></td>
+            <td><div class="sync-history-cont"><div title="Bookmarks Status" class="history-label history-label-rot">Bookmarks</div></div></td>
+            <td><div class="sync-history-cont"><div title="Calendar Event Attendees Status" class="history-label history-label-rot">Calendar</div></div></td>
+            <td><div class="sync-history-cont"><div title="Character Sheet Status" class="history-label history-label-rot">Sheet</div></div></td>
+            <td><div class="sync-history-cont"><div title="Chat Channels Status" class="history-label history-label-rot">Chat</div></div></td>
+            <td><div class="sync-history-cont"><div title="Contact List Status" class="history-label history-label-rot">Contacts</div></div></td>
+            <td><div class="sync-history-cont"><div title="Contact Notifications Status" class="history-label history-label-rot">Contact Notes</div></div></td>
+            <td><div class="sync-history-cont"><div title="Contracts Status" class="history-label history-label-rot">Contracts</div></div></td>
+            <td><div class="sync-history-cont"><div title="Contract Items Status" class="history-label history-label-rot">Contract Items</div></div></td>
+            <td><div class="sync-history-cont"><div title="Contract Bids Status" class="history-label history-label-rot">Contract Bids</div></div></td>
+            <td><div class="sync-history-cont"><div title="Faction Warfare Stats Status" class="history-label history-label-rot">FacWar</div></div></td>
+            <td><div class="sync-history-cont"><div title="Industry Job Status" class="history-label history-label-rot">Industry</div></div></td>
+            <td><div class="sync-history-cont"><div title="Kill Log Status" class="history-label history-label-rot">Kills</div></div></td>
+            <td><div class="sync-history-cont"><div title="Mail Bodies Status" class="history-label history-label-rot">Mail Bodies</div></div></td>
+            <td><div class="sync-history-cont"><div title="Mailing Lists Status" class="history-label history-label-rot">Mailing Lists</div></div></td>
+            <td><div class="sync-history-cont"><div title="Mail Messages Status" class="history-label history-label-rot">Mail Msgs</div></div></td>
+            <td><div class="sync-history-cont"><div title="Market Order Status" class="history-label history-label-rot">Market</div></div></td>
+            <td><div class="sync-history-cont"><div title="Medals Status" class="history-label history-label-rot">Medals</div></div></td>
+            <td><div class="sync-history-cont"><div title="Notifications Status" class="history-label history-label-rot">Notes</div></div></td>
+            <td><div class="sync-history-cont"><div title="Notification Texts Status" class="history-label history-label-rot">Note Text</div></div></td>
+            <td><div class="sync-history-cont"><div title="Planetary Colonies Status" class="history-label history-label-rot">Planetary Colonies</div></div></td>
+            <td><div class="sync-history-cont"><div title="Research Status" class="history-label history-label-rot">Research</div></div></td>
+            <td><div class="sync-history-cont"><div title="Skill In Training Status" class="history-label history-label-rot">In Training</div></div></td>
+            <td><div class="sync-history-cont"><div title="Skill Queue Status" class="history-label history-label-rot">Skill Queue</div></div></td>
+            <td><div class="sync-history-cont"><div title="Standings Status" class="history-label history-label-rot">Standings</div></div></td>
+            <td><div class="sync-history-cont"><div title="Upcoming Calendar Events Status" class="history-label history-label-rot">Upcoming</div></div></td>
+            <td><div class="sync-history-cont"><div title="Wallet Journal Status" class="history-label history-label-rot">Journal</div></div></td>
+            <td><div class="sync-history-cont"><div title="Wallet Transactions Status" class="history-label history-label-rot">Transactions</div></div></td>
+            <td style="width: 18px"></td>
+          </tr>
+          <tr ng-hide="isChar">
+            <td align="center" valign="bottom" class="history-label">Sync Start</td>
+            <td align="center" valign="bottom" class="history-label">Sync End</td>
+            <td><div class="sync-history-cont"><div title="Account Balance Status" class="history-label history-label-rot">Balance</div></div></td>
+            <td><div class="sync-history-cont"><div title="Asset List Status" class="history-label history-label-rot">Assets</div></div></td>
+            <td><div class="sync-history-cont"><div title="Blueprints Status" class="history-label history-label-rot">Blueprints</div></div></td>
+            <td><div class="sync-history-cont"><div title="Bookmarks Status" class="history-label history-label-rot">Bookmarks</div></div></td>
+            <td><div class="sync-history-cont"><div title="Contact List Status" class="history-label history-label-rot">Contacts</div></div></td>
+            <td><div class="sync-history-cont"><div title="Container Log Status" class="history-label history-label-rot">Container Log</div></div></td>
+            <td><div class="sync-history-cont"><div title="Contracts Status" class="history-label history-label-rot">Contracts</div></div></td>
+            <td><div class="sync-history-cont"><div title="Contract Items Status" class="history-label history-label-rot">Contract Items</div></div></td>
+            <td><div class="sync-history-cont"><div title="Contract Bids Status" class="history-label history-label-rot">Contract Bids</div></div></td>
+            <td><div class="sync-history-cont"><div title="Corporation Sheet Status" class="history-label history-label-rot">Sheet</div></div></td>
+            <td><div class="sync-history-cont"><div title="Corp Medals Status" class="history-label history-label-rot">Corp Medals</div></div></td>
+            <td><div class="sync-history-cont"><div title="Corp Titles Status" class="history-label history-label-rot">Corp Titles</div></div></td>
+            <td><div class="sync-history-cont"><div title="Customs Offices Status" class="history-label history-label-rot">Customs Offices</div></div></td>
+            <td><div class="sync-history-cont"><div title="Facilities Status" class="history-label history-label-rot">Facilities</div></div></td>
+            <td><div class="sync-history-cont"><div title="Faction Warfare Stats Status" class="history-label history-label-rot">FacWar</div></div></td>
+            <td><div class="sync-history-cont"><div title="Industry Job Status" class="history-label history-label-rot">Industry</div></div></td>
+            <td><div class="sync-history-cont"><div title="Kill Log Status" class="history-label history-label-rot">Kills</div></div></td>
+            <td><div class="sync-history-cont"><div title="Market Order Status" class="history-label history-label-rot">Market</div></div></td>
+            <td><div class="sync-history-cont"><div title="Member Medals Status" class="history-label history-label-rot">Member Medals</div></div></td>
+            <td><div class="sync-history-cont"><div title="Member Security Status" class="history-label history-label-rot">Member Security</div></div></td>
+            <td><div class="sync-history-cont"><div title="Member Security Log Status" class="history-label history-label-rot">Member Sec. Log</div></div></td>
+            <td><div class="sync-history-cont"><div title="Member Tracking Status" class="history-label history-label-rot">Member Tracking</div></div></td>
+            <td><div class="sync-history-cont"><div title="Outpost List Status" class="history-label history-label-rot">Outpost List</div></div></td>
+            <td><div class="sync-history-cont"><div title="Outpost Details Status" class="history-label history-label-rot">Outpost Details</div></div></td>
+            <td><div class="sync-history-cont"><div title="Shareholder Status" class="history-label history-label-rot">Shareholders</div></div></td>
+            <td><div class="sync-history-cont"><div title="Standings Status" class="history-label history-label-rot">Standings</div></div></td>
+            <td><div class="sync-history-cont"><div title="Starbase List Status" class="history-label history-label-rot">Starbase List</div></div></td>
+            <td><div class="sync-history-cont"><div title="Starbase Details Status" class="history-label history-label-rot">Starbase Details</div></div></td>
+            <td><div class="sync-history-cont"><div title="Wallet Journal Status" class="history-label history-label-rot">Journal</div></div></td>
+            <td><div class="sync-history-cont"><div title="Wallet Transactions Status" class="history-label history-label-rot">Transactions</div></div></td>
+            <td style="width: 18px"></td>
+          </tr>
+          <tr ng-hide="!isChar">
+            <td align="center" class="history-spacer">YYYY-MM-DD HH:MM:SS</td>
+            <td align="center" class="history-spacer">YYYY-MM-DD HH:MM:SS</td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td style="width: 18px"></td>
+          </tr>          
+          <tr ng-hide="isChar">
+            <td align="center" class="history-spacer">YYYY-MM-DD HH:MM:SS</td>
+            <td align="center" class="history-spacer">YYYY-MM-DD HH:MM:SS</td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td class="sync-history-spacer"></td>
+            <td style="width: 18px"></td>
+          </tr>          
+      </table>
+      <div id="historyScroll" style="overflow-y: scroll; overflow-x: hidden; z-index: 1; margin-top: -21px;">
+      <table id="historyScrollTable" style="width: 100%; padding: 0px; border-collapse: separate; border-spacing: 4px; border: 0px;">
+          <tr ng-repeat="his in syncHistory">
+            <td align="center" class="entry-label">{{getStartTime(his)|date:'yyyy-MM-dd HH:mm:ss':'UTC'}}</td>
+            <td align="center" class="entry-label">{{getEndTime(his)|date:'yyyy-MM-dd HH:mm:ss':'UTC'}}</td>
+            <td ng-repeat="stat in statusPointerArray" class="{{determineHistoryClass(his, $index)}}" title="{{determineHistoryTitle(his, $index)}}"></td>
+          </tr>
+      </table>
+      </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>

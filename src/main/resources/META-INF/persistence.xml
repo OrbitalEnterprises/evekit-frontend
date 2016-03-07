@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence
+    xmlns="http://java.sun.com/xml/ns/persistence"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+    version="2.0">
+
+    <persistence-unit name="evekit-properties">
+        <description>
+            EveKit Configuration Properties
+        </description>
+        
+        <class>enterprises.orbital.db.DBProperty</class>
+        <class>enterprises.orbital.evekit.account.GeneralSequenceNumber</class>
+        <class>enterprises.orbital.evekit.account.EveKitUserAccount</class>
+        <class>enterprises.orbital.evekit.account.EveKitUserAuthSource</class>
+        <class>enterprises.orbital.evekit.account.SynchronizedAccountAccessKey</class>
+        <class>enterprises.orbital.evekit.account.SynchronizedEveAccount</class>
+        <class>enterprises.orbital.evekit.model.CapsuleerSyncTracker</class>
+        <class>enterprises.orbital.evekit.model.CorporationSyncTracker</class>
+        <class>enterprises.orbital.evekit.model.SyncTracker</class>
+
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="${enterprises.orbital.evekit.frontend.db.properties.driver}"/>
+            <property name="javax.persistence.jdbc.url" value="${enterprises.orbital.evekit.frontend.db.properties.url}"/>
+            <property name="javax.persistence.jdbc.user" value="${enterprises.orbital.evekit.frontend.db.properties.user}"/>
+            <property name="javax.persistence.jdbc.password" value="${enterprises.orbital.evekit.frontend.db.properties.password}"/>
+            <property name="hibernate.dialect" value="${enterprises.orbital.evekit.frontend.db.properties.dialect}"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.format_sql" value="true" />
+        </properties>
+
+    </persistence-unit>
+
+    <persistence-unit name="evekit-account">
+        <description>
+            EveKit Account
+        </description>
+        
+        <class>enterprises.orbital.db.DBProperty</class>
+        <class>enterprises.orbital.evekit.account.GeneralSequenceNumber</class>
+        <class>enterprises.orbital.evekit.account.EveKitUserAccount</class>
+        <class>enterprises.orbital.evekit.account.EveKitUserAuthSource</class>
+        <class>enterprises.orbital.evekit.account.SynchronizedAccountAccessKey</class>
+        <class>enterprises.orbital.evekit.account.SynchronizedEveAccount</class>
+        <class>enterprises.orbital.evekit.model.CapsuleerSyncTracker</class>
+        <class>enterprises.orbital.evekit.model.CorporationSyncTracker</class>
+        <class>enterprises.orbital.evekit.model.SyncTracker</class>
+
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="${enterprises.orbital.evekit.frontend.db.account.driver}"/>
+            <property name="javax.persistence.jdbc.url" value="${enterprises.orbital.evekit.frontend.db.account.url}"/>
+            <property name="javax.persistence.jdbc.user" value="${enterprises.orbital.evekit.frontend.db.account.user}"/>
+            <property name="javax.persistence.jdbc.password" value="${enterprises.orbital.evekit.frontend.db.account.password}"/>
+            <property name="hibernate.dialect" value="${enterprises.orbital.evekit.frontend.db.account.dialect}"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.format_sql" value="true" />
+        </properties>
+
+    </persistence-unit>
+
+</persistence>

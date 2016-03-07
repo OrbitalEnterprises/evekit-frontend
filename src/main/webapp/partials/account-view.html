@@ -1,0 +1,90 @@
+<div class="container-fluid">
+
+<div class="row col-wrap" style="padding-top: 15px;">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <table style="border-collapse: collapse; border: 0px;">
+          <tr>
+            <td nowrap><h3 class="panel-title">Synchronized Accounts {{loading ? "(Loading ...)" : ""}}</h3></td>
+            <td align="right" width="100%">
+              <div class="btn-group pull-right">
+                <button type="button" class="btn btn-default" ng-click="reloadList()">Refresh</button>
+                <button type="button" class="btn btn-default" ng-click="$location.url('/account/mod/-1')">Add Account</button>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="panel-body">
+      
+      <div ng-repeat="account in accountlist" class="panel panel-default" ng-hide="accountlist.length == 0">
+        <div class="panel-heading">
+          <table style="border-collapse: collapse; border: 0px;">
+            <tr>
+              <td nowrap>
+              <h4 class="panel-title">
+              {{account.name}}
+              <span class="label label-danger" ng-hide="account.markedForDelete == -1" style="margin-left: 20px;">
+              {{'MARKED FOR DELETE (Estimated Delete Time:' + (account.markedForDelete|date:'yyyy-MM-dd HH:mm:ss':'UTC') + ')'}}
+              </span>
+              <span class="label label-danger" ng-hide="!account.expired_" style="margin-left: 20px;">
+              {{'EVE ACCESS KEY EXPIRED AT ' + (account.expires_|date:'yyyy-MM-dd HH:mm:ss':'UTC')}}
+              </span>
+              </h4></td>
+              <td align="right" width="100%">
+                <div class="btn-group pull-right">
+                  <button type="button" class="btn btn-default" ng-hide="account.markedForDelete != -1" 
+                          ng-click="$location.url('/account/history/' + account.aid + '/' + account.characterType + '/' + account.name)">Sync History</button>
+                  <button type="button" class="btn btn-default" ng-hide="account.markedForDelete != -1" ng-click="sendSyncRequest(account);">Sync Now</button>
+                  <a href="{{'/snapshot?acct=' + account.aid}}" target="_blank" class="btn btn-default" role="button">Download Latest Snapshot</a>
+                  <button type="button" class="btn btn-default" ng-hide="account.markedForDelete != -1" 
+                          ng-click="$location.url('/access/view/' + account.aid + '/' + account.characterType + '/' + account.name + '/' + account.eveCharacterName + '/' + account.eveCorporationName + '/' + account.eveCharacterID + '/' + account.eveCorporationID)">Access Keys</button>
+                  <button type="button" class="btn btn-default" ng-hide="account.markedForDelete != -1" ng-click="$location.url('/account/mod/' + account.aid)">Modify</button>
+                  <button type="button" class="btn btn-default" ng-hide="account.markedForDelete != -1" ng-click="deleteAccount(account);">Delete</button>
+                  <button type="button" class="btn btn-default" ng-hide="account.markedForDelete == 1" ng-click="restoreAccount(account);">Restore</button>
+                </div>
+             </td>
+            </tr>
+          </table>
+        </div>
+        <div class="panel-body">
+          <table class="table">
+            <tr>
+              <td rowspan="2" valign="middle" align="center">
+                <img width="64px" height="64px" style="border-width: 2px; border-style: solid;" ng-src="{{'https://image.eveonline.com/character/' + account.eveCharacterID + '_128.jpg'}}">
+              </td>
+              <td rowspan="2" valign="middle" align="center">
+                <img width="64px" height="64px" style="border-width: 2px; border-style: solid;" ng-src="{{'https://image.eveonline.com/corporation/' + account.eveCorporationID + '_128.png'}}">
+              </td>
+              <td nowrap>Key ID</td>
+              <td nowrap>VCode</td>
+              <td nowrap>AutoSync</td>
+              <td nowrap>Type</td>
+              <td nowrap>Character</td>
+              <td nowrap>Corporation</td>
+              <td nowrap>Last Sync</td>
+            </tr>
+            <tr>
+              <td nowrap>{{account.eveKey}}</td>
+              <td nowrap>{{account.eveVCode}}</td>
+              <td nowrap>{{account.autoSynchronized}}</td>
+              <td nowrap>{{account.characterType ? 'CHARACTER' : 'CORPORATION'}}</td>
+              <td nowrap>{{account.eveCharacterName}}</td>
+              <td nowrap>{{account.eveCorporationName}}</td>
+              <td nowrap>{{account.lastSynchronized != -1 ? (account.lastSynchronized|date:'yyyy-MM-dd HH:mm:ss':'UTC') : 'Never'}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      
+      <div class="alert alert-warning" role="alert" ng-hide="accountlist.length > 0 || loading">
+      No synchronized accounts have been specified.  Use the "Add Account" button to create an account.
+      </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>

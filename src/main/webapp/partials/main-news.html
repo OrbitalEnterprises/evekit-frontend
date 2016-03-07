@@ -1,0 +1,169 @@
+<div class="container-fluid">
+
+<div class="row col-wrap">
+  <div class="col-md-12">
+    <div id="intro-panel" class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Welcome to EveKit!</h3>
+      </div>
+      <div class="panel-body col-extend">
+      <table style="width: 100%; border-collapse: collapse; border: 0px;">
+      <tr><td style="width: 50%; padding: 10px; vertical-align: top">
+      EveKit is a web-based toolkit for building applications based on the EVE Online API and EVE Online static data export.
+      You can configure EveKit to automatically download your Character and Corporation data, then use REST
+      or one of the supported client APIs (currently: Java, Javascript and PHP) to access your data.
+      
+      <h4 style="padding-bottom: 1em; padding-top: 1em;">Key features:</h4>
+      
+      <table style="border-collapse: collapse; border: 0px;">
+      <tr>
+        <td nowrap align="right" valign="middle" style="padding-bottom: 10px;">
+        <span class="glyphicon glyphicon-download glyph-list"></span>
+        <td style="padding-left: 10px; padding-bottom: 10px;">
+        EveKit can download for both characters and corporations, at least as frequently as the EVE API servers allow.
+        </td>
+      </tr>
+      <tr>
+        <td nowrap align="right" valign="middle" style="padding-bottom: 10px;">
+        <span class="glyphicon glyphicon-calendar glyph-list"></span>
+        </td>
+        <td style="padding-left: 10px; padding-bottom: 10px;">
+        EveKit synchronizes your data on each download and keeps a <b>complete history</b> of everything.
+        Want to know what your assets looked like a month ago?  No problem.  The EveKit APIs allow you to
+        access your data at a date you specify (defaulting to the latest live data).
+        </td>
+      </tr>
+      <tr>
+        <td nowrap align="right" valign="middle" style="padding-bottom: 10px;">
+        <span class="glyphicon glyphicon-tags glyph-list"></span>
+        </td>
+        <td style="padding-left: 10px; padding-bottom: 10px;">
+        EveKit lets you attach persistent <b>meta data</b> to your synchronized data.  This lets you do things like tag your
+        blueprint originals with the appropriate ME and PE (not really needed as of Hyperion, yay!).
+        </td>
+      </tr>
+      <tr>
+        <td nowrap align="right" valign="middle" style="padding-bottom: 10px;">
+        <span class="glyphicon glyphicon-lock glyph-list"></span>
+        </td>
+        <td style="padding-left: 10px; padding-bottom: 10px;">
+        The EveKit access API supports a <b>key</b> and <b>hash</b> scheme, similar to the EVE Online API key scheme, 
+        so you can give different people different access to your data.
+        </td>
+      </tr>
+      <tr>
+        <td nowrap align="right" valign="middle" style="padding-bottom: 10px;">
+        <span class="glyphicon glyphicon-cloud-download glyph-list"></span>
+        </td>
+        <td style="padding-left: 10px; padding-bottom: 10px;">
+        Your synchronized data is always available in <b>bulk</b> form.  We recognize that not everyone will want to use 
+        the EveKit APIs to access their data.  You can request a snapshot of your data directly from the accounts page at
+        any time.  We'll send you the snapshot in CSV format.  We don't trap your data behind our APIs, you can
+        get a complete snapshot any time you like.  See the <a href="#/account/faq" title="Account FAQ">Account FAQ</a> 
+        for details on how often snapshots are created.
+        </td>
+      </tr>
+      </table>
+      </td>
+      <td style="width: 50%; padding: 10px; vertical-align: top">
+      <h4 style="padding-bottom: 1em;">Getting Started:</h4>
+      
+      <table style="border-collapse: collapse; border: 0px;">
+      <tr>
+        <td nowrap align="right" valign="top" style="padding-bottom: 20px;">
+        <span class="circle-list">1</span>
+        </td>
+        <td valign="top" style="padding-left: 10px; padding-bottom: 20px;">
+        Sign in using one of the third party providers listed in the upper right corner.
+        At EveKit, we don't maintain login credentials (who wants that headache?).  We only
+        pull basic identification via OAuth from the third party you use for sign in.
+        </td>
+      </tr>
+      <tr>
+        <td nowrap align="right" valign="top" style="padding-bottom: 20px;">
+        <span class="circle-list">2</span>
+        </td>
+        <td valign="top" style="padding-left: 10px; padding-bottom: 20px;">
+        Once you're logged in, select "Sync Accounts -> Create Sync Account" from the menu.  
+        </td>
+      </tr>
+      <tr>
+        <td nowrap align="right" valign="top" style="padding-bottom: 20px;">
+        <span class="circle-list">3</span>
+        </td>
+        <td valign="top" style="padding-left: 10px; padding-bottom: 20px;">
+        On the "Add Account" page, you'll need to:
+        <ul>
+          <li> Provide an EVE Online API key and vCode to use for synchronization.
+          <li> Select whether to synchronize a character or corporation.
+          <li> Select which character to use for synchronization.
+          <li> Select whether you want to synchronize automatically or manually.
+        </ul>
+        </td>
+      </tr>
+      <tr>
+        <td nowrap align="right" valign="top" style="padding-bottom: 20px;">
+        <span class="circle-list">4</span>
+        </td>
+        <td valign="top" style="padding-left: 10px; padding-bottom: 20px;">
+        That's it!  To access your data online, create a data access key by
+        selecting "Data Access Keys -&gt; Data Access Keys for &lt;your_account&gt;".
+        If you prefer offline access, you can click "Download Latest Snapshot" from
+        the account list (we'll download your data as a zip of CSV files).  
+        You can find more information about accounts and access keys on the 
+        <a href="#/account/faq" title="Account FAQ">Account FAQ</a>.
+        </td>
+      </tr>
+      </table>
+      
+      <h4 style="padding-top: 1em; padding-bottom: 1em;">Need more help?</h4>
+
+      Check out our <a href="#/main/guide" title="Guides">Guides, Tutorials and Videos</a> section!
+      
+      </td>
+      </tr>
+      </table>
+      </div>
+    </div>
+  </div>
+  
+</div>  <!-- row -->
+
+<div class="row col-wrap">
+  <div class="col-md-6">
+    <div id="news-panel" class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><a href="http://blog.orbital.enterprises/search/label/evekit" target="_blank">Recent Blog Updates About EveKit</a></h3>
+      </div>
+      <div id="news-scroll" class="panel-body col-extend">
+        <ul id="news-scroll-list" class="list-group">
+          <li ng-repeat="ni in newsList" class="list-group-item" style="border: none; margin-bottom: 10px;">
+            <span class="badge">{{(ni.updated_ !== null ? 'Updated ' : 'Created ')}} {{getNewsDate(ni)|date:'yyyy-MM-dd HH:mm:ss':'UTC'}}</span>
+            <h4 class="list-group-item-heading"><a href="{{ni.linkRef_}}" target="_blank">{{ni.title_}}</a></h4>
+            <p class="list-group-item-text" ng-bind-html="ni.renderDetail_"></p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-6">
+    <div id="about-panel" class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">About EveKit</h3>
+      </div>
+      <div class="panel-body">
+      <ul>
+      <li> EveKit is provided by Dark Planet Ventures (DPVT), a one player - multiple alts extremely tiny EVE corporation.
+      <li> Federated login decals from <a href='https://github.com/necolas/css3-social-signin-buttons' target="_blank">CSS3 Social Signin Buttons</a>.
+      <li> Static EVE data is based off of the static dump packages provided by <a href="https://www.fuzzwork.co.uk/dump" target="_blank">Steve Ronuken</a>.
+      <li> Last but not least, many thanks to the contributors and documentors at the <a href='http://eveonline-third-party-documentation.readthedocs.org/' target="_blank">EVE Third Party Documentation Project</a>. 
+      </ul>
+      </div>
+    </div>
+  </div>
+  
+</div> <!-- row -->
+
+<!-- End of view -->
+</div>

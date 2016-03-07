@@ -1,0 +1,30 @@
+<div class="container-fluid">
+
+<div class="row col-wrap">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">User Account Information {{loading ? "(Loading...)" : ""}}</h3>
+      </div>
+
+      <div class="panel-body col-extend">
+      <b>Last Sign On:</b> {{lastlogin|date:'yyyy-MM-dd HH:mm:ss':'UTC'}} UTC <b>via</b> <b>{{lastloginmethod}}</b>
+      <p><p>
+      <b>User since:</b> {{createdate|date:'yyyy-MM-dd':'UTC'}}
+      <p><p>
+      <b>Sign ons:</b>
+      <table class="table">
+      <tr ng-repeat="meth in signonMethods">
+        <td nowrap ng-hide="signon[meth.name] == undefined"><span class="btn-auth btn-{{meth.name}}"><b>{{meth.display}}</b></span> as <b>{{signon[meth.name].screenname}}</b></td>
+        <td nowrap ng-hide="signon[meth.name] == undefined"><button type="button" class="btn btn-info" value="Remove" ng-click="removeAuthSource(meth.name);">Remove</button></td>
+        <td nowrap ng-hide="signon[meth.name] != undefined"><a class="btn-auth btn-{{meth.name}}" href="" ng-click="addAuthSource(meth.name);">Add <b>{{meth.display}}</b> Sign On</a></td>
+        <td ng-hide="signon[meth.name] != undefined"></td>
+      </tr>
+      </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</div>
