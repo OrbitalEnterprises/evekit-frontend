@@ -8,7 +8,7 @@ var CapsuleerSyncTrackerStatusFieldList = [
                                            'calendarEventAttendeesStatus',
                                            'characterSheetStatus',
                                            'chatChannelsStatus',
-                                           'contactliststatus',
+                                           'contactListStatus',
                                            'contactNotificationsStatus',
                                            'contractsStatus',
                                            'contractItemsStatus',
