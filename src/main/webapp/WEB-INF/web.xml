@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee" version="2.5">
+  <!-- Frontend welcome file -->
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
+  <!-- Main servlet for frontend services -->
   <servlet>
     <servlet-name>jersey</servlet-name>
     <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
@@ -16,6 +18,7 @@
     <servlet-name>jersey</servlet-name>
     <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
+  <!-- Swagger servlet which provides swagger.json among other things -->
   <servlet>
     <servlet-name>Jersey2Config</servlet-name>
     <servlet-class>io.swagger.jersey.config.JerseyJaxrsConfig</servlet-class>
@@ -33,6 +36,7 @@
     </init-param>
     <load-on-startup>2</load-on-startup>
   </servlet>
+  <!-- Filter for allowing cross origin calls -->
   <filter>
     <filter-name>ApiOriginFilter</filter-name>
     <filter-class>enterprises.orbital.evekit.frontend.ApiOriginFilter</filter-class>
@@ -41,4 +45,13 @@
     <filter-name>ApiOriginFilter</filter-name>
     <url-pattern>/api/*</url-pattern>
   </filter-mapping>
+  <!-- Snapshot Dump Handler -->
+  <servlet>
+    <servlet-name>DownloadSnapshotHandler</servlet-name>
+    <servlet-class>enterprises.orbital.evekit.frontend.DownloadSnapshotHandler</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DownloadSnapshotHandler</servlet-name>
+    <url-pattern>/snapshot</url-pattern>
+  </servlet-mapping>  
 </web-app>
