@@ -27,25 +27,20 @@
           });
         };
         // Send a synchronization request.
-        // TODO: implement this
-        $scope.sendSyncRequest = function(id) {
-//          var infoMsg = DialogService.simpleInfoMessage('Sending synchronization request...', 30);
-//          var status = SyncAccount.sync({id: id},
-//              function() {
-//            DialogService.removeMessage(infoMsg);
-//            if (angular.isDefined(status.errorcode) || !status.success) {
-//              // Server error on sync request.
-//              var msg = 'sending synchronization request';
-//              if (angular.isDefined(status.errormsg))
-//                msg += ': ' + status.errormsg;
-//              DialogService.serverErrorMessage(msg, 10);
-//            } else {
-//              DialogService.simpleInfoMessage('Account scheduled for synchronization.  If the account has not already been synchronized recently, then account sync history will show sync status shortly.', 40);
-//            }
-//          }, function() {
-//            DialogService.removeMessage(infoMsg);
-//            DialogService.connectionErrorMessage('sending synchronization request', 10);
-//          });
+        $scope.sendSyncRequest = function(acct) {
+          var infoMsg = DialogService.simpleInfoMessage('Sending synchronization request...', 30);
+          AccountWSService.requestSync(acct.userAccount.uid, acct.aid)
+          .then(function(stat) {
+            $scope.$apply(function() {
+              DialogService.removeMessage(infoMsg);
+              DialogService.simpleInfoMessage('Account scheduled for synchronization.  If the account has not already been synchronized recently, then account sync history will show sync status shortly.', 40);
+            });
+          }).catch(function(err) {
+            $scope.$apply(function() {
+              DialogService.removeMessage(infoMsg);
+              DialogService.serverErrorMessage('sending sync request: ' + err.errorMessage, 10);
+            });
+          });
         };
         // Delete a sync account.
         $scope.deleteAccount = function(acct) {

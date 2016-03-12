@@ -303,8 +303,6 @@ public class AuthenticationWS {
     EveKitUserAuthSource targetSource = availableSources.get(0);
     AuthUtil.signOn(request, user, targetSource);
     return Response.ok().build();
-    // URIBuilder builder = makeStandardBuilder(request);
-    // return Response.temporaryRedirect(new URI(builder.toString())).build();
   }
 
 }
