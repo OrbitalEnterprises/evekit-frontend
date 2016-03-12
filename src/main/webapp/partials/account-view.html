@@ -28,8 +28,8 @@
               <span class="label label-danger" ng-hide="account.markedForDelete == -1" style="margin-left: 20px;">
               {{'MARKED FOR DELETE (Estimated Delete Time:' + ((account.markedForDelete + (24 * 60 * 60 * 1000))|date:'yyyy-MM-dd HH:mm:ss':'UTC') + ')'}}
               </span>
-              <span class="label label-danger" ng-hide="!account.expired_" style="margin-left: 20px;">
-              {{'EVE ACCESS KEY EXPIRED AT ' + (account.expires_|date:'yyyy-MM-dd HH:mm:ss':'UTC')}}
+              <span class="label label-danger" ng-show="account.expired" style="margin-left: 20px;">
+              EVE XML API KEY EXPIRED -- CONTACT KEY OWNER FOR RENEWAL
               </span>
               </h4></td>
               <td align="right" width="100%">

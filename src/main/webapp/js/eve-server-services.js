@@ -31,10 +31,39 @@ var xmlResponseHandler = function(response) {
 eveKitServerServices.factory('CharacterInfo', ['$resource', 'RemoteHandler',
   function($resource, RemoteHandler) {
     return $resource('https://api.eveonline.com/account/Characters.xml.aspx', {},
-        {list: 
-          {method: 'GET', 
-           params: {keyID: -1, vCode: ''}, 
+        {list:
+          {method: 'GET',
+           params: {keyID: -1, vCode: ''},
            isArray: true,
            transformResponse: xmlResponseHandler}});
     }]);
+
+var keyInfoResponseHandler = function(response) {
+  // Response will be raw XML text which we parse and extract
+  $response = $( $.parseXML(response) );
+  var data = $response.find('key');
+  if (angular.isDefined(data) && data.length > 0) {
+    return {
+        accessMask: data[0].getAttribute("accessMask"),
+        type: data[0].getAttribute("type"),
+        expires: data[0].getAttribute("expires")
+    };
+  }
+  data = $response.find('error');
+  if (angular.isDefined(data) && data.length > 0) {
+    return { code: parseInt(data[0].getAttribute("code")) };
+  }
+  return null;
+};
+
+eveKitServerServices.factory('APIKeyInfo', ['$resource', 'RemoteHandler',
+  function($resource, RemoteHandler) {
+    return $resource('https://api.eveonline.com/account/APIKeyInfo.xml.aspx', {},
+        {get:
+          {method: 'GET',
+           params: {keyID: -1, vCode: ''},
+           isArray: false,
+           transformResponse: keyInfoResponseHandler}});
+    }]);
+
 })();

@@ -3,8 +3,8 @@
   var eveKitAccount = angular.module('eveKitAccount', ['ngResource', 'ngSanitize', 'ngRoute', 'eveKitDialog', 'eveKitAccountWS', 'eveKitTrackerWS', 'eveKitServerServices']);
 
   eveKitAccount.controller('AccountViewCtrl',
-      ['$scope', '$timeout', '$location', 'DialogService', 'AccountWSService',
-       function($scope, $timeout, $location, DialogService, AccountWSService) {
+      ['$scope', '$timeout', '$location', 'DialogService', 'AccountWSService', 'APIKeyInfo',
+       function($scope, $timeout, $location, DialogService, AccountWSService, APIKeyInfo) {
         $scope.sectionName = "Sync Account : List";
         $scope.accountlist = [];
         $scope.loading = false;
@@ -18,6 +18,33 @@
               $scope.loading = false;
               $scope.accountlist = accts;
             });
+            // Check expiry info for each account
+            var updater = function(el, i) {
+              return function() {
+                APIKeyInfo.get({keyID: el.eveKey, vCode: el.eveVCode},
+                    angular.noop,
+                    function(err) {
+                      // Expired keys will report: 403 (Forbidden)
+                      // <eveapi version="2">
+                      //   <currentTime>2016-03-12 04:35:55</currentTime>
+                      //   <error code="222">
+                      //     Key has expired. Contact key owner for access renewal.
+                      //   </error>
+                      //   <cachedUntil>2016-03-13 04:35:55</cachedUntil>
+                      // </eveapi>
+                      if (angular.isDefined(err.data) && angular.isDefined(err.data.code) && (err.data.code == 222 || err.data.code == 220)) {
+                        // Key expired or doesn't fullfill corporation requirements anymore
+                        var newval = $.extend(true, {}, el);
+                        newval['expired'] = true;
+                        // Splice here is necessary to trigger angular update
+                        $scope.accountlist.splice(i, 1, newval);
+                      }
+                    });
+              };
+            }
+            for (var i = 0; i < accts.length; i++) {
+              (updater(accts[i], i))();
+            }
           }).catch(function(err) {
             $scope.$apply(function() {
               $scope.loading = false;
