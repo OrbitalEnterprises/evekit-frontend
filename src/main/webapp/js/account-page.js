@@ -504,7 +504,7 @@
               });
               $scope.syncHistory = $scope.syncHistory.concat(toadd);
               $scope.syncHistory.sort(function(a, b) {
-                return a.syncStart - b.syncStart;
+                return b.syncStart - a.syncStart;
               });
               if (angular.isDefined(opt_cb)) opt_cb();
             });

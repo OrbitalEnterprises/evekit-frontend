@@ -42,7 +42,7 @@
                           ng-click="$location.url('/access/view/' + account.aid + '/' + account.characterType + '/' + account.name + '/' + account.eveCharacterName + '/' + account.eveCorporationName + '/' + account.eveCharacterID + '/' + account.eveCorporationID)">Access Keys</button>
                   <button type="button" class="btn btn-default" ng-hide="account.markedForDelete != -1" ng-click="$location.url('/account/mod/' + account.aid)">Modify</button>
                   <button type="button" class="btn btn-default" ng-hide="account.markedForDelete != -1" ng-click="deleteAccount(account);">Delete</button>
-                  <button type="button" class="btn btn-default" ng-hide="account.markedForDelete == 1" ng-click="restoreAccount(account);">Restore</button>
+                  <button type="button" class="btn btn-default" ng-hide="account.markedForDelete == -1" ng-click="restoreAccount(account);">Restore</button>
                 </div>
              </td>
             </tr>
