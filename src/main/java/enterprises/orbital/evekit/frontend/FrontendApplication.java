@@ -32,18 +32,16 @@ public class FrontendApplication extends Application {
   @Override
   public Set<Class<?>> getClasses() {
     Set<Class<?>> resources = new HashSet<Class<?>>();
-
-    // // Local resources
+    // Local resources
     resources.add(AccountWS.class);
     resources.add(SyncTrackerWS.class);
     resources.add(AuthenticationWS.class);
     resources.add(ReleaseWS.class);
     resources.add(AdminWS.class);
-
     // Swagger additions
     resources.add(io.swagger.jaxrs.listing.ApiListingResource.class);
     resources.add(io.swagger.jaxrs.listing.SwaggerSerializers.class);
-
+    // Return resource set
     return resources;
   }
 

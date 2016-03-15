@@ -1,7 +1,7 @@
 /* EveKit Module */
 (function(){
 var eveKit = angular.module('eveKit', [
-  'ngRoute', 'ngResource', 'eveKitDialog', 'eveKitRemoteServices', 'eveKitAccountWS', 'eveKitMain', 'eveKitAccount', 'eveKitAccess', 'eveKitAdmin']);
+  'ngRoute', 'ngResource', 'eveKitDialog', 'eveKitRemoteServices', 'eveKitAccountWS', 'eveKitMain', 'eveKitAccount', 'eveKitAccess', 'eveKitAdmin', 'eveKitAPI']);
 
 // Capture any authorization errors before we process the rest of the window location
 var searchParams = window.location.search;
@@ -84,13 +84,13 @@ eveKit.config(['$routeProvider',
         templateUrl: 'partials/access-view.html',
         controller: 'AccessViewCtrl'
       }).
+      when('/api/model', {
+        templateUrl: 'partials/api-model.html',
+        controller: 'APIModelCtrl'
+      }).
 //      when('/api/faq/:section?', {
 //        templateUrl: 'partials/api-faq.html',
 //        controller: 'APIFAQCtrl'
-//      }).
-//      when('/api/sync', {
-//        templateUrl: 'partials/api-sync.html',
-//        controller: 'APISyncCtrl'
 //      }).
 //      when('/api/sde', {
 //        templateUrl: 'partials/api-sde.html',
@@ -228,32 +228,36 @@ eveKit.controller('EveKitAuthCtrl', ['$scope', '$route', '$timeout', 'UserCreden
                               pop: true
                             }]
                           },
-//                          { menuID: 4,
-//                            title: 'API',
-//                            display: 'API',
-//                            urlPrefix: '/api/',
-//                            menulist: [ {
-//                              title: 'EVE Account API',
-//                              display: 'EVE Account API',
-//                              link: '#/api/sync'
-//                            }, {
+                          { menuID: 4,
+                            title: 'API',
+                            display: 'API',
+                            urlPrefix: '/api/',
+                            menulist: [ {
+                              title: 'Model API',
+                              display: 'Model API',
+                              link: '#/api/model'
+                            },
+//                            {
 //                              title: 'Static Data Export API',
 //                              display: 'Static Data Export API',
 //                              link: '#/api/sde'
-//                            }, {
+//                            },
+//                            {
 //                              title: 'Reference Data API',
 //                              display: 'Reference Data API',
 //                              link: '#/api/ref'
-//                            }, {
+//                            },
+//                            {
 //                              title: 'Data Source API',
 //                              display: 'Data Source API',
 //                              link: '#/api/datasource'
-//                            }, {
-//                              title: 'API FAQ',
-//                              display: 'API FAQ',
-//                              link: '#/api/faq'
-//                            }]
-//                          },
+//                            },
+                            {
+                              title: 'API FAQ',
+                              display: 'API FAQ (external)',
+                              link: 'https://groups.google.com/forum/#!topic/orbital-enterprises/5sogZQ_C8xM'
+                            }]
+                          },
                           { menuID: 5,
                             title: 'Admin',
                             display: 'Admin',
