@@ -2,7 +2,7 @@
 (function(){
   var eveKitAccess = angular.module('eveKitAccess', ['ngResource', 'ngSanitize', 'ngRoute', 'eveKitDialog', 'eveKitAccountWS']);
 
-  eveKitAccess.controller('AccessViewCtrl', 
+  eveKitAccess.controller('AccessViewCtrl',
       ['$scope', '$location', '$routeParams', 'DialogService', 'AccountWSService',
        function($scope, $location, $routeParams, DialogService, AccountWSService) {
         $scope.accountID = angular.isDefined($routeParams.acctid) ? parseInt($routeParams.acctid) : -1;
@@ -15,7 +15,7 @@
         if ($scope.accountID == -1) {
           // This should never happen.  Send us back to the view page.
           DialogService.ackDialog('warning', 'Account ID is missing.  If this problem persists, please contact the site admin.', 20, function() {
-            $location.url('/account/view');            
+            $location.url('/account/view');
           })
           return;
         }
@@ -51,7 +51,7 @@
           }).catch(function(err) {
             $scope.$apply(function() {
               $scope.loading = false;
-              DialogService.connectionErrorMessage('loading data access key list: ' + err.errorMessage, 20);            
+              DialogService.connectionErrorMessage('loading data access key list: ' + err.errorMessage, 20);
             });
           });
         };
@@ -76,7 +76,7 @@
         };
         $scope.reloadList();
       }]);
-  
+
   // Validation functions.
   var isAlphaNumeric = function(str) {
     return !/[^a-zA-Z0-9]/.test(str);
@@ -85,7 +85,7 @@
   var isValidDate = function(str) {
     return /[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/.test(str);
   };
-  
+
   var validateKeyName = function(name) {
     if (!name || name.length == 0)
       return false;
@@ -114,7 +114,7 @@
     if (trimmed == 'Unlimited') return true;
     return isValidDate(trimmed);
   };
-  
+
   var abstractValidator = function(name, popover, validator) {
     return function() {
       return {
@@ -123,23 +123,23 @@
         link: function(scope, elm, attrs, ngModel) {
           if (!ngModel) return;
           ngModel.$parsers.unshift(function(viewValue) {
-            var isValid = validator(viewValue); 
+            var isValid = validator(viewValue);
             var status = isValid ? 'hide' : 'show';
             $('#' + popover).popover(status);
             ngModel.$setValidity(name, isValid);
             return viewValue;
           });
         }
-      }; 
+      };
     }
   };
-  
+
   // Validators
   eveKitAccess.directive('validatekeyname', [abstractValidator('validatekeyname', 'key-mod-name', validateKeyName)]);
   eveKitAccess.directive('validatekeyexpiry', [abstractValidator('validatekeyexpiry', 'key-mod-expiry', validateKeyExpiry)]);
   eveKitAccess.directive('validatekeylimit', [abstractValidator('validatekeylimit', 'key-mod-limit', validateKeyLimit)]);
 
-  eveKitAccess.controller('AccessModCtrl', 
+  eveKitAccess.controller('AccessModCtrl',
       ['$scope', '$timeout', '$routeParams', '$location', '$filter', 'DialogService', 'AccountWSService',
        function($scope, $timeout, $routeParams, $location, $filter, DialogService, AccountWSService) {
         $scope.$location = $location;
@@ -158,7 +158,7 @@
         $scope.modKeyExpiry = 'Never';
         $scope.modKeyLimit = 'Unlimited';
         $scope.access_mask = [];
-        $scope.maskValues = []; 
+        $scope.maskValues = [];
         var srcObject = $scope.isChar ? evekit.CharacterMaskConstants : evekit.CorporationMaskConstants;
         for (var mask_prop in srcObject) {
           $scope.maskValues.push(srcObject[mask_prop]);
@@ -190,8 +190,8 @@
               DialogService.removeDialog(msg);
               $scope.existing = keyList[0];
               $scope.modKeyName = $scope.existing.keyName;
-              $scope.modKeyExpiry = $scope.existing.expiry == -1 ? 'Never' : $filter('date')($scope.existing.expiry, 'yyyy-MM-dd');
-              $scope.modKeyLimit = $scope.existing.limit == -1 ? 'Unlimited' : $filter('date')($scope.existing.limit, 'yyyy-MM-dd');
+              $scope.modKeyExpiry = $scope.existing.expiry == -1 ? 'Never' : $filter('date')($scope.existing.expiry, 'yyyy-MM-dd', 'UTC');
+              $scope.modKeyLimit = $scope.existing.limit == -1 ? 'Unlimited' : $filter('date')($scope.existing.limit, 'yyyy-MM-dd', 'UTC');
               $scope.access_mask = $scope.existing.maskValueString.split('|');
               $scope.access_mask.sort();
               $scope.prohibitedAccess = [];
@@ -216,7 +216,7 @@
               DialogService.removeDialog(msg);
               DialogService.connectionErrorMessage('loading data access key: ' + err.errorMessage, 20);
             });
-          });          
+          });
         };
         // Set dirty based on changes.
         $scope.checkDirty = function() {
@@ -251,7 +251,7 @@
             $('#key-mod-limit').popover('show');
           } else {
             $('#key-mod-limit').popover('hide');
-          }          
+          }
         };
         // Build view link for navigating after key change.
         $scope.viewLink = function() {
@@ -261,7 +261,7 @@
           var characterID = angular.isDefined($routeParams.charid) ? parseInt($routeParams.charid) : -1;
           var corporationID = angular.isDefined($routeParams.corpid) ? parseInt($routeParams.corpid) : -1;
           return '/access/view/' + $scope.accountID + '/' + $scope.isChar + '/' +
-                 accountName + '/' + characterName + '/' + corporationName + '/' + 
+                 accountName + '/' + characterName + '/' + corporationName + '/' +
                  characterID + '/' + corporationID;
         };
         // Save new or modified key.
@@ -355,10 +355,10 @@
         };
         // Filters for draggable display.
         $scope.filterProhibited = function(val) {
-          return $scope.prohibitedAccess.indexOf(val) != -1;          
+          return $scope.prohibitedAccess.indexOf(val) != -1;
         };
         $scope.filterAllowed = function(val) {
-          return $scope.allowedAccess.indexOf(val) != -1;          
+          return $scope.allowedAccess.indexOf(val) != -1;
         };
         // Handlers for changing access.
         $scope.selectProhibit = function(val) {
@@ -377,7 +377,7 @@
           if ($scope.prohibitedAccess.indexOf(val) != -1) {
             $scope.prohibitedAccess.splice($scope.prohibitedAccess.indexOf(val), 1);
           }
-          $scope.setMaskFromAllowed();          
+          $scope.setMaskFromAllowed();
         }
         // Init
         $scope.$watchGroup(['modKeyName', 'modKeyExpiry', 'modKeyLimit', 'access_mask'], $scope.checkDirty);
