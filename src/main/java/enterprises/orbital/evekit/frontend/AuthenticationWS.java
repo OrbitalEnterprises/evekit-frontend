@@ -28,6 +28,8 @@ import enterprises.orbital.evekit.ws.common.ServiceError;
 import enterprises.orbital.oauth.AuthUtil;
 import enterprises.orbital.oauth.EVEAuthHandler;
 import enterprises.orbital.oauth.EVECallbackHandler;
+import enterprises.orbital.oauth.GoogleAuthHandler;
+import enterprises.orbital.oauth.GoogleCallbackHandler;
 import enterprises.orbital.oauth.LogoutHandler;
 import enterprises.orbital.oauth.TwitterAuthHandler;
 import enterprises.orbital.oauth.TwitterCallbackHandler;
@@ -146,6 +148,14 @@ public class AuthenticationWS {
       }
 
     case "google":
+      String googleApiKey = OrbitalProperties.getGlobalProperty("enterprises.orbital.auth.google_api_key");
+      String googleApiSecret = OrbitalProperties.getGlobalProperty("enterprises.orbital.auth.google_api_secret");
+      builder.setPath(builder.getPath() + "api/ws/v1/auth/callback/google");
+      redirect = GoogleAuthHandler.doGet(googleApiKey, googleApiSecret, "https://www.googleapis.com/auth/userinfo.email", builder.toString(), req);
+      if (redirect == null) redirect = makeErrorCallback(req, "Google");
+      log.fine("Redirecting to: " + redirect);
+      return Response.temporaryRedirect(new URI(redirect)).build();
+
     default:
       // Log but otherwise ignore.
       log.severe("Unrecognized login source: " + source);
@@ -203,6 +213,17 @@ public class AuthenticationWS {
       return Response.temporaryRedirect(new URI(redirect)).build();
 
     case "google":
+      String googleApiKey = OrbitalProperties.getGlobalProperty("enterprises.orbital.auth.google_api_key");
+      String googleApiSecret = OrbitalProperties.getGlobalProperty("enterprises.orbital.auth.google_api_secret");
+      // Google requires that we pass in the proper callback URL when completing OAuth
+      URIBuilder cbBuilder = makeStandardBuilder(req);
+      cbBuilder.setPath(builder.getPath() + "api/ws/v1/auth/callback/google");
+      redirect = GoogleCallbackHandler.doGet(googleApiKey, googleApiSecret, "https://www.googleapis.com/auth/userinfo.email", cbBuilder.toString(),
+                                             builder.toString(), req);
+      if (redirect == null) redirect = makeErrorCallback(req, "Google");
+      log.fine("Redirecting to: " + redirect);
+      return Response.temporaryRedirect(new URI(redirect)).build();
+
     default:
       // Log but otherwise ignore.
       log.severe("Unrecognized callback source: " + source);
