@@ -2,7 +2,6 @@ package enterprises.orbital.evekit.frontend;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -70,15 +69,9 @@ public class AdminWS {
     }
     // Retrieve list of properties, filter out per-user properties
     final List<PersistentProperty> result = new ArrayList<PersistentProperty>();
-    PersistentProperty.getAll().forEach(new Consumer<PersistentProperty>() {
-
-      @Override
-      public void accept(
-                         PersistentProperty t) {
-        if (!t.getPropertyName().startsWith("EveKitUserAccount.")) result.add(t);
-      }
-
-    });
+    for (PersistentProperty next : PersistentProperty.getAll()) {
+      if (!next.getPropertyName().startsWith("EveKitUserAccount.")) result.add(next);
+    }
     return Response.ok().entity(result).build();
   }
 
@@ -187,18 +180,12 @@ public class AdminWS {
     // Return list of properties
     final List<PersistentProperty> result = new ArrayList<PersistentProperty>();
     final String keyPrefix = "EveKitUserAccount." + String.valueOf(uid) + ".";
-    PersistentProperty.getAll().forEach(new Consumer<PersistentProperty>() {
-
-      @Override
-      public void accept(
-                         PersistentProperty t) {
-        if (t.getPropertyName().startsWith(keyPrefix)) {
-          // Add the property with the key prefix stripped. This hides the user property naming scheme from the caller.
-          result.add(new PersistentProperty(t.getPropertyName().substring(keyPrefix.length()), t.getPropertyValue()));
-        }
+    for (PersistentProperty next : PersistentProperty.getAll()) {
+      if (next.getPropertyName().startsWith(keyPrefix)) {
+        // Add the property with the key prefix stripped. This hides the user property naming scheme from the caller.
+        result.add(new PersistentProperty(next.getPropertyName().substring(keyPrefix.length()), next.getPropertyValue()));
       }
-
-    });
+    }
     return Response.ok().entity(result).build();
   }
 
