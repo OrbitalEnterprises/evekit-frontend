@@ -63,7 +63,7 @@
     return $resource('', {},
         {
       list : {
-        url: 'http://blog.orbital.enterprises/feeds/posts/default/-/evekit',
+        url: 'https://orbital-enterprises.blogspot.com/feeds/posts/default/-/evekit',
         method: 'JSONP',
         params: {
           alt: "json-in-script",

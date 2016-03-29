@@ -35,6 +35,10 @@ eveKitRemoteServices.factory('SwaggerService', [
     if (h != -1) {
       url = url.substring(0, h);
     }
+    h = url.indexOf('?');
+    if (h != -1) {
+      url = url.substring(0, h);
+    }
     // construct and retrieve the swagger client spec
     url = url + "api/swagger.json";
     console.log("retrieving swagger from: " + url);
