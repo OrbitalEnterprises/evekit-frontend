@@ -24,33 +24,26 @@
   var NewsListPopulator = function(json_response) {
     // This is a JSONP call, so we already have JSON format as the argument to this method
     var result = [];
-    if (angular.isDefined(json_response['feed']) &&
-        angular.isDefined(json_response['feed']['entry'])) {
-      var entries = json_response['feed']['entry'];
+    if (angular.isDefined(json_response['items'])) {
+      var entries = json_response['items'];
       if (entries.length > 10) {
         entries = entries.slice(0, 10);
       }
       for (var i = 0; i < entries.length; i++) {
         var nextEntry = entries[i];
         var input = {};
-        if (angular.isDefined(nextEntry.published.$t)) input.created = (new Date(nextEntry.published.$t)).getTime();
-        if (angular.isDefined(nextEntry.updated.$t)) input.updated = (new Date(nextEntry.updated.$t)).getTime();
-        if (angular.isDefined(nextEntry.title.$t)) input.title = nextEntry.title.$t;
-        if (angular.isDefined(nextEntry.content.$t)) {
-          input.detail = nextEntry.content.$t;
+        if (angular.isDefined(nextEntry.published)) input.created = (new Date(nextEntry.published)).getTime();
+        if (angular.isDefined(nextEntry.updated)) input.updated = (new Date(nextEntry.updated)).getTime();
+        if (angular.isDefined(nextEntry.title)) input.title = nextEntry.title;
+        if (angular.isDefined(nextEntry.content)) {
+          input.detail = nextEntry.content;
           if (input.detail.length > 200) {
             input.detail = input.detail.substr(0, 200) + "...";
           }
         }
-        if (angular.isDefined(nextEntry.link)) {
-          for (var j = 0; j < nextEntry.link.length; j++) {
-            if (angular.isDefined(nextEntry.link[j].rel) &&
-                nextEntry.link[j].rel == "alternate") {
-              input.linkTitle = nextEntry.link[j].title;
-              input.linkRef = nextEntry.link[j].href;
-              break;
-            }
-          }
+        if (angular.isDefined(nextEntry.url)) {
+          input.linkTitle = input.title;
+          input.linkRef = nextEntry.url;
         }
         result.push(new NewsEntryBuilder(input));
       }
@@ -60,13 +53,21 @@
 
   eveKitMain.factory('NewsEntry', ['$resource', 'RemoteHandler',
                                    function($resource, RemoteHandler) {
+    var bloggerAPIKey = "AIzaSyCoQFXxawtc-x-1aF7DVbvilnnCONqXPPw";
     return $resource('', {},
         {
       list : {
-        url: 'https://orbital-enterprises.blogspot.com/feeds/posts/default/-/evekit',
+        url: 'https://www.googleapis.com/blogger/v3/blogs/1703723675504697677/posts',
         method: 'JSONP',
         params: {
-          alt: "json-in-script",
+          fetchBodies: true,
+          fetchImages: false,
+          labels: "evekit",
+          maxResults: 10,
+          orderBy: "updated",
+          status: "live",
+          view: "READER",
+          key: bloggerAPIKey,
           callback: "JSON_CALLBACK"
         },
         isArray: true,
