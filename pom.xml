@@ -9,10 +9,17 @@
   </parent>
   <groupId>enterprises.orbital.evekit</groupId>
   <artifactId>frontend</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>war</packaging>
   <name>EveKit Frontend</name>
   <description>Main user facing web page and services</description>
+  <url>https://github.com/OrbitalEnterprises/evekit-frontend</url>
+  <scm>
+  	<url>https://github.com/OrbitalEnterprises/evekit-frontend</url>
+  	<connection>scm:git:https://github.com/OrbitalEnterprises/evekit-frontend.git</connection>
+  	<tag>rel_1_0_0</tag>
+  	<developerConnection>scm:git:git@github.com:OrbitalEnterprises/evekit-frontend.git</developerConnection>
+  </scm>
 
   <properties>
     <enterprises.orbital.evekit.frontend.appname>evekit</enterprises.orbital.evekit.frontend.appname>
@@ -79,12 +86,12 @@
     <dependency>
       <groupId>enterprises.orbital.evekit</groupId>
       <artifactId>account-manager-ws</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>1.0.0</version>
     </dependency>
     <dependency>
       <groupId>enterprises.orbital.evekit</groupId>
       <artifactId>snapshot</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>1.0.0</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
