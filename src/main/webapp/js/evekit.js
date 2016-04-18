@@ -84,7 +84,7 @@ eveKit.config(['$routeProvider',
         templateUrl: 'partials/access-view.html',
         controller: 'AccessViewCtrl'
       }).
-      when('/api/model', {
+      when('/api/model/:accessKey/:accessCred/:keyName', {
         templateUrl: 'partials/api-model.html',
         controller: 'APIModelCtrl'
       }).
@@ -235,27 +235,19 @@ eveKit.controller('EveKitAuthCtrl', ['$scope', '$route', '$timeout', 'UserCreden
                             menulist: [ {
                               title: 'Model API',
                               display: 'Model API',
-                              link: '#/api/model'
+                              link: '#/api/model/-1/-1/-1'
                             },
-//                            {
-//                              title: 'Static Data Export API',
-//                              display: 'Static Data Export API',
-//                              link: '#/api/sde'
-//                            },
-//                            {
-//                              title: 'Reference Data API',
-//                              display: 'Reference Data API',
-//                              link: '#/api/ref'
-//                            },
-//                            {
-//                              title: 'Data Source API',
-//                              display: 'Data Source API',
-//                              link: '#/api/datasource'
-//                            },
+                            {
+                              title: 'Static Data Export API',
+                              display: 'Static Data Export API (external)',
+                              link: 'https://evekit-sde.orbital.enterprises',
+                              pop: true
+                            },
                             {
                               title: 'API FAQ',
                               display: 'API FAQ (external)',
-                              link: 'https://groups.google.com/forum/#!topic/orbital-enterprises/5sogZQ_C8xM'
+                              link: 'https://groups.google.com/forum/#!topic/orbital-enterprises/5sogZQ_C8xM',
+                              pop: true
                             }]
                           },
                           { menuID: 5,

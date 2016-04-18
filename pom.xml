@@ -59,7 +59,7 @@
                 <include>**/web.xml</include>
                 <include>**/index.html</include>
                 <include>**/swagger.html</include>
-                <include>**/api-model.html</include>
+                <include>**/api-page.js</include>
               </includes>
             </resource>
           </webResources>
