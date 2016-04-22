@@ -64,7 +64,25 @@
             hljs.highlightBlock(e)
           });
 
-          addApiKeyAuthorization();
+          // addApiKeyAuthorization();
+          
+          // If key and cred specified, then update all appropriate input fields
+          var access_key = window.location.search.match(/accessKey=([^&]+)/);
+          var access_cred = window.location.search.match(/accessCred=([^&]+)/);
+          if (access_key && access_cred && access_key.length > 1 && access_cred.length > 1) {
+            access_key = decodeURIComponent(access_key[1]);
+            access_cred = decodeURIComponent(access_cred[1]);
+            $("input[name='accessKey']").attr("value", access_key);   
+            $("input[name='accessCred']").attr("value", access_cred);   
+          }
+          
+          // If key name included, then show which key we've populated with
+          var access_key_name = window.location.search.match(/accessKeyName=([^&]+)/);
+          if (access_key_name && access_key_name.length > 1) {
+            $('#key_name').text(decodeURIComponent(access_key_name[1]));
+          } else {
+            $('#using_data_key').css("display", "none");
+          }
         },
         onFailure: function(data) {
           log("Unable to Load SwaggerUI");
@@ -85,7 +103,7 @@
         }
       }
 
-      $('#input_apiKey').change(addApiKeyAuthorization);
+      // $('#input_apiKey').change(addApiKeyAuthorization);
 
       // if you have an apiKey you would like to pre-populate on the page for demonstration purposes...
       /*
@@ -114,6 +132,7 @@
 <!--       <div class='input'><a id="explore" href="#" data-sw-translate>Explore</a></div> -->
 <!--     </form> -->
     <p style="padding-top: 10px">Swagger Model URI: <strong>${enterprises.orbital.evekit.frontend.swaggerui.model}</strong></p>
+    <p id="using_data_key" style="padding-top: 10px">Populated with Data Access Key: <strong id="key_name"></strong></p>
   </div>
 </div>
 

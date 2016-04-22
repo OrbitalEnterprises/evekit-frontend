@@ -63,6 +63,7 @@
               <td nowrap><h4 class="panel-title">{{key.keyName}}</h4></td>
               <td align="right" width="100%">
                 <div class="btn-group pull-right" data-toggle="buttons">
+                  <button type="button" class="btn btn-default" ng-click="$location.url('/api/model/' + key.accessKey + '/' + key.credential + '/' + key.keyName + ' (' + accountName + ')')">Explore</button>
                   <button type="button" class="btn btn-default" ng-click="$location.url('/access/mod/' + accountID + '/' + key.kid + '/' + isChar + '/' + accountName + '/' + characterName + '/' + corporationName + '/' + characterID + '/' + corporationID)">Modify</button>
                   <button type="button" class="btn btn-default" ng-click="deleteKey(key);">Delete</button>
                 </div>
