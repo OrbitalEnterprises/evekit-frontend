@@ -9,7 +9,7 @@
   </parent>
   <groupId>enterprises.orbital.evekit</groupId>
   <artifactId>frontend</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.2</version>
   <packaging>war</packaging>
   <name>EveKit Frontend</name>
   <description>Main user facing web page and services</description>
@@ -17,7 +17,7 @@
   <scm>
   	<url>https://github.com/OrbitalEnterprises/evekit-frontend</url>
   	<connection>scm:git:https://github.com/OrbitalEnterprises/evekit-frontend.git</connection>
-  	<tag>rel_1_0_0</tag>
+  	<tag>rel_1_0_2</tag>
   	<developerConnection>scm:git:git@github.com:OrbitalEnterprises/evekit-frontend.git</developerConnection>
   </scm>
 
@@ -86,12 +86,12 @@
     <dependency>
       <groupId>enterprises.orbital.evekit</groupId>
       <artifactId>account-manager-ws</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.2</version>
     </dependency>
     <dependency>
       <groupId>enterprises.orbital.evekit</groupId>
       <artifactId>snapshot</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.2</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -119,10 +119,10 @@
       <version>5.1.38</version>
     </dependency>
     <dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-c3p0</artifactId>
-			<version>5.0.6.Final</version>
-		</dependency>    
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-c3p0</artifactId>
+      <version>5.0.6.Final</version>
+    </dependency>    
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
