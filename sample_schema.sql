@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.6.24, for Win64 (x86_64)
 --
--- Host: 104.236.99.119    Database: evekitdb
+-- Host: localhost    Database: evekitdb
 -- ------------------------------------------------------
--- Server version	5.5.47-0ubuntu0.14.04.1
+-- Server version	5.6.27-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -337,6 +337,10 @@ CREATE TABLE `evekit_char_sync` (
   `tid` bigint(20) NOT NULL,
   `chatChannelsDetail` varchar(255) DEFAULT NULL,
   `chatChannelsStatus` int(11) DEFAULT NULL,
+  `partialCharacterSheetDetail` varchar(255) DEFAULT NULL,
+  `partialCharacterSheetStatus` int(11) DEFAULT NULL,
+  `skillsDetail` varchar(255) DEFAULT NULL,
+  `skillsStatus` int(11) DEFAULT NULL,
   PRIMARY KEY (`tid`),
   CONSTRAINT `FKcsingpbawh8ecynpsrxvhkv22` FOREIGN KEY (`tid`) REFERENCES `evekit_sync` (`tid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -596,6 +600,8 @@ CREATE TABLE `evekit_data_capsuleer` (
   `walletJournalExpiry` bigint(20) NOT NULL,
   `walletTransactionsExpiry` bigint(20) NOT NULL,
   `cid` bigint(20) NOT NULL,
+  `partialCharacterSheetExpiry` bigint(20) NOT NULL,
+  `skillsExpiry` bigint(20) NOT NULL,
   PRIMARY KEY (`cid`),
   CONSTRAINT `FK9umg7lx8r2xcmhhgh0jr25r7j` FOREIGN KEY (`cid`) REFERENCES `evekit_cached_data` (`cid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -784,6 +790,8 @@ CREATE TABLE `evekit_data_character_sheet` (
   `remoteStationDate` bigint(20) NOT NULL,
   `willpower` int(11) NOT NULL,
   `cid` bigint(20) NOT NULL,
+  `ancestryID` int(11) NOT NULL,
+  `bloodlineID` int(11) NOT NULL,
   PRIMARY KEY (`cid`),
   CONSTRAINT `FKbgm6x09v7e91ls3yod2n453kq` FOREIGN KEY (`cid`) REFERENCES `evekit_cached_data` (`cid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -2395,4 +2403,4 @@ CREATE TABLE `orbital_properties` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-04-19 18:08:33
+-- Dump completed on 2016-06-08  8:26:33
