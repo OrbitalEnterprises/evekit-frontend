@@ -1,11 +1,19 @@
 /* EveKit Account Page Module */
 (function(){
-  var eveKitAccount = angular.module('eveKitAccount', ['ngResource', 'ngSanitize', 'ngRoute', 'eveKitDialog', 'eveKitAccountWS', 'eveKitTrackerWS', 'eveKitServerServices']);
+  var eveKitAccount = angular.module('eveKitAccount', ['ngResource', 'ngSanitize', 'ngRoute', 'eveKitDialog', 'eveKitAccountWS', 'eveKitTrackerWS', 'eveKitServerServices', 'eveKitModeServices']);
+
+  eveKitAccount.controller('AccountMainCtrl',
+      ['$scope', 'ToolModeService',
+       function($scope, ToolModeService) {
+        ToolModeService.refresh(MODE_EVEKIT);
+        $scope.sectionName = "Account Sync : Intro";
+      }]);
 
   eveKitAccount.controller('AccountViewCtrl',
-      ['$scope', '$timeout', '$location', 'DialogService', 'AccountWSService', 'APIKeyInfo',
-       function($scope, $timeout, $location, DialogService, AccountWSService, APIKeyInfo) {
-        $scope.sectionName = "Sync Account : List";
+      ['$scope', '$timeout', '$location', 'DialogService', 'AccountWSService', 'APIKeyInfo', 'ToolModeService',
+       function($scope, $timeout, $location, DialogService, AccountWSService, APIKeyInfo, ToolModeService) {
+        ToolModeService.refresh(MODE_EVEKIT);
+        $scope.sectionName = "Account Sync : List";
         $scope.accountlist = [];
         $scope.loading = false;
         $scope.$location = $location;
@@ -180,11 +188,12 @@
   eveKitAccount.directive('validatevcode', [abstractValidator('validatevcode', 'account-mod-vcode', validateVCode)]);
 
   eveKitAccount.controller('AccountModCtrl',
-      ['$scope', '$timeout', '$routeParams', '$location', 'DialogService', 'AccountWSService', 'CharacterInfo',
-       function($scope, $timeout, $routeParams, $location, DialogService, AccountWSService, CharacterInfo) {
+      ['$scope', '$timeout', '$routeParams', '$location', 'DialogService', 'AccountWSService', 'CharacterInfo', 'ToolModeService',
+       function($scope, $timeout, $routeParams, $location, DialogService, AccountWSService, CharacterInfo, ToolModeService) {
+        ToolModeService.refresh(MODE_EVEKIT);
         $scope.accountID = angular.isDefined($routeParams.acctid) ? parseInt($routeParams.acctid) : -1;
         $scope.isModify = $scope.accountID >= 0;
-        $scope.sectionName = "Sync Account : " + ($scope.isModify ? "Modify" : "Create");
+        $scope.sectionName = "Account Sync : " + ($scope.isModify ? "Modify" : "Create");
         $scope.loading = false;
         $scope.accountChoices = [];
         $scope.original = {
@@ -398,9 +407,10 @@
       }]);
 
   eveKitAccount.controller('AccountHistoryCtrl',
-      ['$scope', '$timeout', '$routeParams', '$location', 'DialogService', 'AccountWSService', 'TrackerWSService',
-       function($scope, $timeout, $routeParams, $location, DialogService, AccountWSService, TrackerWSService) {
-        $scope.sectionName = "Sync Account : History";
+      ['$scope', '$timeout', '$routeParams', '$location', 'DialogService', 'AccountWSService', 'TrackerWSService', 'ToolModeService',
+       function($scope, $timeout, $routeParams, $location, DialogService, AccountWSService, TrackerWSService, ToolModeService) {
+        ToolModeService.refresh(MODE_EVEKIT);
+        $scope.sectionName = "Account Sync : History";
         $scope.$location = $location;
         $scope.accountID = angular.isDefined($routeParams.acctid) ? parseInt($routeParams.acctid) : -1;
         $scope.isChar = angular.isDefined($routeParams.ischar) ? ($routeParams.ischar == 'true') : false;

@@ -1,10 +1,11 @@
 /* EveKit Access Page Module */
 (function(){
-  var eveKitAccess = angular.module('eveKitAccess', ['ngResource', 'ngSanitize', 'ngRoute', 'eveKitDialog', 'eveKitAccountWS']);
+  var eveKitAccess = angular.module('eveKitAccess', ['ngResource', 'ngSanitize', 'ngRoute', 'eveKitDialog', 'eveKitAccountWS', 'eveKitModeServices']);
 
   eveKitAccess.controller('AccessViewCtrl',
-      ['$scope', '$location', '$routeParams', 'DialogService', 'AccountWSService',
-       function($scope, $location, $routeParams, DialogService, AccountWSService) {
+      ['$scope', '$location', '$routeParams', 'DialogService', 'AccountWSService', 'ToolModeService',
+       function($scope, $location, $routeParams, DialogService, AccountWSService, ToolModeService) {
+        ToolModeService.refresh(MODE_EVEKIT);
         $scope.accountID = angular.isDefined($routeParams.acctid) ? parseInt($routeParams.acctid) : -1;
         $scope.isChar = angular.isDefined($routeParams.ischar) ? $routeParams.ischar == 'true' : false;
         $scope.accountName = angular.isDefined($routeParams.name) ? $routeParams.name : '';
@@ -140,8 +141,9 @@
   eveKitAccess.directive('validatekeylimit', [abstractValidator('validatekeylimit', 'key-mod-limit', validateKeyLimit)]);
 
   eveKitAccess.controller('AccessModCtrl',
-      ['$scope', '$timeout', '$routeParams', '$location', '$filter', 'DialogService', 'AccountWSService',
-       function($scope, $timeout, $routeParams, $location, $filter, DialogService, AccountWSService) {
+      ['$scope', '$timeout', '$routeParams', '$location', '$filter', 'DialogService', 'AccountWSService', 'ToolModeService',
+       function($scope, $timeout, $routeParams, $location, $filter, DialogService, AccountWSService, ToolModeService) {
+        ToolModeService.refresh(MODE_EVEKIT);
         $scope.$location = $location;
         $scope.accountID = angular.isDefined($routeParams.acctid) ? parseInt($routeParams.acctid) : -1;
         $scope.keyID = angular.isDefined($routeParams.keyid) ? parseInt($routeParams.keyid) : -1;

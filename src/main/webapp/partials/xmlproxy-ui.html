@@ -1,0 +1,25 @@
+<div class="container-fluid">
+
+<div id="swagger-xmlproxy-row" class="row col-wrap">
+  <div id="swagger-xmlproxy-model-holder" class="col-md-12">
+  <iframe ng-src="{{urlExtra}}" 
+          id="api-xmlproxy" 
+          style="width: 100%;">
+  </iframe>
+  </div>
+</div>
+
+<!-- End of view -->
+</div>
+
+<script type="text/javascript">
+  // resize holder to full length  
+  var fixHeight = function() {
+    // Fix height of scrollable
+    $('#api-xmlproxy').height($('#bottom-nav').position().top - $('#swagger-xmlproxy-model-holder').position().top - 15);
+  };
+  // resize with window
+  $(window).resize(fixHeight);
+  // force a resize when ready
+  $(fixHeight);
+</script> 

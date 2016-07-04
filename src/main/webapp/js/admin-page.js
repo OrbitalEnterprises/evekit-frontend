@@ -1,10 +1,10 @@
 /* EveKit Admin Page Module */
 (function(){
-  var eveKitAdmin = angular.module('eveKitAdmin', ['ngResource', 'ngSanitize', 'ngRoute', 'eveKitDialog', 'eveKitAccountWS', 'eveKitAdminWS', 'eveKitTrackerWS']);
+  var eveKitAdmin = angular.module('eveKitAdmin', ['ngResource', 'ngSanitize', 'ngRoute', 'eveKitDialog', 'eveKitAccountWS', 'eveKitAdminWS', 'eveKitTrackerWS', 'eveKitModeServices']);
 
   eveKitAdmin.controller('AdminSyspropEditCtrl',
-      ['$scope', 'DialogService', 'AdminWSService',
-       function($scope, DialogService, AdminWSService) {
+      ['$scope', 'DialogService', 'AdminWSService', 'ToolModeService',
+       function($scope, DialogService, AdminWSService, ToolModeService) {
         $scope.sectionName = "Admin : System Property Editor";
         $scope.prop_list = [];
         $scope.newprop = {
@@ -86,8 +86,8 @@
       }]);
 
   eveKitAdmin.controller('AdminUserpropEditCtrl',
-      ['$scope', 'DialogService', 'AdminWSService', 'AccountWSService',
-       function($scope, DialogService, AdminWSService, AccountWSService) {
+      ['$scope', 'DialogService', 'AdminWSService', 'AccountWSService', 'ToolModeService',
+       function($scope, DialogService, AdminWSService, AccountWSService, ToolModeService) {
         $scope.sectionName = "Admin : User Account Property Editor";
         $scope.uid_list = [];
         $scope.prop_list = [];
@@ -200,8 +200,8 @@
       }]);
 
   eveKitAdmin.controller('AdminInflightCtrl',
-      ['$scope', 'DialogService', 'TrackerWSService',
-       function($scope, DialogService, TrackerWSService) {
+      ['$scope', 'DialogService', 'TrackerWSService', 'ToolModeService',
+       function($scope, DialogService, TrackerWSService, ToolModeService) {
         $scope.sectionName = "Admin : Inflight Syncs";
         $scope.charSyncHistory = [];
         $scope.corpSyncHistory = [];
@@ -348,8 +348,8 @@
       }]);
 
   eveKitAdmin.controller('AdminUsersCtrl',
-      ['$scope', 'DialogService', 'AccountWSService',
-       function($scope, DialogService, AccountWSService) {
+      ['$scope', 'DialogService', 'AccountWSService', 'ToolModeService',
+       function($scope, DialogService, AccountWSService, ToolModeService) {
         $scope.sectionName = "Admin : User List";
         $scope.user_list = [];
         $scope.user_account_list = {};

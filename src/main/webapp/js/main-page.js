@@ -1,6 +1,6 @@
 /* EveKit Main Page Module */
 (function(){
-  var eveKitMain = angular.module('eveKitMain', ['ngResource', 'ngSanitize', 'eveKitAccountWS', 'eveKitDialog']);
+  var eveKitMain = angular.module('eveKitMain', ['ngResource', 'ngSanitize', 'eveKitAccountWS', 'eveKitDialog', 'angular.vertilize', 'eveKitModeServices']);
 
   var NewsEntryBuilder = function(opt_json) {
     opt_json = opt_json || {};
@@ -51,8 +51,8 @@
     return result;
   };
 
-  eveKitMain.factory('NewsEntry', ['$resource', 'RemoteHandler',
-                                   function($resource, RemoteHandler) {
+  eveKitMain.factory('NewsEntry', ['$resource',
+                                   function($resource) {
     var bloggerAPIKey = "AIzaSyCoQFXxawtc-x-1aF7DVbvilnnCONqXPPw";
     return $resource('', {},
         {
@@ -76,8 +76,8 @@
         })}]);
 
   eveKitMain.controller('MainNewsCtrl',
-      ['$scope', '$sce', '$timeout', 'NewsEntry',
-       function($scope, $sce, $timeout, NewsEntry) {
+      ['$scope', '$sce', '$timeout', 'NewsEntry', 'ToolModeService',
+       function($scope, $sce, $timeout, NewsEntry, ToolModeService) {
     $scope.sectionName = "Main : News";
     $scope.getNewsDate = function(ne) {
       return Math.max(ne.updated_ == null ? 0 : ne.updated_.getTime(), ne.created_ == null ? 0 : ne.created_.getTime());
@@ -103,8 +103,8 @@
     initDisplay();
   }]);
 
-  eveKitMain.controller('MainAccountCtrl', ['$scope', 'UserCredentialsService', 'AccountWSService', 'DialogService',
-                                            function($scope, UserCredentialsService, AccountWSService, DialogService) {
+  eveKitMain.controller('MainAccountCtrl', ['$scope', 'UserCredentialsService', 'AccountWSService', 'DialogService', 'ToolModeService',
+                                            function($scope, UserCredentialsService, AccountWSService, DialogService, ToolModeService) {
     $scope.sectionName = "Main : Account Information";
     $scope.lastlogin = null;
     $scope.lastloginmethod = null;

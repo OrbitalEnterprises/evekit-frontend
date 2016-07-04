@@ -225,3 +225,34 @@
     background-image: url('EVE_SSO_Login_Buttons_Small_White.png');
     width: 54px;
 }
+
+/* Market Viewer Demo Styling */
+.ekmd_axis {
+  font: 14px sans-serif;
+}
+
+.ekmd_axis text {
+  fill: #FFF;
+}
+
+.ekmd_axis path,
+.ekmd_axis line  {
+	fill: none;
+	stroke: #FFF;
+	shape-rendering: crispEdges;
+}
+
+.ekmd_line {
+	fill: none;
+	stroke: #e59210;
+	stroke-width: 1.5px;
+}
+
+.ekmd_area {
+	fill: #9F9F55;
+	stroke-width: 0;
+}
+
+.ekmd_bar {
+	fill: steelblue;
+}

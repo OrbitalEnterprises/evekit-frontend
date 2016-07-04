@@ -38,7 +38,7 @@ import io.swagger.annotations.ApiResponses;
 @Api(
     tags = {
         "Admin"
-},
+    },
     produces = "application/json",
     consumes = "application/json")
 public class AdminWS {
@@ -58,7 +58,7 @@ public class AdminWS {
               code = 401,
               message = "Requestor not logged in or not an admin",
               response = ServiceError.class),
-  })
+      })
   public Response getSysProps(
                               @Context HttpServletRequest request) {
     // Verify caller is an admin
@@ -88,7 +88,7 @@ public class AdminWS {
               code = 401,
               message = "Requestor not logged in or not an admin",
               response = ServiceError.class),
-  })
+      })
   public Response setSysProp(
                              @Context HttpServletRequest request,
                              @PathParam("key") @ApiParam(
@@ -122,7 +122,7 @@ public class AdminWS {
               code = 401,
               message = "Requestor not logged in or not an admin",
               response = ServiceError.class),
-  })
+      })
   public Response deleteSysProp(
                                 @Context HttpServletRequest request,
                                 @PathParam("key") @ApiParam(
@@ -137,6 +137,33 @@ public class AdminWS {
     }
     PersistentProperty.removeProperty(key);
     return Response.ok().build();
+  }
+
+  @Path("/configprop/{key}")
+  @GET
+  @ApiOperation(
+      value = "Return the requested configuration property.  These properties do not require admin privileges to view.")
+  @ApiResponses(
+      value = {
+          @ApiResponse(
+              code = 200,
+              message = "Requested configuration property, or empty response if no such property exists",
+              response = PersistentProperty.class),
+          @ApiResponse(
+              code = 401,
+              message = "Requestor not logged in or not an admin",
+              response = ServiceError.class),
+      })
+  public Response getConfigProperty(
+                                    @Context HttpServletRequest request,
+                                    @PathParam("key") @ApiParam(
+                                        name = "key",
+                                        required = true,
+                                        value = "Property key") String key) {
+    // Config properties start with the special prefix "EveKitConfigProp."
+    String keyName = "EveKitConfigProp." + key;
+    String value = PersistentProperty.getProperty(keyName, "");
+    return Response.ok().entity(new PersistentProperty(key, value)).build();
   }
 
   @Path("/userprop/{uid}")
@@ -158,7 +185,7 @@ public class AdminWS {
               code = 404,
               message = "User with the given UID not found",
               response = ServiceError.class),
-  })
+      })
   public Response getUserProps(
                                @Context HttpServletRequest request,
                                @PathParam("uid") @ApiParam(
@@ -206,7 +233,7 @@ public class AdminWS {
               code = 404,
               message = "User with the given UID not found",
               response = ServiceError.class),
-  })
+      })
   public Response setUserProp(
                               @Context HttpServletRequest request,
                               @PathParam("uid") @ApiParam(
@@ -254,7 +281,7 @@ public class AdminWS {
               code = 404,
               message = "User with the given UID not found",
               response = ServiceError.class),
-  })
+      })
   public Response deleteUserProp(
                                  @Context HttpServletRequest request,
                                  @PathParam("uid") @ApiParam(

@@ -1,7 +1,9 @@
 /* EveKit Module */
 (function(){
 var eveKit = angular.module('eveKit', [
-  'ngRoute', 'ngResource', 'eveKitDialog', 'eveKitRemoteServices', 'eveKitAccountWS', 'eveKitMain', 'eveKitAccount', 'eveKitAccess', 'eveKitAdmin', 'eveKitAPI']);
+  'ngRoute', 'ngResource', 'eveKitModeServices', 'eveKitDialog', 'eveKitRemoteServices', 'eveKitAccountWS',
+  'eveKitMain', 'eveKitAccount', 'eveKitAccess', 'eveKitAdmin', 'eveKitAPI', 'eveKitXMLProxy',
+  'eveKitMarketData', 'eveKitSDE']);
 
 // Capture any authorization errors before we process the rest of the window location
 var searchParams = window.location.search;
@@ -64,6 +66,38 @@ eveKit.config(['$routeProvider',
         templateUrl: 'partials/main-userinfo.html',
         controller: 'MainAccountCtrl'
       }).
+      when('/xmlapi/main', {
+        templateUrl: 'partials/xmlproxy-main.html',
+        controller: 'XMLProxyIntroCtrl'
+      }).
+      when('/xmlapi/ui', {
+        templateUrl: 'partials/xmlproxy-ui.html',
+        controller: 'XMLProxyUICtrl'
+      }).
+      when('/md/main', {
+        templateUrl: 'partials/md-main.html',
+        controller: 'MDIntroCtrl'
+      }).
+      when('/md/ui', {
+        templateUrl: 'partials/md-ui.html',
+        controller: 'MDUICtrl'
+      }).
+      when('/md/book', {
+        templateUrl: 'partials/md-book.html',
+        controller: 'MDBookCtrl'
+      }).
+      when('/sde/main', {
+        templateUrl: 'partials/sde-main.html',
+        controller: 'SDEIntroCtrl'
+      }).
+      when('/sde/ui', {
+        templateUrl: 'partials/sde-ui.html',
+        controller: 'SDEUICtrl'
+      }).
+      when('/account/main', {
+        templateUrl: 'partials/account-main.html',
+        controller: 'AccountMainCtrl'
+      }).
       when('/account/view', {
         templateUrl: 'partials/account-view.html',
         controller: 'AccountViewCtrl'
@@ -88,22 +122,6 @@ eveKit.config(['$routeProvider',
         templateUrl: 'partials/api-model.html',
         controller: 'APIModelCtrl'
       }).
-//      when('/api/faq/:section?', {
-//        templateUrl: 'partials/api-faq.html',
-//        controller: 'APIFAQCtrl'
-//      }).
-//      when('/api/sde', {
-//        templateUrl: 'partials/api-sde.html',
-//        controller: 'APISDECtrl'
-//      }).
-//      when('/api/ref', {
-//        templateUrl: 'partials/api-ref.html',
-//        controller: 'APIRefCtrl'
-//      }).
-//      when('/api/datasource', {
-//        templateUrl: 'partials/api-datasource.html',
-//        controller: 'APIDataSourceCtrl'
-//      }).
       when('/admin/syspropedit', {
         templateUrl: 'partials/admin-sysprop.html',
         controller: 'AdminSyspropEditCtrl'
@@ -158,9 +176,23 @@ eveKit.controller('EveKitVersionCtrl', ['$scope', 'ReleaseService',
 }]);
 
 /* Inband controller for setting authentication status and other container menu settings. */
-eveKit.controller('EveKitAuthCtrl', ['$scope', '$route', '$timeout', 'UserCredentialsService', 'AccountWSService', 'DialogService',
-  function($scope, $route, $timeout, UserCredentialsService, AccountWSService, DialogService) {
+eveKit.controller('EveKitAuthCtrl', ['$scope', '$route', '$timeout', 'UserCredentialsService', 'AccountWSService', 'DialogService', 'ToolModeService',
+  function($scope, $route, $timeout, UserCredentialsService, AccountWSService, DialogService, ToolModeService) {
     $scope.$route = $route;
+    $scope.toolMode = ToolModeService.get();
+    // Get mode to display in toolbar
+    $scope.getToolModeClasses = function(tp) {
+      if (tp == $scope.toolMode) {
+        return "btn btn-primary navbar-btn";
+      } else {
+        return "btn btn-default navbar-btn";
+      }
+    };
+    // Change tool mode
+    $scope.setToolMode = function(newMode) {
+      ToolModeService.change(newMode);
+    };
+    // Apply menu filter when specified
     $scope.menufilter = function(value, index) {
       return angular.isDefined(value.filter) ? value.filter() : true;
     };
@@ -197,18 +229,42 @@ eveKit.controller('EveKitAuthCtrl', ['$scope', '$route', '$timeout', 'UserCreden
                             }]
                           },
                           { menuID: 2,
-                            title: 'Sync Accounts Page',
-                            display: 'Sync Accounts',
-                            urlPrefix: '/account/',
-                            filter: function() { return $scope.userSource != null; },
+                            title: 'XML API Proxy',
+                            display: 'XML Proxy',
+                            urlPrefix: '/xmlapi/',
+                            filter: function() { return $scope.toolMode == MODE_PROXY; },
                             menulist: [ {
+                              title: 'Intro',
+                              display: 'Intro',
+                              link: '#/xmlapi/main',
+                              filter: function() { return $scope.toolMode == MODE_PROXY; }
+                            }, {
+                              title: 'XML Proxy UI',
+                              display: 'XML Proxy UI',
+                              link: '#/xmlapi/ui',
+                              filter: function() { return $scope.toolMode == MODE_PROXY; }
+                            }]
+                          },
+                          { menuID: 3,
+                            title: 'Accounts Sync',
+                            display: 'Account Sync',
+                            urlPrefix: '/account/',
+                            filter: function() { return $scope.toolMode == MODE_EVEKIT; },
+                            menulist: [ {
+                              title: 'Intro',
+                              display: 'Intro',
+                              link: '#/account/main',
+                              filter: function() { return $scope.toolMode == MODE_EVEKIT; }
+                            }, {
                               title: 'Account List',
                               display: 'Account List',
-                              link: '#/account/view'
+                              link: '#/account/view',
+                              filter: function() { return $scope.userSource != null && $scope.toolMode == MODE_EVEKIT; }
                             }, {
                               title: 'Create Sync Account',
                               display: 'Create Sync Account',
-                              link: '#/account/mod/-1'
+                              link: '#/account/mod/-1',
+                              filter: function() { return $scope.userSource != null && $scope.toolMode == MODE_EVEKIT; }
                             }, {
                               title: 'Sync Account FAQ',
                               display: 'Sync Account FAQ (external)',
@@ -216,32 +272,28 @@ eveKit.controller('EveKitAuthCtrl', ['$scope', '$route', '$timeout', 'UserCreden
                               pop: true
                             }]
                           },
-                          { menuID: 3,
+                          { menuID: 4,
                             title: 'Data Access Keys',
                             display: 'Data Access Keys',
                             urlPrefix: '/access/',
-                            filter: function() { return $scope.userSource != null; },
+                            filter: function() { return $scope.userSource != null && $scope.toolMode == MODE_EVEKIT; },
                             menulist: [ {
                               title: 'Access Key FAQ',
                               display: 'Access Key FAQ (external)',
                               link: 'https://groups.google.com/forum/#!topic/orbital-enterprises/3TNV-MvSLkE',
-                              pop: true
+                              pop: true,
+                              filter: function() { return $scope.toolMode == MODE_EVEKIT; }
                             }]
                           },
-                          { menuID: 4,
+                          { menuID: 5,
                             title: 'API',
                             display: 'API',
                             urlPrefix: '/api/',
+                            filter: function() { return $scope.toolMode == MODE_EVEKIT; },
                             menulist: [ {
                               title: 'Model API',
                               display: 'Model API',
                               link: '#/api/model/-1/-1/-1'
-                            },
-                            {
-                              title: 'Static Data Export API',
-                              display: 'Static Data Export API (external)',
-                              link: 'https://evekit-sde.orbital.enterprises',
-                              pop: true
                             },
                             {
                               title: 'API FAQ',
@@ -250,7 +302,46 @@ eveKit.controller('EveKitAuthCtrl', ['$scope', '$route', '$timeout', 'UserCreden
                               pop: true
                             }]
                           },
-                          { menuID: 5,
+                          { menuID: 6,
+                            title: 'SDE',
+                            display: 'SDE',
+                            urlPrefix: '/sde/',
+                            filter: function() { return $scope.toolMode == MODE_SDE; },
+                            menulist: [ {
+                              title: 'Intro',
+                              display: 'Intro',
+                              link: '#/sde/main',
+                              filter: function() { return $scope.toolMode == MODE_SDE; }
+                            }, {
+                              title: 'SDE UI',
+                              display: 'SDE UI',
+                              link: '#/sde/ui',
+                              filter: function() { return $scope.toolMode == MODE_SDE; }
+                            }]
+                          },
+                          { menuID: 7,
+                            title: 'Market Data',
+                            display: 'Market Data',
+                            urlPrefix: '/md/',
+                            filter: function() { return $scope.toolMode == MODE_MKDATA; },
+                            menulist: [ {
+                              title: 'Intro',
+                              display: 'Intro',
+                              link: '#/md/main',
+                              filter: function() { return $scope.toolMode == MODE_MKDATA; }
+                            }, {
+                              title: 'Market Data UI',
+                              display: 'Market Data UI',
+                              link: '#/md/ui',
+                              filter: function() { return $scope.toolMode == MODE_MKDATA; }
+                            }, {
+                              title: 'Market Viewer',
+                              display: 'Market Viewer',
+                              link: '#/md/book',
+                              filter: function() { return $scope.toolMode == MODE_MKDATA; }
+                            }]
+                          },
+                          { menuID: 8,
                             title: 'Admin',
                             display: 'Admin',
                             urlPrefix: '/admin/',
@@ -279,6 +370,7 @@ eveKit.controller('EveKitAuthCtrl', ['$scope', '$route', '$timeout', 'UserCreden
     $scope.userSource = UserCredentialsService.getUserSource();
     $scope.$on('UserInfoChange', function(event, ui) { $scope.userInfo = ui; });
     $scope.$on('UserSourceChange', function(event, us) { $scope.userSource = us; });
+    $scope.$on('ToolModeChange', function(event, mode) { $scope.toolMode = mode; });
     // Set up access key list management
     $scope.updateAccessKeys = function() {
       AccountWSService.getSyncAccount(-1, -1).then(
@@ -298,7 +390,7 @@ eveKit.controller('EveKitAuthCtrl', ['$scope', '$route', '$timeout', 'UserCreden
                   link: '#/access/view/' + acctList[i].aid + '/' + acctList[i].characterType + '/' + acctList[i].name + '/' + acctList[i].eveCharacterName + '/' + acctList[i].eveCorporationName + '/' + acctList[i].eveCharacterID + '/' + acctList[i].eveCorporationID
                 });
               }
-              $scope.evekitmenus[2].menulist = menuList;
+              $scope.evekitmenus[3].menulist = menuList;
             });
           });
       $timeout($scope.updateAccessKeys, 1000 * 60 * 3);

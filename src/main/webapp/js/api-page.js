@@ -1,10 +1,11 @@
 /* EveKit API Page Module */
 (function(){
-  var eveKitAPI = angular.module('eveKitAPI', ['ngRoute']);
+  var eveKitAPI = angular.module('eveKitAPI', ['ngRoute', 'eveKitModeServices']);
 
   eveKitAPI.controller('APIModelCtrl',
-      ['$scope', '$routeParams', '$sce',
-       function($scope, $routeParams, $sce) {
+      ['$scope', '$routeParams', '$sce', 'ToolModeService',
+       function($scope, $routeParams, $sce, ToolModeService) {
+        ToolModeService.refresh(MODE_EVEKIT);
         $scope.sectionName = "API : Model";
         var baseUrl = "vendor/swagger-ui-2.1.4/swagger.html?url=${enterprises.orbital.evekit.frontend.swaggerui.model}";
         $scope.urlExtra = $sce.trustAsResourceUrl(baseUrl);

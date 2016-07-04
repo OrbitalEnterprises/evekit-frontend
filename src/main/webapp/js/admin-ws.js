@@ -8,6 +8,15 @@ var adminWS = angular.module('eveKitAdminWS', ['eveKitRemoteServices']);
 adminWS.factory('AdminWSService', ['SwaggerService',
   function(SwaggerService) {
     return {
+      'getConfigProp' : function(key) {
+        return SwaggerService.getSwagger()
+        .then(function (swg) {
+          return swg.Admin.getConfigProperty({key: key}, {})
+          .then(function(result) {
+            return result.obj;
+          }).catch(handleRemoteResponse);
+        });
+      },
       'getSysProps' : function() {
         return SwaggerService.getSwagger()
         .then(function (swg) {

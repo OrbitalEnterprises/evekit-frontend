@@ -1,26 +1,88 @@
 <div class="container-fluid">
 
-<div class="row col-wrap">
-  <div class="col-md-12">
-    <div id="intro-panel" class="panel panel-default">
+<div vertilize-container class="row col-wrap">
+  <div class="col-md-6">
+    <div vertilize id="intro-panel" class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Welcome to EveKit!</h3>
       </div>
       <div class="panel-body col-extend">
-      <table style="width: 100%; border-collapse: collapse; border: 0px;">
-      <tr><td style="width: 50%; padding: 10px; vertical-align: top">
-      EveKit is a web-based toolkit for building applications based on the EVE Online API and EVE Online static data export.
-      You can configure EveKit to automatically download your Character and Corporation data, then use REST
-      or one of the supported client APIs (currently: Java, Javascript and PHP) to access your data.
+      EveKit is a web-based toolkit for building applications based on the EVE Online third party APIs and EVE Online static data export.
+      EveKit provides four main services (use the toolbar above to switch between services):
+ 
+      <table style="border-collapse: collapse; border: 0px; margin-top: 1em; margin-bottom: 1em;">
+      <tr>
+        <td nowrap align="right" valign="middle" style="padding-bottom: 10px;">
+        <i class="fa fa-users fa-2x"></i>
+        </td>
+        <td nowrap align="right" valign="middle" style="padding-left: 20px; padding-bottom: 10px;">
+        <strong>Account Synchronization Services</strong>
+        </td>
+        <td style="padding-left: 20px; padding-bottom: 10px;">
+        Keep an up to date copy of your character and corporation data on the web, 
+        with convenient APIs for access from your own applications.
+        </td>
+      </tr>
+      <tr>
+        <td nowrap align="right" valign="middle" style="padding-bottom: 10px;">
+        <i class="fa fa-exchange fa-2x"></i>
+        </td>
+        <td nowrap align="right" valign="middle" style="padding-left: 20px; padding-bottom: 10px;">
+        <strong>EVE XML API Proxy</strong>
+        </td>
+        <td style="padding-left: 20px; padding-bottom: 10px;">
+        Use our proxy to the EVE XML API endpoints, perhaps because you want to work with JSON, or if your
+        favorite language doesn't yet have a library for accessing the endpoints.
+        </td>
+      </tr>
+      <tr>
+        <td nowrap align="right" valign="middle" style="padding-bottom: 10px;">
+        <i class="fa fa-database fa-2x"></i>
+        </td>
+        <td nowrap align="right" valign="middle" style="padding-left: 20px; padding-bottom: 10px;">
+        <strong>EVE Static Data Export Online</strong>
+        </td>
+        <td style="padding-left: 20px; padding-bottom: 10px;">
+        Access the latest static data export online using our REST interfaces, or easily generate
+        a client library in your favorite language.
+        </td>
+      </tr>
+      <tr>
+        <td nowrap align="right" valign="middle" style="padding-bottom: 10px;">
+        <i class="fa fa-line-chart fa-2x"></i>
+        </td>
+        <td nowrap align="right" valign="middle" style="padding-left: 20px; padding-bottom: 10px;">
+        <strong>EVE Market Data</strong>
+        </td>
+        <td style="padding-left: 20px; padding-bottom: 10px;">
+        Quickly view recent or historic order books or market data, or download data for your own use.
+        </td>
+      </tr>
+      </table>     
+      
+      These services combine to provide a rich set of capabilities which can be used in a variety of different
+      third party applications. 
       
       <h4 style="padding-bottom: 1em; padding-top: 1em;">Key features:</h4>
       
       <table style="border-collapse: collapse; border: 0px;">
       <tr>
         <td nowrap align="right" valign="middle" style="padding-bottom: 10px;">
-        <span class="glyphicon glyphicon-download glyph-list"></span>
+        <span class="glyphicon glyphicon-globe glyph-list"></span>
+        </td>
         <td style="padding-left: 10px; padding-bottom: 10px;">
-        EveKit can download for both characters and corporations, at least as frequently as the EVE API servers allow.
+        EveKit services are web-ready.  Every API is annotated with <a href="http://swagger.io">Swagger</a> markup
+        making it easy to work directly with REST services (returning JSON), or generate a client in the 
+        language of your choice (using free tools like the <a href="http://editor.swagger.io/">Swagger Editor</a>). 
+        </td>
+      </tr>
+      <tr>
+        <td nowrap align="right" valign="middle" style="padding-bottom: 10px;">
+        <span class="glyphicon glyphicon-download glyph-list"></span>
+        </td>
+        <td style="padding-left: 10px; padding-bottom: 10px;">
+        EveKit account synchronization can download for both characters and corporations, at least as frequently as 
+        the EVE XML API cache timers allow.
         </td>
       </tr>
       <tr>
@@ -28,8 +90,8 @@
         <span class="glyphicon glyphicon-calendar glyph-list"></span>
         </td>
         <td style="padding-left: 10px; padding-bottom: 10px;">
-        EveKit synchronizes your data on each download and keeps a <b>complete history</b> of everything.
-        Want to know what your assets looked like a month ago?  No problem.  The EveKit APIs allow you to
+        Account synchronization keeps a <b>complete history</b> of everything.  Want to know what your assets looked 
+        like a month ago?  No problem.  The account model APIs allow you to
         access your data at a date you specify (defaulting to the latest live data).
         </td>
       </tr>
@@ -38,17 +100,18 @@
         <span class="glyphicon glyphicon-tags glyph-list"></span>
         </td>
         <td style="padding-left: 10px; padding-bottom: 10px;">
-        EveKit lets you attach persistent <b>meta data</b> to your synchronized data.  This lets you do things like tag your
-        blueprint originals with the appropriate ME and PE (not really needed as of Hyperion, yay!).
+        Account data we store on your behalf can be tagged with persistent <b>meta data</b>.  This makes it easy to
+        store custom data you might need for certain applications right next to your regular account data.
         </td>
       </tr>
       <tr>
         <td nowrap align="right" valign="middle" style="padding-bottom: 10px;">
-        <span class="glyphicon glyphicon-lock glyph-list"></span>
+        <span class="glyphicon glyphicon-hdd glyph-list"></span>
         </td>
         <td style="padding-left: 10px; padding-bottom: 10px;">
-        The EveKit access API supports a <b>key</b> and <b>hash</b> scheme, similar to the EVE Online API key scheme, 
-        so you can give different people different access to your data.
+        EveKit provides interfaces to key reference data like the EVE Static Data Export and EVE Market Data.
+        We always provide access to the last two SDE dumps.  We scrape market data continuously (at least as frequently
+        as the cache timers allow), and generate daily dump files for download.
         </td>
       </tr>
       <tr>
@@ -56,82 +119,21 @@
         <span class="glyphicon glyphicon-cloud-download glyph-list"></span>
         </td>
         <td style="padding-left: 10px; padding-bottom: 10px;">
-        Your synchronized data is always available in <b>bulk</b> form.  We recognize that not everyone will want to use 
-        the EveKit APIs to access their data.  You can request a snapshot of your data directly from the accounts page at
-        any time.  We'll send you the snapshot in CSV format.  We don't trap your data behind our APIs, you can
-        get a complete snapshot any time you like.  See the <a href="https://groups.google.com/d/msg/orbital-enterprises/SZ_0uG117Ws/P95KQORAAQAJ" title="Account FAQ">Account FAQ</a> 
-        for details on how often snapshots are created.
+        Any account data we store on your behalf is always available to you in <b>bulk</b> form (as CSV files).  We recognize that not 
+        everyone will want to use our APIs to access their data, so we generate daily snapshots which you can access from our 
+        account synchronization services.  We don't trap your data behind our APIs, you can get a complete snapshot any time you like.
         </td>
       </tr>
       </table>
-      </td>
-      <td style="width: 50%; padding: 10px; vertical-align: top">
-      <h4 style="padding-bottom: 1em;">Getting Started:</h4>
-      
-      <table style="border-collapse: collapse; border: 0px;">
-      <tr>
-        <td nowrap align="right" valign="top" style="padding-bottom: 20px;">
-        <span class="circle-list">1</span>
-        </td>
-        <td valign="top" style="padding-left: 10px; padding-bottom: 20px;">
-        Sign in using one of the third party providers listed in the upper right corner.
-        At EveKit, we don't maintain login credentials (who wants that headache?).  We only
-        pull basic identification via OAuth from the third party you use for sign in.
-        </td>
-      </tr>
-      <tr>
-        <td nowrap align="right" valign="top" style="padding-bottom: 20px;">
-        <span class="circle-list">2</span>
-        </td>
-        <td valign="top" style="padding-left: 10px; padding-bottom: 20px;">
-        Once you're logged in, select "Sync Accounts -> Create Sync Account" from the menu.  
-        </td>
-      </tr>
-      <tr>
-        <td nowrap align="right" valign="top" style="padding-bottom: 20px;">
-        <span class="circle-list">3</span>
-        </td>
-        <td valign="top" style="padding-left: 10px; padding-bottom: 20px;">
-        On the "Add Account" page, you'll need to:
-        <ul>
-          <li> Provide an EVE Online API key and vCode to use for synchronization.
-          <li> Select whether to synchronize a character or corporation.
-          <li> Select which character to use for synchronization.
-          <li> Select whether you want to synchronize automatically or manually.
-        </ul>
-        </td>
-      </tr>
-      <tr>
-        <td nowrap align="right" valign="top" style="padding-bottom: 20px;">
-        <span class="circle-list">4</span>
-        </td>
-        <td valign="top" style="padding-left: 10px; padding-bottom: 20px;">
-        That's it!  To access your data online, create a data access key by
-        selecting "Data Access Keys -&gt; Data Access Keys for &lt;your_account&gt;".
-        If you prefer offline access, you can click "Download Latest Snapshot" from
-        the account list (we'll download your data as a zip of CSV files).  
-        You can find more information about accounts and access keys on the 
-        <a href="https://groups.google.com/d/msg/orbital-enterprises/SZ_0uG117Ws/P95KQORAAQAJ" title="Account FAQ">Account FAQ</a>.
-        </td>
-      </tr>
-      </table>
-      
-      <h4 style="padding-top: 1em; padding-bottom: 1em;">Need more help?</h4>
 
-      Check out our <a href="http://blog.orbital.enterprises/p/evekit-guides-videos-and-tutorials.html" title="Guides">Guides, Tutorials and Videos</a>!
-      
-      </td>
-      </tr>
-      </table>
+      Use the toolbar to select one of our services to get started.  If you need help, or want to explore more of our documentation,
+      check out our <a href="http://blog.orbital.enterprises/p/evekit-guides-videos-and-tutorials.html" title="Guides">Guides, Tutorials and Videos</a>!
       </div>
     </div>
   </div>
-  
-</div>  <!-- row -->
 
-<div class="row col-wrap">
   <div class="col-md-6">
-    <div id="news-panel" class="panel panel-default">
+    <div vertilize id="news-panel" class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title"><a href="http://blog.orbital.enterprises/search/label/evekit" target="_blank">Recent Blog Updates About EveKit</a></h3>
       </div>
@@ -147,7 +149,11 @@
     </div>
   </div>
   
-  <div class="col-md-6">
+</div>  <!-- row -->
+
+<div class="row col-wrap">
+  
+  <div class="col-md-12">
     <div id="about-panel" class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">About EveKit</h3>

@@ -28,8 +28,8 @@ var xmlResponseHandler = function(response) {
   return charList;
 };
 
-eveKitServerServices.factory('CharacterInfo', ['$resource', 'RemoteHandler',
-  function($resource, RemoteHandler) {
+eveKitServerServices.factory('CharacterInfo', ['$resource',
+  function($resource) {
     return $resource('https://api.eveonline.com/account/Characters.xml.aspx', {},
         {list:
           {method: 'GET',
@@ -56,8 +56,8 @@ var keyInfoResponseHandler = function(response) {
   return null;
 };
 
-eveKitServerServices.factory('APIKeyInfo', ['$resource', 'RemoteHandler',
-  function($resource, RemoteHandler) {
+eveKitServerServices.factory('APIKeyInfo', ['$resource',
+  function($resource) {
     return $resource('https://api.eveonline.com/account/APIKeyInfo.xml.aspx', {},
         {get:
           {method: 'GET',
