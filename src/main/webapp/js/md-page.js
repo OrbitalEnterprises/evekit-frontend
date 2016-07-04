@@ -298,7 +298,7 @@
           select_type_input.autocomplete({ source: typeCompleter });
           // Prepare date and time pickers
           select_date_input.datepicker({dateFormat: 'yy-mm-dd', minDate: '2015-04-01'});
-          select_time_input.timepicker({step: 5, useSelect: true, className: 'form-control'});
+          select_time_input.timepicker({show2400: true, timeFormat: 'H:i', step: 5, useSelect: true, className: 'form-control'});
           // Prepare market history graph area
           redrawMarketHistory();
           // Redraw on resizes
@@ -311,7 +311,8 @@
           // date = today (UTC)
           // time = now (UTC)
           var search = ekGetSearchParams();
-          var now = new Date(search['time'] || Date.now());
+          var sample = new Date();
+          var now = new Date(search['time'] || Date.now() + sample.getTimezoneOffset() * 60 * 1000);
           select_date_input.datepicker('setDate', now);
           select_time_input.timepicker('setTime', now);
           select_region_input.val(search['region'] || 'The Forge');
@@ -426,6 +427,7 @@
           var typeName = select_type_input.val();
           var regionID, typeID, fetchTime;
           fetchTime = select_time_input.timepicker('getTime', select_date_input.datepicker('getDate'));
+          fetchTime = new Date(fetchTime.getTime() - fetchTime.getTimezoneOffset() * 60 * 1000);
           var loadingMsg = DialogService.simpleInfoMessage("Loading data...", 30);
             // Resolve region
           regionLookup($scope.sdeClient, regionName, $scope.regionCache,
