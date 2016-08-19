@@ -360,7 +360,7 @@
         // Load and display book
         function displayBookData(regionID, typeID, timestamp, cb) {
           $scope.marketClient.then(function(client) {
-            client.MarketData.book({type: typeID, region: regionID, date: timestamp})
+            client.MarketData.book({typeID: typeID, regionID: regionID, date: timestamp})
               .then(function(bookData) {
                 bookData = bookData.obj;
                 $scope.bidOrders = [];
@@ -394,7 +394,7 @@
             var nextPromise = (function(nextTime) {
               return $q(function (resolve) {
                 $scope.marketClient.then(function (client) {
-                  client.MarketData.history({type: typeID, region: regionID, date: nextTime})
+                  client.MarketData.history({typeID: typeID, regionID: regionID, date: nextTime})
                     .then(function (historyData) {
                       resolve(historyData.obj);
                     })
