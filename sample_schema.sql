@@ -1,6 +1,8 @@
+CREATE DATABASE  IF NOT EXISTS `evekitdb_2_1_0` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `evekitdb_2_1_0`;
 -- MySQL dump 10.13  Distrib 5.6.24, for Win64 (x86_64)
 --
--- Host: localhost    Database: evekitdb
+-- Host: localhost    Database: evekitdb_2_1_0
 -- ------------------------------------------------------
 -- Server version	5.6.27-log
 
@@ -230,7 +232,7 @@ DROP TABLE IF EXISTS `evekit_auth_source`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `evekit_auth_source` (
   `sid` bigint(20) NOT NULL,
-  `details` longtext NOT NULL,
+  `details` longtext,
   `last` bigint(20) NOT NULL,
   `screenName` varchar(255) DEFAULT NULL,
   `source` varchar(255) DEFAULT NULL,
@@ -286,6 +288,8 @@ CREATE TABLE `evekit_char_sync` (
   `calendarEventAttendeesStatus` int(11) DEFAULT NULL,
   `characterSheetDetail` varchar(255) DEFAULT NULL,
   `characterSheetStatus` int(11) DEFAULT NULL,
+  `chatChannelsDetail` varchar(255) DEFAULT NULL,
+  `chatChannelsStatus` int(11) DEFAULT NULL,
   `contactListDetail` varchar(255) DEFAULT NULL,
   `contactListStatus` int(11) DEFAULT NULL,
   `contactNotificationsDetail` varchar(255) DEFAULT NULL,
@@ -304,6 +308,8 @@ CREATE TABLE `evekit_char_sync` (
   `industryJobsStatus` int(11) DEFAULT NULL,
   `killlogDetail` varchar(255) DEFAULT NULL,
   `killlogStatus` int(11) DEFAULT NULL,
+  `locationsDetail` varchar(255) DEFAULT NULL,
+  `locationsStatus` int(11) DEFAULT NULL,
   `mailBodiesDetail` varchar(255) DEFAULT NULL,
   `mailBodiesStatus` int(11) DEFAULT NULL,
   `mailMessagesDetail` varchar(255) DEFAULT NULL,
@@ -318,6 +324,8 @@ CREATE TABLE `evekit_char_sync` (
   `notificationTextsStatus` int(11) DEFAULT NULL,
   `notificationsDetail` varchar(255) DEFAULT NULL,
   `notificationsStatus` int(11) DEFAULT NULL,
+  `partialCharacterSheetDetail` varchar(255) DEFAULT NULL,
+  `partialCharacterSheetStatus` int(11) DEFAULT NULL,
   `planetaryColoniesDetail` varchar(255) DEFAULT NULL,
   `planetaryColoniesStatus` int(11) DEFAULT NULL,
   `researchDetail` varchar(255) DEFAULT NULL,
@@ -326,6 +334,8 @@ CREATE TABLE `evekit_char_sync` (
   `skillInTrainingStatus` int(11) DEFAULT NULL,
   `skillQueueDetail` varchar(255) DEFAULT NULL,
   `skillQueueStatus` int(11) DEFAULT NULL,
+  `skillsDetail` varchar(255) DEFAULT NULL,
+  `skillsStatus` int(11) DEFAULT NULL,
   `standingsDetail` varchar(255) DEFAULT NULL,
   `standingsStatus` int(11) DEFAULT NULL,
   `upcomingCalendarEventsDetail` varchar(255) DEFAULT NULL,
@@ -335,12 +345,6 @@ CREATE TABLE `evekit_char_sync` (
   `walletTransactionsDetail` varchar(255) DEFAULT NULL,
   `walletTransactionsStatus` int(11) DEFAULT NULL,
   `tid` bigint(20) NOT NULL,
-  `chatChannelsDetail` varchar(255) DEFAULT NULL,
-  `chatChannelsStatus` int(11) DEFAULT NULL,
-  `partialCharacterSheetDetail` varchar(255) DEFAULT NULL,
-  `partialCharacterSheetStatus` int(11) DEFAULT NULL,
-  `skillsDetail` varchar(255) DEFAULT NULL,
-  `skillsStatus` int(11) DEFAULT NULL,
   PRIMARY KEY (`tid`),
   CONSTRAINT `FKcsingpbawh8ecynpsrxvhkv22` FOREIGN KEY (`tid`) REFERENCES `evekit_sync` (`tid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -390,6 +394,8 @@ CREATE TABLE `evekit_corp_sync` (
   `industryJobsStatus` int(11) DEFAULT NULL,
   `killlogDetail` varchar(255) DEFAULT NULL,
   `killlogStatus` int(11) DEFAULT NULL,
+  `locationsDetail` varchar(255) DEFAULT NULL,
+  `locationsStatus` int(11) DEFAULT NULL,
   `marketOrdersDetail` varchar(255) DEFAULT NULL,
   `marketOrdersStatus` int(11) DEFAULT NULL,
   `memberMedalsDetail` varchar(255) DEFAULT NULL,
@@ -450,8 +456,8 @@ DROP TABLE IF EXISTS `evekit_data_account_status`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `evekit_data_account_status` (
   `createDate` bigint(20) NOT NULL,
-  `logonCount` int(11) NOT NULL,
-  `logonMinutes` int(11) NOT NULL,
+  `logonCount` bigint(20) NOT NULL,
+  `logonMinutes` bigint(20) NOT NULL,
   `paidUntil` bigint(20) NOT NULL,
   `cid` bigint(20) NOT NULL,
   PRIMARY KEY (`cid`),
@@ -471,8 +477,8 @@ CREATE TABLE `evekit_data_asset` (
   `flag` int(11) NOT NULL,
   `itemID` bigint(20) NOT NULL,
   `locationID` bigint(20) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `rawQuantity` int(11) NOT NULL,
+  `quantity` bigint(20) NOT NULL,
+  `rawQuantity` bigint(20) NOT NULL,
   `singleton` bit(1) NOT NULL,
   `typeID` int(11) NOT NULL,
   `cid` bigint(20) NOT NULL,
@@ -547,7 +553,7 @@ DROP TABLE IF EXISTS `evekit_data_calendar_event_attendee`;
 CREATE TABLE `evekit_data_calendar_event_attendee` (
   `characterID` bigint(20) NOT NULL,
   `characterName` varchar(255) DEFAULT NULL,
-  `eventID` int(11) NOT NULL,
+  `eventID` bigint(20) NOT NULL,
   `response` varchar(255) DEFAULT NULL,
   `cid` bigint(20) NOT NULL,
   PRIMARY KEY (`cid`),
@@ -584,6 +590,7 @@ CREATE TABLE `evekit_data_capsuleer` (
   `industryJobsExpiry` bigint(20) NOT NULL,
   `industryJobsHistoryExpiry` bigint(20) NOT NULL,
   `killlogExpiry` bigint(20) NOT NULL,
+  `locationsExpiry` bigint(20) NOT NULL,
   `mailBodiesExpiry` bigint(20) NOT NULL,
   `mailMessagesExpiry` bigint(20) NOT NULL,
   `mailingListsExpiry` bigint(20) NOT NULL,
@@ -591,17 +598,17 @@ CREATE TABLE `evekit_data_capsuleer` (
   `medalsExpiry` bigint(20) NOT NULL,
   `notificationTextsExpiry` bigint(20) NOT NULL,
   `notificationsExpiry` bigint(20) NOT NULL,
+  `partialCharacterSheetExpiry` bigint(20) NOT NULL,
   `planetaryColoniesExpiry` bigint(20) NOT NULL,
   `researchExpiry` bigint(20) NOT NULL,
   `skillInTrainingExpiry` bigint(20) NOT NULL,
   `skillQueueExpiry` bigint(20) NOT NULL,
+  `skillsExpiry` bigint(20) NOT NULL,
   `standingsExpiry` bigint(20) NOT NULL,
   `upcomingCalendarEventsExpiry` bigint(20) NOT NULL,
   `walletJournalExpiry` bigint(20) NOT NULL,
   `walletTransactionsExpiry` bigint(20) NOT NULL,
   `cid` bigint(20) NOT NULL,
-  `partialCharacterSheetExpiry` bigint(20) NOT NULL,
-  `skillsExpiry` bigint(20) NOT NULL,
   PRIMARY KEY (`cid`),
   CONSTRAINT `FK9umg7lx8r2xcmhhgh0jr25r7j` FOREIGN KEY (`cid`) REFERENCES `evekit_cached_data` (`cid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -768,7 +775,9 @@ CREATE TABLE `evekit_data_character_sheet` (
   `allianceID` bigint(20) NOT NULL,
   `allianceName` varchar(255) DEFAULT NULL,
   `ancestry` varchar(255) DEFAULT NULL,
+  `ancestryID` int(11) NOT NULL,
   `bloodline` varchar(255) DEFAULT NULL,
+  `bloodlineID` int(11) NOT NULL,
   `characterID` bigint(20) NOT NULL,
   `charisma` int(11) NOT NULL,
   `corporationID` bigint(20) NOT NULL,
@@ -777,7 +786,7 @@ CREATE TABLE `evekit_data_character_sheet` (
   `factionID` bigint(20) NOT NULL,
   `factionName` varchar(255) DEFAULT NULL,
   `freeRespecs` int(11) NOT NULL,
-  `freeSkillPoints` int(11) NOT NULL,
+  `freeSkillPoints` bigint(20) NOT NULL,
   `gender` varchar(255) DEFAULT NULL,
   `homeStationID` bigint(20) NOT NULL,
   `intelligence` int(11) NOT NULL,
@@ -790,8 +799,6 @@ CREATE TABLE `evekit_data_character_sheet` (
   `remoteStationDate` bigint(20) NOT NULL,
   `willpower` int(11) NOT NULL,
   `cid` bigint(20) NOT NULL,
-  `ancestryID` int(11) NOT NULL,
-  `bloodlineID` int(11) NOT NULL,
   PRIMARY KEY (`cid`),
   CONSTRAINT `FKbgm6x09v7e91ls3yod2n453kq` FOREIGN KEY (`cid`) REFERENCES `evekit_cached_data` (`cid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -914,7 +921,7 @@ CREATE TABLE `evekit_data_chatchannel` (
   `comparisonKey` varchar(255) DEFAULT NULL,
   `displayName` varchar(255) DEFAULT NULL,
   `hasPassword` bit(1) NOT NULL,
-  `motd` varchar(255) DEFAULT NULL,
+  `motd` longtext,
   `ownerID` bigint(20) NOT NULL,
   `ownerName` varchar(255) DEFAULT NULL,
   `cid` bigint(20) NOT NULL,
@@ -1002,14 +1009,14 @@ CREATE TABLE `evekit_data_container_log` (
   `actorName` varchar(255) DEFAULT NULL,
   `flag` int(11) NOT NULL,
   `itemID` bigint(20) NOT NULL,
-  `itemTypeID` bigint(20) NOT NULL,
-  `locationID` int(11) NOT NULL,
+  `itemTypeID` int(11) NOT NULL,
+  `locationID` bigint(20) NOT NULL,
   `logTime` bigint(20) NOT NULL,
   `newConfiguration` varchar(255) DEFAULT NULL,
   `oldConfiguration` varchar(255) DEFAULT NULL,
   `passwordType` varchar(255) DEFAULT NULL,
-  `quantity` int(11) NOT NULL,
-  `typeID` bigint(20) NOT NULL,
+  `quantity` bigint(20) NOT NULL,
+  `typeID` int(11) NOT NULL,
   `cid` bigint(20) NOT NULL,
   PRIMARY KEY (`cid`),
   KEY `logTimeIndex` (`logTime`),
@@ -1035,18 +1042,18 @@ CREATE TABLE `evekit_data_contract` (
   `dateCompleted` bigint(20) NOT NULL,
   `dateExpired` bigint(20) NOT NULL,
   `dateIssued` bigint(20) NOT NULL,
-  `endStationID` int(11) NOT NULL,
+  `endStationID` bigint(20) NOT NULL,
   `forCorp` bit(1) NOT NULL,
   `issuerCorpID` bigint(20) NOT NULL,
   `issuerID` bigint(20) NOT NULL,
   `numDays` int(11) NOT NULL,
   `price` decimal(19,2) DEFAULT NULL,
   `reward` decimal(19,2) DEFAULT NULL,
-  `startStationID` int(11) NOT NULL,
+  `startStationID` bigint(20) NOT NULL,
   `status` varchar(255) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
-  `volume` bigint(20) NOT NULL,
+  `volume` double NOT NULL,
   `cid` bigint(20) NOT NULL,
   PRIMARY KEY (`cid`),
   KEY `contractIDIndex` (`contractID`),
@@ -1087,7 +1094,7 @@ CREATE TABLE `evekit_data_contract_item` (
   `contractID` bigint(20) NOT NULL,
   `included` bit(1) NOT NULL,
   `quantity` bigint(20) NOT NULL,
-  `rawQuantity` int(11) NOT NULL,
+  `rawQuantity` bigint(20) NOT NULL,
   `recordID` bigint(20) NOT NULL,
   `singleton` bit(1) NOT NULL,
   `typeID` int(11) NOT NULL,
@@ -1125,6 +1132,7 @@ CREATE TABLE `evekit_data_corporation` (
   `industryJobsExpiry` bigint(20) NOT NULL,
   `industryJobsHistoryExpiry` bigint(20) NOT NULL,
   `killlogExpiry` bigint(20) NOT NULL,
+  `locationsExpiry` bigint(20) NOT NULL,
   `marketOrdersExpiry` bigint(20) NOT NULL,
   `medalsExpiry` bigint(20) NOT NULL,
   `memberMedalsExpiry` bigint(20) NOT NULL,
@@ -1384,10 +1392,10 @@ DROP TABLE IF EXISTS `evekit_data_industry_job`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `evekit_data_industry_job` (
-  `activityID` bigint(20) NOT NULL,
+  `activityID` int(11) NOT NULL,
   `blueprintID` bigint(20) NOT NULL,
   `blueprintLocationID` bigint(20) NOT NULL,
-  `blueprintTypeID` bigint(20) NOT NULL,
+  `blueprintTypeID` int(11) NOT NULL,
   `blueprintTypeName` varchar(255) DEFAULT NULL,
   `completedCharacterID` bigint(20) NOT NULL,
   `completedDate` bigint(20) NOT NULL,
@@ -1401,17 +1409,17 @@ CREATE TABLE `evekit_data_industry_job` (
   `outputLocationID` bigint(20) NOT NULL,
   `pauseDate` bigint(20) NOT NULL,
   `probability` double NOT NULL,
-  `productTypeID` bigint(20) NOT NULL,
+  `productTypeID` int(11) NOT NULL,
   `productTypeName` varchar(255) DEFAULT NULL,
   `runs` int(11) NOT NULL,
-  `solarSystemID` bigint(20) NOT NULL,
+  `solarSystemID` int(11) NOT NULL,
   `solarSystemName` varchar(255) DEFAULT NULL,
   `startDate` bigint(20) NOT NULL,
   `stationID` bigint(20) NOT NULL,
   `status` int(11) NOT NULL,
   `successfulRuns` int(11) NOT NULL,
   `teamID` bigint(20) NOT NULL,
-  `timeInSeconds` bigint(20) NOT NULL,
+  `timeInSeconds` int(11) NOT NULL,
   `cid` bigint(20) NOT NULL,
   PRIMARY KEY (`cid`),
   KEY `jobIDIndex` (`jobID`),
@@ -1561,6 +1569,26 @@ CREATE TABLE `evekit_data_kill_victim` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `evekit_data_location`
+--
+
+DROP TABLE IF EXISTS `evekit_data_location`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `evekit_data_location` (
+  `itemID` bigint(20) NOT NULL,
+  `itemName` varchar(255) DEFAULT NULL,
+  `x` double NOT NULL,
+  `y` double NOT NULL,
+  `z` double NOT NULL,
+  `cid` bigint(20) NOT NULL,
+  PRIMARY KEY (`cid`),
+  KEY `idIndex` (`itemID`),
+  CONSTRAINT `FK8a06n6kqsbr5e4qsjpy6vwkx0` FOREIGN KEY (`cid`) REFERENCES `evekit_cached_data` (`cid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `evekit_data_mailing_list`
 --
 
@@ -1656,11 +1684,11 @@ DROP TABLE IF EXISTS `evekit_data_member_tracking`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `evekit_data_member_tracking` (
   `base` varchar(255) DEFAULT NULL,
-  `baseID` int(11) NOT NULL,
+  `baseID` bigint(20) NOT NULL,
   `characterID` bigint(20) NOT NULL,
   `grantableRoles` bigint(20) NOT NULL,
   `location` varchar(255) DEFAULT NULL,
-  `locationID` int(11) NOT NULL,
+  `locationID` bigint(20) NOT NULL,
   `logoffDateTime` bigint(20) NOT NULL,
   `logonDateTime` bigint(20) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -1689,7 +1717,7 @@ CREATE TABLE `evekit_data_outpost` (
   `ownerID` bigint(20) NOT NULL,
   `reprocessingEfficiency` double NOT NULL,
   `reprocessingStationTake` double NOT NULL,
-  `solarSystemID` bigint(20) NOT NULL,
+  `solarSystemID` int(11) NOT NULL,
   `standingOwnerID` bigint(20) NOT NULL,
   `stationID` bigint(20) NOT NULL,
   `stationName` varchar(255) DEFAULT NULL,
@@ -1977,7 +2005,7 @@ DROP TABLE IF EXISTS `evekit_data_starbase`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `evekit_data_starbase` (
   `itemID` bigint(20) NOT NULL,
-  `locationID` int(11) NOT NULL,
+  `locationID` bigint(20) NOT NULL,
   `moonID` int(11) NOT NULL,
   `onlineTimestamp` bigint(20) NOT NULL,
   `standingOwnerID` bigint(20) NOT NULL,
@@ -2033,7 +2061,7 @@ DROP TABLE IF EXISTS `evekit_data_upcoming_calendar_event`;
 CREATE TABLE `evekit_data_upcoming_calendar_event` (
   `duration` int(11) NOT NULL,
   `eventDate` bigint(20) NOT NULL,
-  `eventID` int(11) NOT NULL,
+  `eventID` bigint(20) NOT NULL,
   `eventText` longtext,
   `eventTitle` varchar(255) DEFAULT NULL,
   `important` bit(1) NOT NULL,
@@ -2090,6 +2118,7 @@ CREATE TABLE `evekit_data_wallet_transaction` (
   `accountKey` int(11) NOT NULL,
   `clientID` bigint(20) NOT NULL,
   `clientName` varchar(255) DEFAULT NULL,
+  `clientTypeID` int(11) NOT NULL,
   `date` bigint(20) NOT NULL,
   `journalTransactionID` bigint(20) NOT NULL,
   `price` decimal(19,2) DEFAULT NULL,
@@ -2102,6 +2131,8 @@ CREATE TABLE `evekit_data_wallet_transaction` (
   `typeID` int(11) NOT NULL,
   `typeName` varchar(255) DEFAULT NULL,
   `cid` bigint(20) NOT NULL,
+  `characterID` bigint(20) NOT NULL,
+  `characterName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`cid`),
   KEY `transactionIDIndex` (`transactionID`),
   CONSTRAINT `FKnch7ua2a6hrebva2xa7i0iogt` FOREIGN KEY (`cid`) REFERENCES `evekit_cached_data` (`cid`)
@@ -2403,4 +2434,4 @@ CREATE TABLE `orbital_properties` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-08  8:26:33
+-- Dump completed on 2016-10-02 11:39:29

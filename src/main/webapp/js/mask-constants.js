@@ -47,6 +47,8 @@ evekit.CommonMaskConstants = {
       "Industry Jobs Access", "Allows view of industry jobs."),
   'ACCESS_KILL_LOG' : new evekit.MaskConstant('ACCESS_KILL_LOG', "Kill Log Access",
       "Allows view of kill log."),
+  'ACCESS_LOCATIONS' : new evekit.MaskConstant('ACCESS_LOCATIONS', "Locations Access",
+      "Allows view of asset locations."),
   'ACCESS_MARKET_ORDERS' : new evekit.MaskConstant('ACCESS_MARKET_ORDERS',
       "Market Orders Access", "Allows view of market orders."),
   'ACCESS_STANDINGS' : new evekit.MaskConstant('ACCESS_STANDINGS', "Standings Access",
