@@ -122,6 +122,47 @@
           </tr>
         </table>
       </div>              
+
+      <div class="panel-heading">
+        <table style="border-collapse: collapse; border: 0px;">
+          <tr>
+            <td nowrap><h3 class="panel-title">Inflight Ref Data Syncs</h3></td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="panel-body">
+        <table style="width: 100%; padding: 0px; border-collapse: separate; border-spacing: 4px; border: 0px;">
+          <tr>
+            <td align="center" valign="bottom" class="history-label">Sync Start</td>
+            <td align="center" valign="bottom" class="history-label">Sync End</td>
+            <td><div class="sync-history-cont"><div title="Server Status Status" class="history-label history-label-rot">Server Status</div></div></td>
+            <td><div class="sync-history-cont"><div title="API Call List Status" class="history-label history-label-rot">API Calls</div></div></td>
+            <td><div class="sync-history-cont"><div title="Alliance List Status" class="history-label history-label-rot">Alliances</div></div></td>
+            <td><div class="sync-history-cont"><div title="Conquerable Station List Status" class="history-label history-label-rot">Conq. Stations</div></div></td>
+            <td><div class="sync-history-cont"><div title="Error List Status" class="history-label history-label-rot">Error List</div></div></td>
+            <td><div class="sync-history-cont"><div title="Faction War Stats Status" class="history-label history-label-rot">Fac. War Stats</div></div></td>
+            <td><div class="sync-history-cont"><div title="Faction War Top Stats Status" class="history-label history-label-rot">Fac. War Top Stats</div></div></td>
+            <td><div class="sync-history-cont"><div title="Ref Types Status" class="history-label history-label-rot">Ref Types</div></div></td>
+            <td><div class="sync-history-cont"><div title="Skill Tree Status" class="history-label history-label-rot">Skill Tree</div></div></td>
+            <td><div class="sync-history-cont"><div title="Faction War Systems Status" class="history-label history-label-rot">Fac. War Systems</div></div></td>
+            <td><div class="sync-history-cont"><div title="Map Jumps Status" class="history-label history-label-rot">Map Jumps</div></div></td>
+            <td><div class="sync-history-cont"><div title="Map Kills Status" class="history-label history-label-rot">Map Kills</div></div></td>
+            <td><div class="sync-history-cont"><div title="Sovereignty Status" class="history-label history-label-rot">Sovereignty</div></div></td>
+            <td align="center" valign="bottom" class="account-label">Actions</td>
+          </tr>
+          <tr ng-repeat="his in refSyncHistory">
+            <td align="center" class="entry-label">{{getStartTime(false, his)|date:'yyyy-MM-dd HH:mm:ss':'UTC'}}</td>
+            <td align="center" class="entry-label">{{getEndTime(false, his)|date:'yyyy-MM-dd HH:mm:ss':'UTC'}}</td>
+            <td ng-repeat="stat in refStatusFunctions" class="{{determineRefHistoryClass(false, his, $index)}}" title="{{determineRefHistoryTitle(false, his, $index)}}"></td>
+            <td align="center">
+              <button type="button" class="btn btn-primary" ng-click="displayRefDetail(his.tid)">Details</button>
+              <button type="button" class="btn btn-primary" ng-click="finishRefSync(his.tid)">Finish Sync</button>
+            </td>
+          </tr>
+        </table>
+      </div>              
+
     </div>
   </div>
 </div>

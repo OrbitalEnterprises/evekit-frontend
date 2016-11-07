@@ -138,6 +138,10 @@ eveKit.config(['$routeProvider',
         templateUrl: 'partials/admin-users.html',
         controller: 'AdminUsersCtrl'
       }).
+      when('/admin/refhistory', {
+        templateUrl: 'partials/admin-ref-history.html',
+        controller: 'AdminHistoryCtrl'
+      }).
       otherwise({
         redirectTo: '/main/news'
       });
@@ -362,6 +366,10 @@ eveKit.controller('EveKitAuthCtrl', ['$scope', '$route', '$timeout', 'UserCreden
                               title: 'User List',
                               display: 'User List',
                               link: '#/admin/users'
+                            }, {
+                              title: 'Ref Sync History',
+                              display: 'Ref Sync History',
+                              link: '#/admin/refhistory'
                             }]
                           }
                           ];

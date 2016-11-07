@@ -137,6 +137,36 @@ var CorporationSyncTrackerDetailFieldList = [
                                              'walletJournalDetail',
                                              'walletTransactionsDetail'
                                              ];
+var RefSyncTrackerStatusFieldList = [
+                                     'serverStatusStatus',
+                                     'callListStatus',
+                                     'allianceListStatus',
+                                     'conquerableStationsStatus',
+                                     'errorListStatus',
+                                     'facWarStatsStatus',
+                                     'facWarTopStatsStatus',
+                                     'refTypeStatus',
+                                     'skillTreeStatus',
+                                     'facWarSystemsStatus',
+                                     'mapJumpStatus',
+                                     'mapKillStatus',
+                                     'sovereigntyStatus'
+                                     ];
+var RefSyncTrackerDetailFieldList = [
+                                     'serverStatusDetail',
+                                     'callListDetail',
+                                     'allianceListDetail',
+                                     'conquerableStationsDetail',
+                                     'errorListDetail',
+                                     'facWarStatsDetail',
+                                     'facWarTopStatsDetail',
+                                     'refTypeDetail',
+                                     'skillTreeDetail',
+                                     'facWarSystemsDetail',
+                                     'mapJumpDetail',
+                                     'mapKillDetail',
+                                     'sovereigntyDetail'
+                                     ];
 
 /* Sync Tracker Services */
 (function() {
@@ -172,6 +202,18 @@ trackerWS.factory('TrackerWSService', ['SwaggerService',
           }).catch(handleRemoteResponse);
         });
       },
+      'getRefHistory' : function(contid, maxresults) {
+        return SwaggerService.getSwagger()
+        .then(function (swg) {
+          var args = {};
+          if (contid) args['contid'] = contid;
+          if (maxresults) args['maxresults'] = maxresults;
+          return swg.Account.requestRefSyncHistory(args, {})
+          .then(function(result) {
+            return result.obj;
+          }).catch(handleRemoteResponse);
+        });
+      },
       'getUnfinishedCapSync' : function() {
         return SwaggerService.getSwagger()
         .then(function (swg) {
@@ -190,10 +232,28 @@ trackerWS.factory('TrackerWSService', ['SwaggerService',
           }).catch(handleRemoteResponse);
         });
       },
+      'getUnfinishedRefSync' : function() {
+        return SwaggerService.getSwagger()
+        .then(function (swg) {
+          return swg.Account.requestUnfinishedRefSync({}, {})
+          .then(function(result) {
+            return result.obj;
+          }).catch(handleRemoteResponse);
+        });
+      },
       'finishTracker' : function(uid, aid, tid) {
         return SwaggerService.getSwagger()
         .then(function (swg) {
           return swg.Account.requestFinishTracker({uid: uid, aid: aid, tid: tid}, {})
+          .then(function(result) {
+            return true;
+          }).catch(handleRemoteResponse);
+        });
+      },
+      'finishRefTracker' : function(tid) {
+        return SwaggerService.getSwagger()
+        .then(function (swg) {
+          return swg.Account.requestFinishRefTracker({tid: tid}, {})
           .then(function(result) {
             return true;
           }).catch(handleRemoteResponse);

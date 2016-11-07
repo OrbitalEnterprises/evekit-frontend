@@ -205,8 +205,10 @@
         $scope.sectionName = "Admin : Inflight Syncs";
         $scope.charSyncHistory = [];
         $scope.corpSyncHistory = [];
+        $scope.refSyncHistory = [];
         $scope.charStatusFunctions = CapsuleerSyncTrackerStatusFieldList;
         $scope.corpStatusFunctions = CorporationSyncTrackerStatusFieldList;
+        $scope.refStatusFunctions = RefSyncTrackerStatusFieldList;
 
         // Refresh char sync list
         var refreshCharSyncList = function() {
@@ -242,15 +244,36 @@
           });
         };
 
+        // Refresh ref sync list
+        var refreshRefSyncList = function() {
+          var info = DialogService.simpleInfoMessage('Refreshing Ref Data Syncs...');
+          TrackerWSService.getUnfinishedRefSync()
+          .then(function(result) {
+            $scope.$apply(function() {
+              DialogService.removeMessage(info);
+              $scope.refSyncHistory = result;
+            });
+          }).catch(function(err) {
+            $scope.$apply(function() {
+              DialogService.removeMessage(info);
+              DialogService.connectionErrorMessage('refreshing ref data syncs: ' + err.errorMessage, 10);
+            });
+          });
+        };
+
         // Refresh both sync lists
         $scope.refreshSyncLists = function() {
           refreshCharSyncList();
           refreshCorpSyncList();
+          refreshRefSyncList();
         };
 
         // Display sync details
         $scope.displayDetail = function(uid, accountID, trackerID) {
           DialogService.ackDialog('info', 'uid=' + uid + '<br>aid=' + accountID + '<br>tid=' + trackerID, -1, angular.noop);
+        };
+        $scope.displayRefDetail = function(trackerID) {
+          DialogService.ackDialog('info', 'tid=' + trackerID, -1, angular.noop);
         };
 
         // Finish synchronization
@@ -266,6 +289,21 @@
             $scope.$apply(function() {
               DialogService.removeMessage(info);
               DialogService.connectionErrorMessage('finishing sync: ' + err.errorMessage, 10);
+            });
+          });
+        };
+        $scope.finishRefSync = function(trackerID) {
+          var info = DialogService.simpleInfoMessage('Finishing ref sync...');
+          TrackerWSService.finishRefTracker(trackerID)
+          .then(function(result) {
+            $scope.$apply(function() {
+              DialogService.removeMessage(info);
+              $scope.refreshSyncLists();
+            });
+          }).catch(function(err) {
+            $scope.$apply(function() {
+              DialogService.removeMessage(info);
+              DialogService.connectionErrorMessage('finishing ref sync: ' + err.errorMessage, 10);
             });
           });
         };
@@ -334,6 +372,67 @@
             break;
           }
         };
+
+        // Class and title decoding for ref data sync
+        $scope.determineRefHistoryClass = function (historyEntry, index) {
+          var status = historyEntry[RefSyncTrackerStatusFieldList[index]];
+          switch (status) {
+            case 'UPDATED':
+              return 'sync-history-ok';
+              break;
+
+            case 'NOT_EXPIRED':
+              return 'sync-history-ok';
+              break;
+
+            case 'SYNC_ERROR':
+              return 'sync-history-fail';
+              break;
+
+            case 'SYNC_WARNING':
+              return 'sync-history-warn';
+              break;
+
+            case 'NOT_PROCESSED':
+              return 'sync-history-nop';
+              break;
+
+            case 'NOT_ALLOWED':
+              return 'sync-history-na';
+              break;
+
+            default:
+              console.log('Received unexpected status "' + status + '" in sync history');
+            break;
+          }
+        };
+        $scope.determineRefHistoryTitle = function (historyEntry, index) {
+          var status = historyEntry[RefSyncTrackerDetailFieldList[index]];
+          switch (status) {
+            case 'UPDATED':
+              return 'Updated';
+              break;
+
+            case 'NOT_EXPIRED':
+              return 'Not Expired';
+              break;
+
+            case 'SYNC_ERROR':
+            case 'SYNC_WARNING':
+            case 'NOT_ALLOWED':
+              return historyEntry[RefSyncTrackerDetailFieldList[index]];
+              break;
+
+            case 'NOT_PROCESSED':
+              return 'Not Processed';
+              break;
+
+            default:
+              console.log('Received unexpected status "' + status + '" in sync history');
+            break;
+          }
+        };
+
         // Get history element start time.
         $scope.getStartTime = function (isChar, el) {
           return el['syncStart'];
@@ -472,6 +571,136 @@
 
         // Initialize
         $scope.refresh();
+      }]);
+
+  eveKitAdmin.controller('AdminHistoryCtrl',
+      ['$scope', 'DialogService', 'AccountWSService', 'TrackerWSService',
+       function($scope, DialogService, AccountWSService, TrackerWSService) {
+        $scope.sectionName = "Admin : Ref Sync History";
+        $scope.syncHistory = [];
+        $scope.statusPointerArray = RefSyncTrackerStatusFieldList;
+        $scope.detailPointerArray = RefSyncTrackerDetailFieldList;
+        $scope.determineRefHistoryClass = function (historyEntry, index) {
+          var status = historyEntry[$scope.statusPointerArray[index]];
+          switch (status) {
+            case 'UPDATED':
+              return 'sync-history-ok';
+              break;
+
+            case 'NOT_EXPIRED':
+              return 'sync-history-ok';
+              break;
+
+            case 'SYNC_ERROR':
+              return 'sync-history-fail';
+              break;
+
+            case 'SYNC_WARNING':
+              return 'sync-history-warn';
+              break;
+
+            case 'NOT_PROCESSED':
+              return 'sync-history-nop';
+              break;
+
+            case 'NOT_ALLOWED':
+              return 'sync-history-na';
+              break;
+
+            default:
+              console.log('Received unexpected status "' + status + '" in sync history');
+            break;
+          }
+        };
+        $scope.determineRefHistoryTitle = function (historyEntry, index) {
+          var status = historyEntry[$scope.statusPointerArray[index]];
+          switch (status) {
+            case 'UPDATED':
+              return 'Updated';
+              break;
+
+            case 'NOT_EXPIRED':
+              return 'Not Expired';
+              break;
+
+            case 'SYNC_ERROR':
+            case 'SYNC_WARNING':
+            case 'NOT_ALLOWED':
+              return historyEntry[$scope.detailPointerArray[index]];
+              break;
+
+            case 'NOT_PROCESSED':
+              return 'Not Processed';
+              break;
+
+            default:
+              console.log('Received unexpected status "' + status + '" in sync history');
+            break;
+          }
+        };
+        // Get history element start time.
+        $scope.getStartTime = function (el) {
+          return el['syncStart'];
+        };
+        // Get history element end time.
+        $scope.getEndTime = function (el) {
+          return el['syncEnd'];
+        };
+        // Load next history batch.
+        var maxresults = 100;
+        $scope.refreshHistory = function(opt_cb) {
+          $scope.loading = true;
+          var continuation = $scope.syncHistory.length == 0 ? -1 : $scope.syncHistory[$scope.syncHistory.length - 1].syncStart;
+          var resource = TrackerWSService.getRefHistory;
+          resource(continuation, maxresults).then(function(result) {
+            $scope.$apply(function() {
+              $scope.loading = false;
+              var toadd = [];
+              angular.forEach(result, function(el) {
+                var found = false;
+                for(var i = 0; i < $scope.syncHistory.length && !found; i++) {
+                  if ($scope.syncHistory[i].tid == el.tid) {
+                    found = true;
+                    break;
+                  }
+                }
+                if (!found) toadd.push(el);
+              });
+              $scope.syncHistory = $scope.syncHistory.concat(toadd);
+              $scope.syncHistory.sort(function(a, b) {
+                return b.syncStart - a.syncStart;
+              });
+              if (angular.isDefined(opt_cb)) opt_cb();
+            });
+          }).catch(function(err) {
+            $scope.$apply(function() {
+              $scope.loading = false;
+              DialogService.connectionErrorMessage('loading ref sync history: ' + err.errorMessage + '.  Please reload to try again', 20);
+              if (angular.isDefined(opt_cb)) opt_cb();
+            });
+          });
+        };
+        // Load more history when we scroll to the bottom of the current view.
+        $scope.handleScroll = function() {
+          if ($('#refHistoryScroll').scrollTop() > ($('#refHistoryScrollTable').height() - $('#refHistoryScroll').height()) / 2) {
+            $('#refHistoryScroll').unbind('scroll');
+            $scope.loadMoreHistory();
+          }
+        };
+        $scope.loadMoreHistory = function () {
+          $scope.refreshHistory(function() {
+            fixHeight();
+            $('#refHistoryScroll').scroll($scope.handleScroll);
+          });
+        };
+        // Fix viewport size so scrolling works correctly.
+        var fixHeight = function() {
+          $('#refHistoryScroll').height($('#bottom-nav').offset().top - $('#refHistoryScroll').offset().top - 60);
+        };
+        // Init
+        $('#refHistoryScroll').scroll($scope.handleScroll);
+        $(window).resize(fixHeight);
+        $scope.loadMoreHistory();
       }]);
 
 })();

@@ -11,14 +11,6 @@
         </description>
         
         <class>enterprises.orbital.db.DBProperty</class>
-        <class>enterprises.orbital.evekit.account.GeneralSequenceNumber</class>
-        <class>enterprises.orbital.evekit.account.EveKitUserAccount</class>
-        <class>enterprises.orbital.evekit.account.EveKitUserAuthSource</class>
-        <class>enterprises.orbital.evekit.account.SynchronizedAccountAccessKey</class>
-        <class>enterprises.orbital.evekit.account.SynchronizedEveAccount</class>
-        <class>enterprises.orbital.evekit.model.CapsuleerSyncTracker</class>
-        <class>enterprises.orbital.evekit.model.CorporationSyncTracker</class>
-        <class>enterprises.orbital.evekit.model.SyncTracker</class>        
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="${enterprises.orbital.evekit.frontend.db.properties.driver}"/>
@@ -51,6 +43,7 @@
         <class>enterprises.orbital.evekit.account.SynchronizedEveAccount</class>
         <class>enterprises.orbital.evekit.model.CapsuleerSyncTracker</class>
         <class>enterprises.orbital.evekit.model.CorporationSyncTracker</class>
+        <class>enterprises.orbital.evekit.model.RefSyncTracker</class>
         <class>enterprises.orbital.evekit.model.SyncTracker</class>
 
         <properties>
