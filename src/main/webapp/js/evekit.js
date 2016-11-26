@@ -122,6 +122,10 @@ eveKit.config(['$routeProvider',
         templateUrl: 'partials/api-model.html',
         controller: 'APIModelCtrl'
       }).
+      when('/api/refmodel', {
+        templateUrl: 'partials/api-model.html',
+        controller: 'RefAPIModelCtrl'
+      }).
       when('/admin/syspropedit', {
         templateUrl: 'partials/admin-sysprop.html',
         controller: 'AdminSyspropEditCtrl'
@@ -298,6 +302,11 @@ eveKit.controller('EveKitAuthCtrl', ['$scope', '$route', '$timeout', 'UserCreden
                               title: 'Model API',
                               display: 'Model API',
                               link: '#/api/model/-1/-1/-1'
+                            },
+                            {
+                              title: 'Reference Data API',
+                              display: 'Reference Data API',
+                              link: '#/api/refmodel'
                             },
                             {
                               title: 'API FAQ',

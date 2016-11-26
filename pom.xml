@@ -66,6 +66,7 @@
                 <include>**/web.xml</include>
                 <include>**/index.html</include>
                 <include>**/swagger.html</include>
+                <include>**/swagger-ref.html</include>
                 <include>**/swagger-xmlproxy.html</include>
                 <include>**/swagger-marketdata.html</include>
                 <include>**/xmlproxy-main.html</include>

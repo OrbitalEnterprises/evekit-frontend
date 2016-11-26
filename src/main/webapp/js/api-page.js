@@ -18,4 +18,13 @@
         }
       }]);
 
+  eveKitAPI.controller('RefAPIModelCtrl',
+      ['$scope', '$routeParams', '$sce', 'ToolModeService',
+       function($scope, $routeParams, $sce, ToolModeService) {
+        ToolModeService.refresh(MODE_EVEKIT);
+        $scope.sectionName = "API : Reference Data Model";
+        var baseUrl = "vendor/swagger-ui-2.1.4/swagger-ref.html?url=${enterprises.orbital.evekit.frontend.swaggerui.refmodel}";
+        $scope.urlExtra = $sce.trustAsResourceUrl(baseUrl);
+      }]);
+
 })();
