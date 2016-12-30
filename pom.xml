@@ -73,6 +73,7 @@
                 <include>**/api-page.js</include>
                 <include>**/xmlproxy-page.js</include>
                 <include>**/md-page.js</include>
+                <include>**/tableau-page.js</include>
               </includes>
             </resource>
           </webResources>
