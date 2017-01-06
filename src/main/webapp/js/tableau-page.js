@@ -72,10 +72,23 @@ eveKit.controller('EveKitTableau',
       // Supported swagger URIs.  Substituted at build time.
       swgModelURI = "${enterprises.orbital.evekit.frontend.swaggerui.model}";
       swgRefURI = "${enterprises.orbital.evekit.frontend.swaggerui.refmodel}";
+      swgSDEURI = "${enterprises.orbital.evekit.frontend.swaggerui.sdemodel}";
       // Upgrade API groups based on selected api type
       $scope.apiGroups = [];
       $scope.changeAPIType = function(opt_cont) {
-        var uri = $scope.apiType == 'REFERENCE' ? swgRefURI : swgModelURI;
+        var uri = null;
+        switch ($scope.apiType) {
+        case 'MODEL':
+          uri = swgModelURI;
+          break;
+        case 'SDE':
+          uri = swgSDEURI;
+          break;
+        case 'REFERENCE':
+        default:
+          uri = swgRefURI;
+          break;
+        }
         SwaggerService.getSwagger(uri).then(function (cl) {
           $scope.apiClient = cl;
           var groups = [];
@@ -251,26 +264,28 @@ eveKit.controller('EveKitTableau',
         var args = {};
         // Prepare time, continuation, maxresults, and reverse arguments
         connectionObject.timeQuery = $scope.selectedTimeQuery;
-        switch ($scope.selectedTimeQuery) {
-        case 'SELECT':
-          var dt = new Date($scope.tqSelect);
-          args['at'] = "{values: [" + dt.getTime() + "]}";
-          connectionObject.timeSelect = $scope.tqSelect;
-          break;
-        case 'RANGE':
-          var startDt = new Date($scope.tqRangeFrom);
-          var endDt = new Date($scope.tqRangeTo);
-          args['at'] = "{start: " + startDt.getTime() + ", end: " + endDt.getTime() + "}";
-          connectionObject.timeRangeFrom = $scope.tqRangeFrom;
-          connectionObject.timeRangeTo = $scope.tqRangeTo;
-          break;
-        case 'MANUAL':
-          args['at'] = "{values: [" + $scope.tqManual + "]}";
-          connectionObject.timeManual = $scope.tqManual;
-          break;
-        case 'LATEST':
-        default:
-          break;
+        if ($scope.apiType != 'SDE') {
+          switch ($scope.selectedTimeQuery) {
+          case 'SELECT':
+            var dt = new Date($scope.tqSelect);
+            args['at'] = "{values: [" + dt.getTime() + "]}";
+            connectionObject.timeSelect = $scope.tqSelect;
+            break;
+          case 'RANGE':
+            var startDt = new Date($scope.tqRangeFrom);
+            var endDt = new Date($scope.tqRangeTo);
+            args['at'] = "{start: " + startDt.getTime() + ", end: " + endDt.getTime() + "}";
+            connectionObject.timeRangeFrom = $scope.tqRangeFrom;
+            connectionObject.timeRangeTo = $scope.tqRangeTo;
+            break;
+          case 'MANUAL':
+            args['at'] = "{values: [" + $scope.tqManual + "]}";
+            connectionObject.timeManual = $scope.tqManual;
+            break;
+          case 'LATEST':
+          default:
+            break;
+          }
         }
         connectionObject.cid = -1;
         if ($scope.contid) {
@@ -336,7 +351,19 @@ eveKit.controller('EveKitTableau',
       myConnector.getData = function (table, doneCallback) {
         var connData = JSON.parse(tableau.connectionData);
         var limit = connData['count'];
-        var uri = connData['apiType'] == 'REFERENCE' ? swgRefURI : swgModelURI;
+        var uri = null;
+        switch (connData['apiType']) {
+        case 'MODEL':
+          uri = swgModelURI;
+          break;
+        case 'SDE':
+          uri = swgSDEURI;
+          break;
+        case 'REFERENCE':
+          uri = swgRefURI;
+        default:
+          break;
+        }
         var schema = connData['schema'];
         var reverse = connData['reverse'];
         var cid = connData['cid'];
@@ -357,7 +384,7 @@ eveKit.controller('EveKitTableau',
               argSet['maxresults'] = limit;
             }
             // Configure for reversed order as needed
-            if (reverse) {
+            if (connData['apiType'] != 'SDE' && reverse) {
               argSet['reverse'] = true;
             } else {
               delete argSet['reverse'];
@@ -373,9 +400,17 @@ eveKit.controller('EveKitTableau',
                   // TODO - better handling of missing data?
                   datum[schema[j].id] = nextData[schema[j].id];
                 }
-                var nextCid = datum['cid'];
-                cid = reverse ? Math.min(cid, nextCid) : Math.max(cid, nextCid);
+                if (connData['apiType'] != 'SDE') {
+                  // Continuation ID fields don't exist in the SDE
+                  var nextCid = datum['cid'];
+                  cid = reverse ? Math.min(cid, nextCid) : Math.max(cid, nextCid);
+                }
                 tableData.push(datum);
+              }
+              if (connData['apiType'] == 'SDE') {
+                // In the SDE, result count is used for continuation.  Thus, the continuation counter always
+                // advances according to the length of the result set.
+                cid = cid + resultLength;
               }
               table.appendRows(tableData);
               if (resultLength < 1000 || limit == 1000) {
