@@ -5,7 +5,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +18,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.http.client.utils.URIBuilder;
-import org.scribe.builder.api.Api;
 
 import enterprises.orbital.base.OrbitalProperties;
 import enterprises.orbital.evekit.account.EveKitUserAccount;
@@ -47,20 +45,22 @@ import io.swagger.annotations.ApiParam;
 @io.swagger.annotations.Api(
     tags = {
         "Authentication"
-},
+    },
     produces = "application/json")
 public class AuthenticationWS {
   private static final Logger log = Logger.getLogger(AuthenticationWS.class.getName());
 
   protected static URIBuilder makeStandardBuilder(
-                                                  HttpServletRequest req) throws MalformedURLException, URISyntaxException {
+                                                  HttpServletRequest req)
+    throws MalformedURLException, URISyntaxException {
     URIBuilder builder = new URIBuilder(OrbitalProperties.getGlobalProperty(FrontendApplication.PROP_APP_PATH, FrontendApplication.DEF_APP_PATH) + "/");
     return builder;
   }
 
   protected static String makeErrorCallback(
                                             HttpServletRequest req,
-                                            String source) throws MalformedURLException, URISyntaxException {
+                                            String source)
+    throws MalformedURLException, URISyntaxException {
     URIBuilder builder = makeStandardBuilder(req);
     builder.addParameter("auth_error",
                          "Error while authenticating with " + source + ".  Please retry.  If the problem perists, please contact the site admin.");
@@ -70,7 +70,8 @@ public class AuthenticationWS {
   protected static void loginDebugUser(
                                        String source,
                                        String screenName,
-                                       HttpServletRequest req) throws IOException {
+                                       HttpServletRequest req)
+    throws IOException {
     UserAccount existing = AuthUtil.getCurrentUser(req);
     UserAuthSource authSource = AuthUtil.getBySourceScreenname(source, screenName);
     if (authSource != null) {
@@ -93,7 +94,6 @@ public class AuthenticationWS {
     }
   }
 
-  @SuppressWarnings("unchecked")
   @Path("/login/{source}")
   @GET
   @io.swagger.annotations.ApiOperation(
@@ -104,13 +104,14 @@ public class AuthenticationWS {
           @io.swagger.annotations.ApiResponse(
               code = 307,
               message = "Temporary redirect to an OAuth endpoint to initiate authentication.")
-  })
+      })
   public Response login(
                         @Context HttpServletRequest req,
                         @PathParam("source") @io.swagger.annotations.ApiParam(
                             name = "source",
                             required = true,
-                            value = "The source with which to authenticate.") String source) throws IOException, URISyntaxException {
+                            value = "The source with which to authenticate.") String source)
+    throws IOException, URISyntaxException {
     String redirect;
     URIBuilder builder = makeStandardBuilder(req);
 
@@ -134,14 +135,8 @@ public class AuthenticationWS {
       } else {
         String eveClientID = OrbitalProperties.getGlobalProperty("enterprises.orbital.auth.eve_client_id");
         String eveSecretKey = OrbitalProperties.getGlobalProperty("enterprises.orbital.auth.eve_secret_key");
-        Class<? extends Api> eveApiClass = null;
-        try {
-          eveApiClass = (Class<? extends Api>) Class.forName(OrbitalProperties.getGlobalProperty("enterprises.orbital.auth.eve_api_class"));
-        } catch (ClassNotFoundException e) {
-          log.log(Level.SEVERE, "Failed to retrieve API class", e);
-        }
         builder.setPath(builder.getPath() + "api/ws/v1/auth/callback/eve");
-        redirect = EVEAuthHandler.doGet(eveApiClass, eveClientID, eveSecretKey, builder.toString(), req);
+        redirect = EVEAuthHandler.doGet(eveClientID, eveSecretKey, builder.toString(), null, req);
         if (redirect == null) redirect = makeErrorCallback(req, "EVE");
         log.fine("Redirecting to: " + redirect);
         return Response.temporaryRedirect(new URI(redirect)).build();
@@ -164,7 +159,6 @@ public class AuthenticationWS {
     return null;
   }
 
-  @SuppressWarnings("unchecked")
   @Path("/callback/{source}")
   @GET
   @io.swagger.annotations.ApiOperation(
@@ -178,13 +172,14 @@ public class AuthenticationWS {
           @io.swagger.annotations.ApiResponse(
               code = 400,
               message = "Unable to complete authentication.")
-  })
+      })
   public Response callback(
                            @Context HttpServletRequest req,
                            @PathParam("source") @io.swagger.annotations.ApiParam(
                                name = "source",
                                required = true,
-                               value = "The source with which authentication just completed.") String source) throws IOException, URISyntaxException {
+                               value = "The source with which authentication just completed.") String source)
+    throws IOException, URISyntaxException {
     String redirect;
     URIBuilder builder = makeStandardBuilder(req);
 
@@ -201,13 +196,7 @@ public class AuthenticationWS {
       String eveClientID = OrbitalProperties.getGlobalProperty("enterprises.orbital.auth.eve_client_id");
       String eveSecretKey = OrbitalProperties.getGlobalProperty("enterprises.orbital.auth.eve_secret_key");
       String eveVerifyURL = OrbitalProperties.getGlobalProperty("enterprises.orbital.auth.eve_verify_url");
-      Class<? extends Api> eveApiClass = null;
-      try {
-        eveApiClass = (Class<? extends Api>) Class.forName(OrbitalProperties.getGlobalProperty("enterprises.orbital.auth.eve_api_class"));
-      } catch (ClassNotFoundException e) {
-        log.log(Level.SEVERE, "Failed to retrieve API class", e);
-      }
-      redirect = EVECallbackHandler.doGet(eveApiClass, eveClientID, eveSecretKey, eveVerifyURL, builder.toString(), req);
+      redirect = EVECallbackHandler.doGet(eveClientID, eveSecretKey, eveVerifyURL, builder.toString(), req);
       if (redirect == null) redirect = makeErrorCallback(req, "EVE");
       log.fine("Redirecting to: " + redirect);
       return Response.temporaryRedirect(new URI(redirect)).build();
@@ -242,9 +231,10 @@ public class AuthenticationWS {
           @io.swagger.annotations.ApiResponse(
               code = 307,
               message = "Temporary redirect back to Jeeves site.")
-  })
+      })
   public Response logout(
-                         @Context HttpServletRequest req) throws IOException, URISyntaxException {
+                         @Context HttpServletRequest req)
+    throws IOException, URISyntaxException {
     URIBuilder builder = makeStandardBuilder(req);
     String redirect = LogoutHandler.doGet(null, builder.toString(), req);
     // This should never happen for the normal logout case.
@@ -263,7 +253,7 @@ public class AuthenticationWS {
           @io.swagger.annotations.ApiResponse(
               code = 307,
               message = "Temporary redirect back to Jeeves site.")
-  })
+      })
   public Response remove(
                          @Context HttpServletRequest req,
                          @Context HttpServletResponse res,
@@ -271,7 +261,7 @@ public class AuthenticationWS {
                              name = "source",
                              required = true,
                              value = "Source we want to remove as a login source for the current logged in user.") String source)
-                               throws IOException, URISyntaxException {
+    throws IOException, URISyntaxException {
     URIBuilder builder = makeStandardBuilder(req);
     String redirect = LogoutHandler.doGet(source, builder.toString(), req);
     // Null is returned if no user is currently logged in. Silently ignore in this case.
@@ -297,13 +287,14 @@ public class AuthenticationWS {
               code = 404,
               message = "Request UID not found",
               response = ServiceError.class)
-  })
+      })
   public Response becomeUser(
                              @Context HttpServletRequest request,
                              @PathParam("uid") @ApiParam(
                                  name = "uid",
                                  required = true,
-                                 value = "UID of user to switch to") long uid) throws IOException, URISyntaxException {
+                                 value = "UID of user to switch to") long uid)
+    throws IOException, URISyntaxException {
     // Retrieve user and verify as needed
     EveKitUserAccount user = (EveKitUserAccount) AuthUtil.getCurrentUser(request);
     if (user == null || !user.isAdmin()) {
