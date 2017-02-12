@@ -136,7 +136,7 @@ public class AuthenticationWS {
         String eveClientID = OrbitalProperties.getGlobalProperty("enterprises.orbital.auth.eve_client_id");
         String eveSecretKey = OrbitalProperties.getGlobalProperty("enterprises.orbital.auth.eve_secret_key");
         builder.setPath(builder.getPath() + "api/ws/v1/auth/callback/eve");
-        redirect = EVEAuthHandler.doGet(eveClientID, eveSecretKey, builder.toString(), null, req);
+        redirect = EVEAuthHandler.doGet(eveClientID, eveSecretKey, builder.toString(), null, null, req);
         if (redirect == null) redirect = makeErrorCallback(req, "EVE");
         log.fine("Redirecting to: " + redirect);
         return Response.temporaryRedirect(new URI(redirect)).build();
