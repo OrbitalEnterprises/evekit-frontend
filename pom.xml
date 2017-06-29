@@ -40,6 +40,8 @@
     <mysql.connector.version>5.1.38</mysql.connector.version>
     <hibernate.version>5.0.7.Final</hibernate.version>
     <log4j.version>1.2.17</log4j.version>
+    <javax.json.version>1.0</javax.json.version>
+    <glassfish.json.version>1.0.4</glassfish.json.version>
   </properties>
   
   <build>
@@ -105,6 +107,16 @@
       <groupId>enterprises.orbital.evekit</groupId>
       <artifactId>snapshot</artifactId>
       <version>${evekit.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.json</groupId>
+      <artifactId>javax.json-api</artifactId>
+      <version>${javax.json.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish</groupId>
+      <artifactId>javax.json</artifactId>
+      <version>${glassfish.json.version}</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>

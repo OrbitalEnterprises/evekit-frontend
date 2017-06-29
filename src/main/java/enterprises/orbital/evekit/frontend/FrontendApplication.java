@@ -38,6 +38,7 @@ public class FrontendApplication extends Application {
     resources.add(AuthenticationWS.class);
     resources.add(ReleaseWS.class);
     resources.add(AdminWS.class);
+    resources.add(TokenWS.class);
     // Swagger additions
     resources.add(io.swagger.jaxrs.listing.ApiListingResource.class);
     resources.add(io.swagger.jaxrs.listing.SwaggerSerializers.class);

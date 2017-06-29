@@ -256,3 +256,18 @@
 .ekmd_bar {
 	fill: steelblue;
 }
+
+/* ESI token styling */
+.token_valid {
+	font-weight: bold;
+	background-color: green;
+	padding: 8px;
+	border: 2px solid white;
+}
+
+.token_reauth {
+	font-weight: bold;
+	background-color: red;
+	padding: 8px;
+	border: 2px solid white;
+}

@@ -102,6 +102,10 @@ eveKit.config(['$routeProvider',
         templateUrl: 'partials/account-view.html',
         controller: 'AccountViewCtrl'
       }).
+      when('/account/token', {
+        templateUrl: 'partials/account-token.html',
+        controller: 'AccountTokenCtrl'
+      }).
       when('/account/mod/:acctid', {
         templateUrl: 'partials/account-mod.html',
         controller: 'AccountModCtrl'
@@ -268,6 +272,11 @@ eveKit.controller('EveKitAuthCtrl', ['$scope', '$route', '$timeout', 'UserCreden
                               display: 'Account List',
                               link: '#/account/view',
                               filter: function() { return $scope.userSource != null && $scope.toolMode == MODE_EVEKIT; }
+                            }, {
+                                title: 'ESI Token List',
+                                display: 'ESI Token List',
+                                link: '#/account/token',
+                                filter: function() { return $scope.userSource != null && $scope.toolMode == MODE_EVEKIT && $scope.userInfo.admin; }
                             }, {
                               title: 'Create Sync Account',
                               display: 'Create Sync Account',

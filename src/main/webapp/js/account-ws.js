@@ -155,6 +155,60 @@ accountWS.factory('AccountWSService', ['SwaggerService',
     };
  }]);
 
+    /**
+     * Service for managing EVE SSO tokens.
+     */
+    accountWS.factory('TokenWSService', ['SwaggerService',
+        function(SwaggerService) {
+            return {
+                'getTokenList' : function() {
+                    return SwaggerService.getSwagger()
+                        .then(function (swg) {
+                            return swg.Token.getTokenList({}, {})
+                                .then(function(result) {
+                                    return result.obj;
+                                }).catch(handleRemoteResponse);
+                        });
+                },
+                'deleteToken' : function(kid) {
+                    return SwaggerService.getSwagger()
+                        .then(function (swg) {
+                            return swg.Token.deleteToken({kid: kid}, {})
+                                .then(function(result) {
+                                    return true;
+                                }).catch(handleRemoteResponse);
+                        });
+                },
+                'reauthToken' : function(kid) {
+                    return SwaggerService.getSwagger()
+                        .then(function (swg) {
+                            return swg.Token.reauthToken({kid: kid}, {})
+                                .then(function(result) {
+                                    return result.obj;
+                                }).catch(handleRemoteResponse);
+                        });
+                },
+                'getESIScopes' : function() {
+                    return SwaggerService.getSwagger()
+                        .then(function (swg) {
+                            return swg.Token.getESIScopes({}, {})
+                                .then(function(result) {
+                                    return result.obj;
+                                }).catch(handleRemoteResponse);
+                        });
+                },
+                'createToken' : function(scope) {
+                    return SwaggerService.getSwagger()
+                        .then(function (swg) {
+                            return swg.Token.createToken({scope: scope}, {})
+                                .then(function(result) {
+                                    return result.obj;
+                                }).catch(handleRemoteResponse);
+                        });
+                }
+            };
+        }]);
+
 /**
  * Service to collect and periodically update user credentials.  Changes in credentials are broadcast as an event.
  */

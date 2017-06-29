@@ -549,4 +549,175 @@
         $scope.loadMoreHistory();
       }]);
 
+
+    eveKitAccount.controller('AccountTokenCtrl',
+        ['$scope', '$location', '$window', '$filter', 'DialogService', 'AccountWSService', 'TokenWSService',
+            function($scope, $location, $window, $filter, DialogService, AccountWSService, TokenWSService) {
+                $scope.sectionName = "ESI Token List";
+                $scope.loading = false;
+                $scope.tokenList = [];
+                // State for create connection dialog
+                $scope.currentScope = [];
+                $scope.currentScopeSelection = {};
+                // Reload token list.
+                $scope.reloadList = function() {
+                    $scope.loading = true;
+                    AccountWSService.getUser().then(function(uval) {
+                        if (uval == null || !uval.admin) {
+                            $scope.$apply(function() {
+                                // Not logged in, redirect
+                                $location.path('/main');
+                            });
+                            return;
+                        }
+                        // Valid user, look for token list
+                        TokenWSService.getTokenList().then(function(result) {
+                            $scope.$apply(function() {
+                                $scope.loading = false;
+                                $scope.tokenList = result;
+                                // Compute displayable scope list.
+                                for (var i=0; i < $scope.tokenList.length; i++) {
+                                    var scope_title = "Authorized Scopes:\n";
+                                    var scopes = $scope.tokenList[i].scopes.split(' ');
+                                    for (var j=0; j < scopes.length; j++) {
+                                        scope_title += scopes[j] + '\n';
+                                    }
+                                    // Remove the trailing newline.
+                                    if (scope_title.length > 0) {
+                                        scope_title = scope_title.substring(0, scope_title.length - 1);
+                                    }
+                                    $scope.tokenList[i].displayScopes = scope_title;
+                                }
+                            });
+                        }).catch(function(err) {
+                            $scope.$apply(function() {
+                                $scope.loading = false;
+                                DialogService.connectionErrorMessage('loading token list: ' + err.errorMessage, 20);
+                            });
+                        });
+                    }).catch(function(err) {
+                        $scope.$apply(function() {
+                            // Assume not logged in and redirect
+                            $location.path('/main');
+                        });
+                    });
+                };
+                // Delete a token
+                $scope.deleteToken = function(key) {
+                    DialogService.yesNoDialog('warning', 'Really delete token?', false, function(answer) {
+                        if (answer == 1) {
+                            var info = DialogService.simpleInfoMessage('Deleting token...');
+                            TokenWSService.deleteToken(key).then(function(result) {
+                                $scope.$apply(function() {
+                                    DialogService.removeMessage(info);
+                                    $scope.reloadList();
+                                });
+                            }).catch(function(err) {
+                                $scope.$apply(function() {
+                                    DialogService.removeMessage(info);
+                                    DialogService.connectionErrorMessage('removing token: ' + err.errorMessage, 20);
+                                });
+                            });
+                        }
+                    })
+                };
+                // Reauthorize a token
+                $scope.reauthToken = function(key) {
+                    DialogService.yesNoDialog('warning', 'Really re-authorize token?', false, function(answer) {
+                        if (answer == 1) {
+                            var info = DialogService.simpleInfoMessage('Re-authorizing token...');
+                            TokenWSService.reauthToken(key).then(function(result) {
+                                // On success, result is a redirect we need to manually insert.
+                                // This is basically the same flow as creating a new connection.
+                                $window.location.href = result['newLocation']
+                            }).catch(function(err) {
+                                $scope.$apply(function() {
+                                    DialogService.removeMessage(info);
+                                    DialogService.connectionErrorMessage('re-authorizing token: ' + err.errorMessage, 20);
+                                });
+                            });
+                        }
+                    })
+                };
+                // Retrieve available scopes
+                $scope.getScopeList = function(cb) {
+                    TokenWSService.getESIScopes().then(function(result) {
+                        $scope.$apply(function() {
+                            // Result is a map: scopeName -> scopeDefinition
+                            // Transform to a list of objects before returning
+                            scopeList = [];
+                            for (var sc in result) {
+                                if (result.hasOwnProperty(sc)) scopeList.push({value: sc, description: result[sc]});
+                            }
+                            $scope.currentScope = scopeList;
+                            if (cb) cb();
+                        });
+                    }).catch(function(err) {
+                        $scope.$apply(function() {
+                            $('#createToken').modal('hide');
+                            DialogService.connectionErrorMessage('retrieving scope list: ' + err.errorMessage, 20);
+                        });
+                    })
+                };
+                // Update scope list as needed
+                $scope.updateDialogScope = function() {
+                    var info = DialogService.simpleInfoMessage("Retrieving scope list...", 10);
+                    if ($scope.currentScope.length > 0) {
+                        // Already cached
+                        DialogService.removeMessage(info);
+                    } else {
+                        // Retrieve latest from server
+                        $scope.getScopeList(function() {
+                            DialogService.removeMessage(info);
+                        });
+                    }
+                };
+                // Reset scopes
+                $scope.clearAllScopes = function() {
+                    $scope.currentScopeSelection = {};
+                };
+                // Select all scopes
+                $scope.selectAllScopes = function() {
+                    for (var i = 0; i < $scope.currentScope.length; i++) {
+                        $scope.currentScopeSelection[$scope.currentScope[i].value] = true;
+                    }
+                };
+                // Sanity check invalid form
+                $scope.isFormInvalid = function() {
+                    // The new token form is invalid only if no scopes have been selected
+                    for (var key in $scope.currentScopeSelection) {
+                        if ($scope.currentScopeSelection.hasOwnProperty())
+                            return false;
+                    }
+                    return true;
+                }
+                // Create new token
+                $scope.createToken = function() {
+                    var scopeList = [];
+                    for (var sc in $scope.currentScopeSelection) {
+                        if ($scope.currentScopeSelection.hasOwnProperty(sc)) scopeList.push(sc);
+                    }
+                    TokenWSService.createToken(scopeList.join(' ')).then(function(result) {
+                        // Result is a redirect to complete
+                        $window.location.href = result['newLocation'];
+                    }).catch(function(err) {
+                        // Fail, show error message
+                        $scope.$apply(function() {
+                            DialogService.connectionErrorMessage('creating new token: ' + err.errorMessage, 20);
+                        });
+                    });
+                };
+                // Popup to create new connection
+                $scope.create = function() {
+                    $scope.currentScopeSelection = {};
+                    $scope.updateDialogScope();
+                    $('#createToken').modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                };
+                // Init
+                $scope.reloadList();
+            }]);
+
 })();
