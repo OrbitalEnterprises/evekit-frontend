@@ -149,7 +149,7 @@ public class TokenWS {
       throws IOException, URISyntaxException {
     // Start new or re-authenticated token flow
     URIBuilder builder = AuthenticationWS.makeStandardBuilder(request);
-    builder.setPath(builder.toString() + "api/ws/v1/token/token_callback");
+    builder.setPath(builder.getPath() + "api/ws/v1/token/token_callback");
     String eveClientID = OrbitalProperties.getGlobalProperty(PROP_TOKEN_EVE_CLIENT_ID);
     String eveSecretKey = OrbitalProperties.getGlobalProperty(PROP_TOKEN_EVE_SECRET_KEY);
     String eScope = existing == null ? scope : existing.getScopes();
