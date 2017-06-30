@@ -290,12 +290,12 @@ public class TokenWS {
     if (ESITokenManager.processTokenCallback(req, eveVerifyURL, eveClientID, eveSecretKey)) {
       // Token creation or re-authentication completed properly, redirect
       URIBuilder builder = AuthenticationWS.makeStandardBuilder(req);
-      builder.setPath(builder.getPath() + "#/account/token");
+      builder.setPath(builder.getPath() + "&#35;/account/token");
       return Response.temporaryRedirect(new URI(builder.toString())).build();
     }
     // Otherwise, failed to complete, redirect with an error message
     URIBuilder builder = AuthenticationWS.makeStandardBuilder(req);
-    builder.setPath(builder.getPath() + "#/account/token");
+    builder.setPath(builder.getPath() + "&#35;/account/token");
     String err = "Error while creating or re-authenticating ESI token.  Please retry.  If the problem perists, please contact the site admin.";
     builder.addParameter("auth_error", err);
     return Response.temporaryRedirect(new URI(builder.toString())).build();
