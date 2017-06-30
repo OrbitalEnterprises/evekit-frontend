@@ -287,15 +287,13 @@ public class TokenWS {
     String eveClientID = OrbitalProperties.getGlobalProperty(PROP_TOKEN_EVE_CLIENT_ID);
     String eveSecretKey = OrbitalProperties.getGlobalProperty(PROP_TOKEN_EVE_SECRET_KEY);
     String eveVerifyURL = OrbitalProperties.getGlobalProperty(PROP_EVE_VERIFY_URL);
+    URIBuilder builder = AuthenticationWS.makeStandardBuilder(req);
+    builder.setFragment("account/token");
     if (ESITokenManager.processTokenCallback(req, eveVerifyURL, eveClientID, eveSecretKey)) {
       // Token creation or re-authentication completed properly, redirect
-      URIBuilder builder = AuthenticationWS.makeStandardBuilder(req);
-      builder.setPath(builder.getPath() + "&#35;/account/token");
       return Response.temporaryRedirect(new URI(builder.toString())).build();
     }
     // Otherwise, failed to complete, redirect with an error message
-    URIBuilder builder = AuthenticationWS.makeStandardBuilder(req);
-    builder.setPath(builder.getPath() + "&#35;/account/token");
     String err = "Error while creating or re-authenticating ESI token.  Please retry.  If the problem perists, please contact the site admin.";
     builder.addParameter("auth_error", err);
     return Response.temporaryRedirect(new URI(builder.toString())).build();
