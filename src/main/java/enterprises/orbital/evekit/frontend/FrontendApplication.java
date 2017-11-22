@@ -11,6 +11,7 @@ import enterprises.orbital.base.PersistentProperty;
 import enterprises.orbital.db.DBPropertyProvider;
 import enterprises.orbital.evekit.account.EveKitUserAccountProvider;
 import enterprises.orbital.evekit.ws.account.AccountWS;
+import enterprises.orbital.evekit.ws.account.CredentialWS;
 import enterprises.orbital.evekit.ws.model.SyncTrackerWS;
 import enterprises.orbital.oauth.AuthUtil;
 
@@ -34,11 +35,11 @@ public class FrontendApplication extends Application {
     Set<Class<?>> resources = new HashSet<Class<?>>();
     // Local resources
     resources.add(AccountWS.class);
+    resources.add(CredentialWS.class);
     resources.add(SyncTrackerWS.class);
     resources.add(AuthenticationWS.class);
     resources.add(ReleaseWS.class);
     resources.add(AdminWS.class);
-    resources.add(TokenWS.class);
     // Swagger additions
     resources.add(io.swagger.jaxrs.listing.ApiListingResource.class);
     resources.add(io.swagger.jaxrs.listing.SwaggerSerializers.class);

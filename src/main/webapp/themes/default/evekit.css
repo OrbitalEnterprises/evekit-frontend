@@ -1,6 +1,6 @@
 /* EveKit Container CSS for this theme */
 .selected-account {
-	border: 2px solid white;
+	border: 2px solid darkblue;
 }
 
 .history-label {
@@ -56,4 +56,8 @@
 
 .well {
 	color: #000;
+}
+
+table.ek-borderless > tbody > tr > td {
+	border-top: 0px
 }

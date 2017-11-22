@@ -42,7 +42,6 @@
         <class>enterprises.orbital.evekit.account.SynchronizedAccountAccessKey</class>
         <class>enterprises.orbital.evekit.account.SynchronizedEveAccount</class>
         <class>enterprises.orbital.evekit.account.NewESIToken</class>
-        <class>enterprises.orbital.evekit.account.ESIToken</class>
         <class>enterprises.orbital.evekit.model.CapsuleerSyncTracker</class>
         <class>enterprises.orbital.evekit.model.CorporationSyncTracker</class>
         <class>enterprises.orbital.evekit.model.RefSyncTracker</class>
@@ -56,6 +55,7 @@
             <property name="hibernate.dialect" value="${enterprises.orbital.evekit.frontend.db.account.dialect}"/>
             <property name="hibernate.show_sql" value="false" />
             <property name="hibernate.format_sql" value="false" />
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
 
             <property name="hibernate.c3p0.min_size" value="5"/>
             <property name="hibernate.c3p0.max_size" value="20"/>
