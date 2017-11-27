@@ -52,7 +52,6 @@
     <script src="js/access-page.js"></script>
     <script src="js/admin-page.js"></script>
     <script src="js/api-page.js"></script>
-    <script src="js/xmlproxy-page.js"></script>
     <script src="js/md-page.js"></script>
     <script src="js/sde-page.js"></script>
     <script src="js/evekit.js"></script>
@@ -82,11 +81,6 @@
                     ng-class="getToolModeClasses('evekit')"
                     ng-click="setToolMode('evekit')">
                 <i class="fa fa-users fa-2x" title="Account Synchronization and Model Access"></i>
-            </button>
-            <button type="button"
-                    ng-class="getToolModeClasses('proxy')"
-                    ng-click="setToolMode('proxy')">
-                <i class="fa fa-exchange fa-2x" title="EVE XML API Proxy"></i>
             </button>
             <button type="button"
                     ng-class="getToolModeClasses('sde')"

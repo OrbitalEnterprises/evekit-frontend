@@ -1,6 +1,5 @@
 // Mode Constants
 var MODE_EVEKIT = 'evekit';
-var MODE_PROXY = 'proxy';
 var MODE_SDE = 'sde';
 var MODE_MKDATA = 'marketdata';
 
@@ -13,7 +12,6 @@ eveKitModeServices.factory('ToolModeService', ['$rootScope', '$location',
     var mode = MODE_EVEKIT;
     var modeURL = {};
     modeURL[MODE_EVEKIT] = '/evekit/main';
-    modeURL[MODE_PROXY] = '/xmlapi/main';
     modeURL[MODE_SDE] = '/sde/main';
     modeURL[MODE_MKDATA] = '/md/main';
     return {

@@ -9,7 +9,7 @@
   </parent>
   <groupId>enterprises.orbital.evekit</groupId>
   <artifactId>frontend</artifactId>
-  <version>4.0.0</version>
+  <version>4.0.1</version>
   <packaging>war</packaging>
   <name>EveKit Frontend</name>
   <description>Main user facing web page and services</description>
@@ -72,7 +72,6 @@
                 <include>**/swagger-marketdata.html</include>
                 <include>**/xmlproxy-main.html</include>
                 <include>**/api-page.js</include>
-                <include>**/xmlproxy-page.js</include>
                 <include>**/md-page.js</include>
                 <include>**/tableau-page.js</include>
               </includes>
