@@ -9,7 +9,7 @@
   </parent>
   <groupId>enterprises.orbital.evekit</groupId>
   <artifactId>frontend</artifactId>
-  <version>4.0.1</version>
+  <version>4.0.2</version>
   <packaging>war</packaging>
   <name>EveKit Frontend</name>
   <description>Main user facing web page and services</description>
@@ -33,7 +33,7 @@
     <enterprises.orbital.evekit.sync_account_limit>100</enterprises.orbital.evekit.sync_account_limit>
     <enterprises.orbital.evekit.access_key_limit>10</enterprises.orbital.evekit.access_key_limit>
     <enterprises.orbital.evekit.reauthFragment>account/view</enterprises.orbital.evekit.reauthFragment>
-    <evekit.version>4.0.1</evekit.version>
+    <evekit.version>4.0.2</evekit.version>
     <servlet.version>3.1.0</servlet.version>
     <swagger.version>1.5.7</swagger.version>
     <jersey.containers.version>2.1</jersey.containers.version>
