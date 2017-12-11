@@ -682,7 +682,7 @@
         };
         // Load more history when we scroll to the bottom of the current view.
         $scope.handleScroll = function() {
-          if ($('#refHistoryScroll').scrollTop() > ($('#refHistoryScrollTable').height() - $('#refHistoryScroll').height()) / 2) {
+          if ($('#refHistoryScroll').scrollTop() > $scope.syncHistory.length * 22 / 2) {
             $('#refHistoryScroll').unbind('scroll');
             $scope.loadMoreHistory();
           }

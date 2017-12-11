@@ -747,13 +747,13 @@
                 };
                 // Load more history when we scroll to the bottom of the current view.
                 $scope.capHandleScroll = function () {
-                    if ($('#capHistoryScroll').scrollTop() > ($('#capHistoryScrollTable').height() - $('#capHistoryScroll').height()) / 2) {
+		    if ($('#capHistoryScroll').scrollTop() > $scope.syncHistory.length * 22 / 2) {
                         $('#capHistoryScroll').unbind('scroll');
                         $scope.capLoadMoreHistory();
                     }
                 };
                 $scope.corpHandleScroll = function () {
-                    if ($('#corpHistoryScroll').scrollTop() > ($('#corpHistoryScrollTable').height() - $('#corpHistoryScroll').height()) / 2) {
+		    if ($('#corpHistoryScroll').scrollTop() > $scope.syncHistory.length * 22 / 2) {
                         $('#corpHistoryScroll').unbind('scroll');
                         $scope.corpLoadMoreHistory();
                     }
