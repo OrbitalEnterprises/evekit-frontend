@@ -746,26 +746,48 @@
                     });
                 };
                 // Load more history when we scroll to the bottom of the current view.
-                $scope.handleScroll = function () {
-                    if ($('#historyScroll').scrollTop() > ($('#historyScrollTable').height() - $('#historyScroll').height()) / 2) {
-                        $('#historyScroll').unbind('scroll');
-                        $scope.loadMoreHistory();
+                $scope.capHandleScroll = function () {
+                    if ($('#capHistoryScroll').scrollTop() > ($('#capHistoryScrollTable').height() - $('#capHistoryScroll').height()) / 2) {
+                        $('#capHistoryScroll').unbind('scroll');
+                        $scope.capLoadMoreHistory();
                     }
                 };
-                $scope.loadMoreHistory = function () {
-                    $scope.refreshHistory(function () {
-                        fixHeight();
-                        $('#historyScroll').scroll($scope.handleScroll);
-                    });
+                $scope.corpHandleScroll = function () {
+                    if ($('#corpHistoryScroll').scrollTop() > ($('#corpHistoryScrollTable').height() - $('#corpHistoryScroll').height()) / 2) {
+                        $('#corpHistoryScroll').unbind('scroll');
+                        $scope.corpLoadMoreHistory();
+                    }
                 };
                 // Fix viewport size so scrolling works correctly.
-                var fixHeight = function () {
-                    $('#historyScroll').height($('#bottom-nav').offset().top - $('#historyScroll').offset().top - 60);
+                var capFixHeight = function () {
+                    $('#capHistoryScroll').height($('#bottom-nav').offset().top - $('#capHistoryScroll').offset().top - 60);
+                };
+                var corpFixHeight = function () {
+                    $('#corpHistoryScroll').height($('#bottom-nav').offset().top - $('#corpHistoryScroll').offset().top - 60);
+                };
+                // Load history when scroll reaches the end
+                $scope.capLoadMoreHistory = function () {
+                    $scope.refreshHistory(function () {
+                        capFixHeight();
+                        $('#capHistoryScroll').scroll($scope.capHandleScroll);
+                    });
+                };
+                $scope.corpLoadMoreHistory = function () {
+                    $scope.refreshHistory(function () {
+                        corpFixHeight();
+                        $('#corpHistoryScroll').scroll($scope.corpHandleScroll);
+                    });
                 };
                 // Init
-                $('#historyScroll').scroll($scope.handleScroll);
-                $(window).resize(fixHeight);
-                $scope.loadMoreHistory();
+                if ($scope.isChar) {
+                    $('#capHistoryScroll').scroll($scope.capHandleScroll);
+                    $(window).resize(capFixHeight);
+                    $scope.capLoadMoreHistory();
+                } else {
+                    $('#corpHistoryScroll').scroll($scope.corpHandleScroll);
+                    $(window).resize(corpFixHeight);
+                    $scope.corpLoadMoreHistory();
+                }
             }]);
 
 

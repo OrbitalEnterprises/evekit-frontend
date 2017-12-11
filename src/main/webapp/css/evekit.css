@@ -62,7 +62,7 @@
 	border-width: 2px;
 	border-style: solid;
 	white-space: nowrap;
-	width: 2em;
+	/*width: 2em;*/
 }
 
 .sync-history-fail {
@@ -71,7 +71,7 @@
 	border-width: 2px;
 	border-style: solid;
 	white-space: nowrap;
-	width: 2em;
+	/*width: 2em;*/
 }
 
 .sync-history-warn {
@@ -80,7 +80,7 @@
 	border-width: 2px;
 	border-style: solid;
 	white-space: nowrap;
-	width: 2em;
+	/*width: 2em;*/
 }
 
 .sync-history-nop {
@@ -89,7 +89,7 @@
 	border-width: 2px;
 	border-style: solid;
 	white-space: nowrap;
-	width: 2em;
+	/*width: 2em;*/
 }
 
 .sync-history-na {
@@ -98,7 +98,7 @@
 	border-width: 2px;
 	border-style: solid;
 	white-space: nowrap;
-	width: 2em;
+	/*width: 2em;*/
 }
 
 .sync-history-spacer {
