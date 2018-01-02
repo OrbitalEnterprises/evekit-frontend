@@ -137,36 +137,20 @@ var CorporationSyncTrackerDetailFieldList = [
                                              'walletJournalDetail',
                                              'walletTransactionsDetail'
                                              ];
-var RefSyncTrackerStatusFieldList = [
-                                     'serverStatusStatus',
-                                     'callListStatus',
-                                     'allianceListStatus',
-                                     'conquerableStationsStatus',
-                                     'errorListStatus',
-                                     'facWarStatsStatus',
-                                     'facWarTopStatsStatus',
-                                     'refTypeStatus',
-                                     'skillTreeStatus',
-                                     'facWarSystemsStatus',
-                                     'mapJumpStatus',
-                                     'mapKillStatus',
-                                     'sovereigntyStatus'
-                                     ];
-var RefSyncTrackerDetailFieldList = [
-                                     'serverStatusDetail',
-                                     'callListDetail',
-                                     'allianceListDetail',
-                                     'conquerableStationsDetail',
-                                     'errorListDetail',
-                                     'facWarStatsDetail',
-                                     'facWarTopStatsDetail',
-                                     'refTypeDetail',
-                                     'skillTreeDetail',
-                                     'facWarSystemsDetail',
-                                     'mapJumpDetail',
-                                     'mapKillDetail',
-                                     'sovereigntyDetail'
-                                     ];
+
+var RefSyncTrackerEndpoints = [
+    "REF_SERVER_STATUS",
+    "REF_ALLIANCE",
+    "REF_SOV_MAP",
+    "REF_SOV_CAMPAIGN",
+    "REF_SOV_STRUCTURE",
+    "REF_FW_WARS",
+    "REF_FW_STATS",
+    "REF_FW_SYSTEMS",
+    "REF_FW_FACTION_LEADERBOARD",
+    "REF_FW_CORP_LEADERBOARD",
+    "REF_FW_CHAR_LEADERBOARD"
+];
 
 /* Sync Tracker Services */
 (function() {

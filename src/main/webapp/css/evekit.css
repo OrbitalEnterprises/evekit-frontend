@@ -43,16 +43,16 @@
 	padding: 2px 5px 2px 5px;
 	white-space: nowrap;
 	transform: rotate(270deg);
-  -ms-transform: rotate(270deg) translateX(-10em);
+  -ms-transform: rotate(270deg) translateX(-12em);
   -moz-transform: rotate(270deg);
-  -webkit-transform: rotate(270deg) translateX(-1.9em);
+  -webkit-transform: rotate(270deg) translateX(-2.9em);
   -o-transform: rotate(270deg);
   transform-origin: left;
   -ms-transform-origin: left top;
   -webkit-transform-origin: left top;
   -moz-transform-origin: left top;
   -o-transform-origin: left;
-  width: 10em;
+  width: 12em;
   height: 2em;
 }
 
@@ -161,7 +161,7 @@
 }
 
 .sync-history-nop {
-	background-color: #fff;
+	background-color: #000;
 	color: #000;
 	border-color: grey;
 }

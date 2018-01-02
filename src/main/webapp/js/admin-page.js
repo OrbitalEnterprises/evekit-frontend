@@ -208,7 +208,7 @@
         $scope.refSyncHistory = [];
         $scope.charStatusFunctions = CapsuleerSyncTrackerStatusFieldList;
         $scope.corpStatusFunctions = CorporationSyncTrackerStatusFieldList;
-        $scope.refStatusFunctions = RefSyncTrackerStatusFieldList;
+        $scope.endpointList = RefSyncTrackerEndpoints;
 
         // Refresh char sync list
         var refreshCharSyncList = function() {
@@ -374,30 +374,26 @@
         };
 
         // Class and title decoding for ref data sync
-        $scope.determineRefHistoryClass = function (historyEntry, index) {
-          var status = historyEntry[RefSyncTrackerStatusFieldList[index]];
+        $scope.determineRefHistoryClass = function (historyEntry, endpoint) {
+            if (endpoint !== historyEntry['endpoint']) {
+                // Not requesting status for this entry
+                return 'sync-history-nop';
+            }
+            var status = historyEntry['status'];
           switch (status) {
-            case 'UPDATED':
+            case 'FINISHED':
               return 'sync-history-ok';
               break;
 
-            case 'NOT_EXPIRED':
-              return 'sync-history-ok';
-              break;
-
-            case 'SYNC_ERROR':
+            case 'ERROR':
               return 'sync-history-fail';
               break;
 
-            case 'SYNC_WARNING':
+            case 'WARNING':
               return 'sync-history-warn';
               break;
 
             case 'NOT_PROCESSED':
-              return 'sync-history-nop';
-              break;
-
-            case 'NOT_ALLOWED':
               return 'sync-history-na';
               break;
 
@@ -406,39 +402,24 @@
             break;
           }
         };
-        $scope.determineRefHistoryTitle = function (historyEntry, index) {
-          var status = historyEntry[RefSyncTrackerDetailFieldList[index]];
-          switch (status) {
-            case 'UPDATED':
-              return 'Updated';
-              break;
-
-            case 'NOT_EXPIRED':
-              return 'Not Expired';
-              break;
-
-            case 'SYNC_ERROR':
-            case 'SYNC_WARNING':
-            case 'NOT_ALLOWED':
-              return historyEntry[RefSyncTrackerDetailFieldList[index]];
-              break;
-
-            case 'NOT_PROCESSED':
-              return 'Not Processed';
-              break;
-
-            default:
-              console.log('Received unexpected status "' + status + '" in sync history');
-            break;
-          }
+        $scope.determineRefHistoryTitle = function (historyEntry, endpoint) {
+            if (endpoint !== historyEntry['endpoint']) {
+                // Not requesting status for this entry
+                return "N/A";
+            }
+            return historyEntry['detail'];
         };
 
+           // Get history element start time.
+           $scope.getScheduled = function (el) {
+               return el['scheduled'];
+           };
         // Get history element start time.
-        $scope.getStartTime = function (isChar, el) {
+        $scope.getStartTime = function (el) {
           return el['syncStart'];
         };
         // Get history element end time.
-        $scope.getEndTime = function (isChar, el) {
+        $scope.getEndTime = function (el) {
           return el['syncEnd'];
         };
 
@@ -578,65 +559,41 @@
        function($scope, DialogService, AccountWSService, TrackerWSService) {
         $scope.sectionName = "Admin : Ref Sync History";
         $scope.syncHistory = [];
-        $scope.statusPointerArray = RefSyncTrackerStatusFieldList;
-        $scope.detailPointerArray = RefSyncTrackerDetailFieldList;
-        $scope.determineRefHistoryClass = function (historyEntry, index) {
-          var status = historyEntry[$scope.statusPointerArray[index]];
-          switch (status) {
-            case 'UPDATED':
-              return 'sync-history-ok';
-              break;
+        $scope.endpointList = RefSyncTrackerEndpoints;
+        $scope.determineRefHistoryClass = function (historyEntry, endpoint) {
+            if (endpoint !== historyEntry['endpoint']) {
+                // Not requesting status for this entry
+                return 'sync-history-nop';
+            }
+            var status = historyEntry['status'];
+            switch (status) {
+                case 'FINISHED':
+                    return 'sync-history-ok';
+                    break;
 
-            case 'NOT_EXPIRED':
-              return 'sync-history-ok';
-              break;
+                case 'ERROR':
+                    return 'sync-history-fail';
+                    break;
 
-            case 'SYNC_ERROR':
-              return 'sync-history-fail';
-              break;
+                case 'WARNING':
+                    return 'sync-history-warn';
+                    break;
 
-            case 'SYNC_WARNING':
-              return 'sync-history-warn';
-              break;
+                case 'NOT_PROCESSED':
+                    return 'sync-history-nop';
+                    break;
 
-            case 'NOT_PROCESSED':
-              return 'sync-history-nop';
-              break;
-
-            case 'NOT_ALLOWED':
-              return 'sync-history-na';
-              break;
-
-            default:
-              console.log('Received unexpected status "' + status + '" in sync history');
-            break;
-          }
+                default:
+                    console.log('Received unexpected status "' + status + '" in sync history');
+                    break;
+            }
         };
-        $scope.determineRefHistoryTitle = function (historyEntry, index) {
-          var status = historyEntry[$scope.statusPointerArray[index]];
-          switch (status) {
-            case 'UPDATED':
-              return 'Updated';
-              break;
-
-            case 'NOT_EXPIRED':
-              return 'Not Expired';
-              break;
-
-            case 'SYNC_ERROR':
-            case 'SYNC_WARNING':
-            case 'NOT_ALLOWED':
-              return historyEntry[$scope.detailPointerArray[index]];
-              break;
-
-            case 'NOT_PROCESSED':
-              return 'Not Processed';
-              break;
-
-            default:
-              console.log('Received unexpected status "' + status + '" in sync history');
-            break;
-          }
+        $scope.determineRefHistoryTitle = function (historyEntry, endpoint) {
+            if (endpoint !== historyEntry['endpoint']) {
+                // Not requesting status for this entry
+                return "N/A";
+            }
+            return historyEntry['detail'];
         };
         // Get history element start time.
         $scope.getStartTime = function (el) {
