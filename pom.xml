@@ -33,6 +33,7 @@
     <enterprises.orbital.evekit.sync_account_limit>100</enterprises.orbital.evekit.sync_account_limit>
     <enterprises.orbital.evekit.access_key_limit>10</enterprises.orbital.evekit.access_key_limit>
     <enterprises.orbital.evekit.reauthFragment>account/view</enterprises.orbital.evekit.reauthFragment>
+    <enterprises.orbital.evekit.frontend.beta>false</enterprises.orbital.evekit.frontend.beta>
     <evekit.version>4.1.0</evekit.version>
     <servlet.version>3.1.0</servlet.version>
     <swagger.version>1.5.7</swagger.version>
@@ -74,6 +75,7 @@
                 <include>**/api-page.js</include>
                 <include>**/md-page.js</include>
                 <include>**/tableau-page.js</include>
+                <include>**/evekit.js</include>
               </includes>
             </resource>
           </webResources>

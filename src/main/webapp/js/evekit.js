@@ -156,6 +156,10 @@
         function ($scope, $route, $timeout, UserCredentialsService, AccountWSService, DialogService, ToolModeService) {
             $scope.$route = $route;
             $scope.toolMode = ToolModeService.get();
+            // Control whether this is the beta site
+            $scope.isBeta = function() {
+                return "${enterprises.orbital.evekit.frontend.beta}" == "true";
+            };
             // Get mode to display in toolbar
             $scope.getToolModeClasses = function (tp) {
                 if (tp == $scope.toolMode) {
