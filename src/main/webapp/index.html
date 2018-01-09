@@ -72,7 +72,8 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href=""><img src="resources/images/tape_logo.png" alt="EveKit"/></a>
+            <a ng-show="!isBeta()" class="navbar-brand" href=""><img src="resources/images/tape_logo.png" alt="EveKit"/></a>
+            <a ng-show="isBeta()" class="navbar-brand" href=""><img src="resources/images/tape_logo_test.png" alt="EveKit"/></a>
         </div>
 
         <!-- Tool selection buttons -->
