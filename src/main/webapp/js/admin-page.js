@@ -505,6 +505,16 @@
             $scope.$apply(function() {
               DialogService.removeMessage(info);
               $scope.user_account_list[uid] = result;
+              // Retrieve whether each account is disabled
+              for (var i = 0; i < result.length; i++) {
+                var nextAccount = result[i];
+                nextAccount.disabled = false;
+                AccountWSService.checkDisabled(uid, nextAccount.aid).then(function(disabled) {
+                  $scope.$apply(function() {
+                    nextAccount.disabled = disabled;
+                  });
+                });
+              }
             });
           }).catch(function(err) {
             $scope.$apply(function() {
@@ -515,9 +525,9 @@
         };
 
         // Disable/Enable user
-        $scope.toggleAutoSync = function(uid, acctid, state) {
-          var info = DialogService.simpleInfoMessage('Toggling auto sync...');
-          AccountWSService.toggleAutoSync(uid, acctid, state)
+        $scope.toggleAccountDisabled = function(uid, acctid, state) {
+          var info = DialogService.simpleInfoMessage('Toggling disabled...');
+          AccountWSService.toggleAccountDisabled(uid, acctid, state)
           .then(function(result) {
             $scope.$apply(function() {
               DialogService.removeMessage(info);

@@ -122,12 +122,21 @@
                                 }).catch(handleRemoteResponse);
                         });
                 },
-                'toggleAutoSync': function (uid, aid, autosync) {
+                'toggleAccountDisabled': function (uid, aid, dis) {
                     return SwaggerService.getSwagger()
                         .then(function (swg) {
-                            return swg.Account.toggleAutoSync({uid: uid, aid: aid, autosync: autosync}, {})
+                            return swg.Account.toggleAccountDisabled({uid: uid, aid: aid, disabled: dis}, {})
                                 .then(function (result) {
                                     return true;
+                                }).catch(handleRemoteResponse);
+                        });
+                },
+                'checkDisabled': function (uid, aid) {
+                    return SwaggerService.getSwagger()
+                        .then(function (swg) {
+                            return swg.Account.isAccountDisabled({uid: uid, aid: aid}, {})
+                                .then(function (result) {
+                                    return result.obj.isDisabled;
                                 }).catch(handleRemoteResponse);
                         });
                 },

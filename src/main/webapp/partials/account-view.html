@@ -64,14 +64,12 @@
                                         <i class="fa fa-question fa-5x" aria-hidden="true" ng-show="account.eveCharacterID === -1"></i>
                                         <img width="64px" height="64px" style="border-width: 2px; border-style: solid;" ng-hide="account.eveCharacterID === -1" ng-src="{{'https://image.eveonline.com/corporation/' + account.eveCorporationID + '_128.png'}}">
                                     </td>
-                                    <td nowrap>AutoSync</td>
                                     <td nowrap>Type</td>
                                     <td nowrap>Character</td>
                                     <td nowrap>Corporation</td>
                                     <td nowrap>Last Sync</td>
                                 </tr>
                                 <tr>
-                                    <td nowrap>{{account.autoSynchronized}}</td>
                                     <td nowrap>{{account.characterType ? 'CHARACTER' : 'CORPORATION'}}</td>
                                     <td nowrap>{{account.eveCharacterID === -1 ? 'N/A - Add Credential' : account.eveCharacterName}}</td>
                                     <td nowrap>{{account.eveCorporationID === -1 ? 'N/A - Add Credential' : account.eveCorporationName}}</td>
@@ -199,9 +197,6 @@
                             <label><input name="newAccountType" type="radio" ng-model="newAccountType" value="CHARACTER">CHARACTER</label>&nbsp;&nbsp;
                             <label><input name="newAccountType" type="radio" ng-model="newAccountType" value="CORPORATION">CORPORATION</label>
                         </div>
-                        <div class="col-sm-1 checkbox">
-                            <label><input type="checkbox" ng-model="newAccountAutoSync"><b>AutoSync</b></label>
-                        </div>
                     </div>
                 </form>
             </div>
@@ -235,9 +230,6 @@
                         <div class="col-sm-2 radio">
                             <label><input name="modifyAccountType" type="radio" ng-disabled="true" ng-model="modifyAccountType" value="CHARACTER">CHARACTER</label>&nbsp;&nbsp;
                             <label><input name="modifyAccountType" type="radio" ng-disabled="true" ng-model="modifyAccountType" value="CORPORATION">CORPORATION</label>
-                        </div>
-                        <div class="col-sm-1 checkbox">
-                            <label><input type="checkbox" ng-model="modifyAccountAutoSync"><b>AutoSync</b></label>
                         </div>
                     </div>
                 </form>

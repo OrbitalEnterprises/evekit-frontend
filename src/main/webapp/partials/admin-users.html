@@ -50,7 +50,7 @@
             <th>ID</th>
             <th>Name</th>
             <th>Type</th>
-            <th>AutoSync?</th>
+            <th>Disabled?</th>
             <th>Last Sync</th>
             <th>Delete Time</th>
             <th>Actions</th>
@@ -59,11 +59,11 @@
             <td>{{acct.aid}}</td>
             <td>{{acct.name}}</td>
             <td>{{acct.characterType ? 'Character' : 'Corporation'}}</td>
-            <td>{{acct.autoSynchronized}}</td>
+            <td>{{acct.disabled}}</td>
             <td>{{acct.lastSynchronized != -1 ? (acct.lastSynchronized|date:'yyyy-MM-dd HH:mm:ss':'UTC') : 'Never'}}</td>
             <td>{{acct.markedForDelete != -1 ? (acct.markedForDelete|date:'yyyy-MM-dd HH:mm:ss':'UTC') : 'N/A'}}</td>
             <td>
-              <button type="button" class="btn btn-primary" ng-click="toggleAutoSync(user.uid, acct.aid, !acct.autoSynchronized)">{{acct.autoSynchronized ? "Disable AutoSync" : "Enable AutoSync"}}</button>
+              <button type="button" class="btn btn-primary" ng-click="toggleAccountDisabled(user.uid, acct.aid, !acct.disabled)">{{acct.disabled ? "Enable" : "Disable"}}</button>
             </td>
           </tr>
           </table>

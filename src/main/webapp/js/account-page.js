@@ -114,12 +114,10 @@
                 // State for new account form
                 $scope.newAccountName = '';
                 $scope.newAccountType = '';
-                $scope.newAccountAutoSync = false;
                 // Start the new account dialog
                 $scope.addAccountDialog = function () {
                     $scope.newAccountName = '';
                     $scope.newAccountType = '';
-                    $scope.newAccountAutoSync = false;
                     $('#addAccount').modal({
                         backdrop: 'static',
                         keyboard: false
@@ -144,7 +142,7 @@
                 // Save new account
                 $scope.addAccount = function() {
                     var info = DialogService.simpleInfoMessage('Adding account...');
-                    AccountWSService.saveSyncAccount(-1, -1, $scope.newAccountName, $scope.newAccountType === 'CHARACTER', $scope.newAccountAutoSync).then(function (success) {
+                    AccountWSService.saveSyncAccount(-1, -1, $scope.newAccountName, $scope.newAccountType === 'CHARACTER').then(function (success) {
                         $scope.$apply(function () {
                             DialogService.removeMessage(info);
                             $scope.reloadList();
@@ -160,13 +158,11 @@
                 $scope.accountToModify = null;
                 $scope.modifyAccountName = '';
                 $scope.modifyAccountType = '';
-                $scope.modifyAccountAutoSync = false;
                 // Start the modify account dialog
                 $scope.modifyAccountDialog = function (account) {
                     $scope.accountToModify = account;
                     $scope.modifyAccountName = account.name;
                     $scope.modifyAccountType = account.characterType ? 'CHARACTER' : 'CORPORATION';
-                    $scope.modifyAccountAutoSync = account.autoSynchronized;
                     $('#modifyAccount').modal({
                         backdrop: 'static',
                         keyboard: false
@@ -191,7 +187,7 @@
                 // Save modified account
                 $scope.modifyAccount = function() {
                     var info = DialogService.simpleInfoMessage('Saving account changes...');
-                    AccountWSService.saveSyncAccount(-1, $scope.accountToModify.aid, $scope.modifyAccountName, $scope.accountToModify.characterType, $scope.modifyAccountAutoSync).then(function (success) {
+                    AccountWSService.saveSyncAccount(-1, $scope.accountToModify.aid, $scope.modifyAccountName, $scope.accountToModify.characterType).then(function (success) {
                         $scope.$apply(function () {
                             DialogService.removeMessage(info);
                             $scope.reloadList();
