@@ -1,143 +1,4 @@
-/* Tracker field names */
-var CapsuleerSyncTrackerStatusFieldList = [
-                                           'accountStatusStatus',
-                                           'accountBalanceStatus',
-                                           'assetListStatus',
-                                           'blueprintsStatus',
-                                           'bookmarksStatus',
-                                           'calendarEventAttendeesStatus',
-                                           'characterSheetStatus',
-                                           'partialCharacterSheetStatus',
-                                           'chatChannelsStatus',
-                                           'contactListStatus',
-                                           'contactNotificationsStatus',
-                                           'contractsStatus',
-                                           'contractItemsStatus',
-                                           'contractBidsStatus',
-                                           'facWarStatsStatus',
-                                           'industryJobsStatus',
-                                           'killlogStatus',
-                                           'locationsStatus',
-                                           'mailBodiesStatus',
-                                           'mailingListsStatus',
-                                           'mailMessagesStatus',
-                                           'marketOrdersStatus',
-                                           'medalsStatus',
-                                           'notificationsStatus',
-                                           'notificationTextsStatus',
-                                           'planetaryColoniesStatus',
-                                           'researchStatus',
-                                           'skillInTrainingStatus',
-                                           'skillQueueStatus',
-                                           'skillsStatus',
-                                           'standingsStatus',
-                                           'upcomingCalendarEventsStatus',
-                                           'walletJournalStatus',
-                                           'walletTransactionsStatus'
-                                           ];
-var CapsuleerSyncTrackerDetailFieldList = [
-                                           'accountStatusDetail',
-                                           'accountBalanceDetail',
-                                           'assetListDetail',
-                                           'blueprintsDetail',
-                                           'bookmarksDetail',
-                                           'calendarEventAttendeesDetail',
-                                           'characterSheetDetail',
-                                           'partialCharacterSheetDetail',
-                                           'chatChannelsDetail',
-                                           'contactListDetail',
-                                           'contactNotificationsDetail',
-                                           'contractsDetail',
-                                           'contractItemsDetail',
-                                           'contractBidsDetail',
-                                           'facWarStatsDetail',
-                                           'industryJobsDetail',
-                                           'killlogDetail',
-                                           'locationsDetail',
-                                           'mailBodiesDetail',
-                                           'mailingListsDetail',
-                                           'mailMessagesDetail',
-                                           'marketOrdersDetail',
-                                           'medalsDetail',
-                                           'notificationsDetail',
-                                           'notificationTextsDetail',
-                                           'planetaryColoniesDetail',
-                                           'researchDetail',
-                                           'skillInTrainingDetail',
-                                           'skillQueueDetail',
-                                           'skillsDetail',
-                                           'standingsDetail',
-                                           'upcomingCalendarEventsDetail',
-                                           'walletJournalDetail',
-                                           'walletTransactionsDetail'
-                                           ];
-var CorporationSyncTrackerStatusFieldList = [
-                                             'accountBalanceStatus',
-                                             'assetListStatus',
-                                             'blueprintsStatus',
-                                             'bookmarksStatus',
-                                             'contactListStatus',
-                                             'containerLogStatus',
-                                             'contractsStatus',
-                                             'contractItemsStatus',
-                                             'contractBidsStatus',
-                                             'corporationSheetStatus',
-                                             'corpMedalsStatus',
-                                             'corpTitlesStatus',
-                                             'customsOfficeStatus',
-                                             'facilitiesStatus',
-                                             'facWarStatsStatus',
-                                             'industryJobsStatus',
-                                             'killlogStatus',
-                                             'locationsStatus',
-                                             'marketOrdersStatus',
-                                             'memberMedalsStatus',
-                                             'memberSecurityStatus',
-                                             'memberSecurityLogStatus',
-                                             'memberTrackingStatus',
-                                             'outpostListStatus',
-                                             'outpostDetailStatus',
-                                             'shareholderStatus',
-                                             'standingsStatus',
-                                             'starbaseListStatus',
-                                             'starbaseDetailStatus',
-                                             'walletJournalStatus',
-                                             'walletTransactionsStatus'
-                                             ];
-var CorporationSyncTrackerDetailFieldList = [
-                                             'accountBalanceDetail',
-                                             'assetListDetail',
-                                             'blueprintsDetail',
-                                             'bookmarksDetail',
-                                             'contactListDetail',
-                                             'containerLogDetail',
-                                             'contractsDetail',
-                                             'contractItemsDetail',
-                                             'contractBidsDetail',
-                                             'corporationSheetDetail',
-                                             'corpMedalsDetail',
-                                             'corpTitlesDetail',
-                                             'customsOfficeDetail',
-                                             'facilitiesDetail',
-                                             'facWarStatsDetail',
-                                             'industryJobsDetail',
-                                             'killlogDetail',
-                                             'locationsDetail',
-                                             'marketOrdersDetail',
-                                             'memberMedalsDetail',
-                                             'memberSecurityDetail',
-                                             'memberSecurityLogDetail',
-                                             'memberTrackingDetail',
-                                             'outpostListDetail',
-                                             'outpostDetailDetail',
-                                             'shareholderDetail',
-                                             'standingsDetail',
-                                             'starbaseListDetail',
-                                             'starbaseDetailDetail',
-                                             'walletJournalDetail',
-                                             'walletTransactionsDetail'
-                                             ];
-
+/* Sync Endpoints */
 var RefSyncTrackerEndpoints = [
     "REF_SERVER_STATUS",
     "REF_ALLIANCE",
@@ -152,6 +13,73 @@ var RefSyncTrackerEndpoints = [
     "REF_FW_CHAR_LEADERBOARD"
 ];
 
+var AccountSyncTrackerEndpoints = [
+    "CHAR_ASSETS",
+    "CORP_ASSETS",
+    "CHAR_BLUEPRINTS",
+    "CORP_BLUEPRINTS",
+    "CHAR_BOOKMARKS",
+    "CORP_BOOKMARKS",
+    "CHAR_CONTACTS",
+    "CORP_CONTACTS",
+    "CHAR_CONTRACTS",
+    "CORP_CONTRACTS",
+    "CHAR_FACTION_WAR",
+    "CORP_FACTION_WAR",
+    "CHAR_INDUSTRY",
+    "CORP_INDUSTRY",
+    "CHAR_KILL_MAIL",
+    "CORP_KILL_MAIL",
+    "CHAR_MARKET",
+    "CORP_MARKET",
+    "CHAR_MINING",
+    "CORP_MINING",
+    "CHAR_STANDINGS",
+    "CORP_STANDINGS",
+    "CHAR_WALLET_BALANCE",
+    "CORP_WALLET_BALANCE",
+    "CHAR_WALLET_JOURNAL",
+    "CORP_WALLET_JOURNAL",
+    "CHAR_WALLET_TRANSACTIONS",
+    "CORP_WALLET_TRANSACTIONS",
+
+    "CHAR_AGENTS",
+    "CHAR_CALENDAR",
+    "CHAR_CHANNELS",
+    "CHAR_CLONES",
+    "CHAR_CORP_ROLES",
+    "CHAR_FATIGUE",
+    "CHAR_FITTINGS",
+    "CHAR_FLEETS",
+    "CHAR_IMPLANTS",
+    "CHAR_LOCATION",
+    "CHAR_LOYALTY",
+    "CHAR_MAIL",
+    "CHAR_MEDALS",
+    "CHAR_NOTIFICATIONS",
+    "CHAR_ONLINE",
+    "CHAR_OPPORTUNITIES",
+    "CHAR_PLANETS",
+    "CHAR_SHEET",
+    "CHAR_SHIP_TYPE",
+    "CHAR_SKILL_QUEUE",
+    "CHAR_SKILLS",
+    "CHAR_TITLES",
+
+    "CORP_ALLIANCE_CONTACTS",
+    "CORP_CONTAINER_LOGS",
+    "CORP_CUSTOMS",
+    "CORP_DIVISIONS",
+    "CORP_FACILITIES",
+    "CORP_MEDALS",
+    "CORP_MEMBERSHIP",
+    "CORP_SHEET",
+    "CORP_STARBASES",
+    "CORP_STRUCTURES",
+    "CORP_TITLES",
+    "CORP_TRACK_MEMBERS"
+];
+
 /* Sync Tracker Services */
 (function() {
 var trackerWS = angular.module('eveKitTrackerWS', ['eveKitRemoteServices']);
@@ -162,25 +90,13 @@ var trackerWS = angular.module('eveKitTrackerWS', ['eveKitRemoteServices']);
 trackerWS.factory('TrackerWSService', ['SwaggerService',
   function(SwaggerService) {
     return {
-      'getCapHistory' : function(aid, contid, maxresults) {
+      'getAccountHistory' : function(aid, contid, maxresults) {
         return SwaggerService.getSwagger()
         .then(function (swg) {
           var args = {aid: aid};
           if (contid) args['contid'] = contid;
           if (maxresults) args['maxresults'] = maxresults;
-          return swg.Account.requestCapsuleerSyncHistory(args, {})
-          .then(function(result) {
-            return result.obj;
-          }).catch(handleRemoteResponse);
-        });
-      },
-      'getCorpHistory' : function(aid, contid, maxresults) {
-        return SwaggerService.getSwagger()
-        .then(function (swg) {
-          var args = {aid: aid};
-          if (contid) args['contid'] = contid;
-          if (maxresults) args['maxresults'] = maxresults;
-          return swg.Account.requestCorporationSyncHistory(args, {})
+          return swg.AccountV2.requestSyncHistory(args, {})
           .then(function(result) {
             return result.obj;
           }).catch(handleRemoteResponse);
@@ -192,34 +108,25 @@ trackerWS.factory('TrackerWSService', ['SwaggerService',
           var args = {};
           if (contid) args['contid'] = contid;
           if (maxresults) args['maxresults'] = maxresults;
-          return swg.Account.requestRefSyncHistory(args, {})
+          return swg.AccountV2.requestRefSyncHistory(args, {})
           .then(function(result) {
             return result.obj;
           }).catch(handleRemoteResponse);
         });
       },
-      'getUnfinishedCapSync' : function() {
+      'getAccountStartedSync' : function() {
         return SwaggerService.getSwagger()
         .then(function (swg) {
-          return swg.Account.requestUnfinishedCapsuleerSync({}, {})
+          return swg.AccountV2.requestStartedSync({}, {})
           .then(function(result) {
             return result.obj;
           }).catch(handleRemoteResponse);
         });
       },
-      'getUnfinishedCorpSync' : function() {
+      'getRefStartedSync' : function() {
         return SwaggerService.getSwagger()
         .then(function (swg) {
-          return swg.Account.requestUnfinishedCorporationSync({}, {})
-          .then(function(result) {
-            return result.obj;
-          }).catch(handleRemoteResponse);
-        });
-      },
-      'getUnfinishedRefSync' : function() {
-        return SwaggerService.getSwagger()
-        .then(function (swg) {
-          return swg.Account.requestUnfinishedRefSync({}, {})
+          return swg.AccountV2.requestStartedRefSync({}, {})
           .then(function(result) {
             return result.obj;
           }).catch(handleRemoteResponse);
@@ -228,8 +135,8 @@ trackerWS.factory('TrackerWSService', ['SwaggerService',
       'finishTracker' : function(uid, aid, tid) {
         return SwaggerService.getSwagger()
         .then(function (swg) {
-          return swg.Account.requestFinishTracker({uid: uid, aid: aid, tid: tid}, {})
-          .then(function(result) {
+          return swg.AccountV2.requestFinishTracker({uid: uid, aid: aid, tid: tid}, {})
+          .then(function() {
             return true;
           }).catch(handleRemoteResponse);
         });
@@ -237,8 +144,8 @@ trackerWS.factory('TrackerWSService', ['SwaggerService',
       'finishRefTracker' : function(tid) {
         return SwaggerService.getSwagger()
         .then(function (swg) {
-          return swg.Account.requestFinishRefTracker({tid: tid}, {})
-          .then(function(result) {
+          return swg.AccountV2.requestFinishRefTracker({tid: tid}, {})
+          .then(function() {
             return true;
           }).catch(handleRemoteResponse);
         });

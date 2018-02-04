@@ -203,43 +203,24 @@
       ['$scope', 'DialogService', 'TrackerWSService', 'ToolModeService',
        function($scope, DialogService, TrackerWSService, ToolModeService) {
         $scope.sectionName = "Admin : Inflight Syncs";
-        $scope.charSyncHistory = [];
-        $scope.corpSyncHistory = [];
+        $scope.accountSyncHistory = [];
         $scope.refSyncHistory = [];
-        $scope.charStatusFunctions = CapsuleerSyncTrackerStatusFieldList;
-        $scope.corpStatusFunctions = CorporationSyncTrackerStatusFieldList;
-        $scope.endpointList = RefSyncTrackerEndpoints;
+        $scope.accountEndpointList = AccountSyncTrackerEndpoints;
+        $scope.refEndpointList = RefSyncTrackerEndpoints;
 
-        // Refresh char sync list
-        var refreshCharSyncList = function() {
-          var info = DialogService.simpleInfoMessage('Refreshing Capsuleer Syncs...');
-          TrackerWSService.getUnfinishedCapSync()
+        // Refresh account sync list
+        var refreshAccountSyncList = function() {
+          var info = DialogService.simpleInfoMessage('Refreshing Account Syncs...');
+          TrackerWSService.getAccountStartedSync()
           .then(function(result) {
             $scope.$apply(function() {
               DialogService.removeMessage(info);
-              $scope.charSyncHistory = result;
+              $scope.accountSyncHistory = result;
             });
           }).catch(function(err) {
             $scope.$apply(function() {
               DialogService.removeMessage(info);
-              DialogService.connectionErrorMessage('refreshing capsuleer syncs: ' + err.errorMessage, 10);
-            });
-          });
-        };
-
-        // Refresh corp sync list
-        var refreshCorpSyncList = function() {
-          var info = DialogService.simpleInfoMessage('Refreshing Corporation Syncs...');
-          TrackerWSService.getUnfinishedCorpSync()
-          .then(function(result) {
-            $scope.$apply(function() {
-              DialogService.removeMessage(info);
-              $scope.corpSyncHistory = result;
-            });
-          }).catch(function(err) {
-            $scope.$apply(function() {
-              DialogService.removeMessage(info);
-              DialogService.connectionErrorMessage('refreshing corporation syncs: ' + err.errorMessage, 10);
+              DialogService.connectionErrorMessage('refreshing account syncs: ' + err.errorMessage, 10);
             });
           });
         };
@@ -247,7 +228,7 @@
         // Refresh ref sync list
         var refreshRefSyncList = function() {
           var info = DialogService.simpleInfoMessage('Refreshing Ref Data Syncs...');
-          TrackerWSService.getUnfinishedRefSync()
+          TrackerWSService.getRefStartedSync()
           .then(function(result) {
             $scope.$apply(function() {
               DialogService.removeMessage(info);
@@ -263,8 +244,7 @@
 
         // Refresh both sync lists
         $scope.refreshSyncLists = function() {
-          refreshCharSyncList();
-          refreshCorpSyncList();
+          refreshAccountSyncList();
           refreshRefSyncList();
         };
 
@@ -308,119 +288,44 @@
           });
         };
 
-        // Decode history class
-        $scope.determineHistoryClass = function (isChar, historyEntry, index) {
-          var statusPointerArray = isChar ? CapsuleerSyncTrackerStatusFieldList : CorporationSyncTrackerStatusFieldList;
-          var status = historyEntry[statusPointerArray[index]];
-          switch (status) {
-            case 'UPDATED':
-              return 'sync-history-ok';
-              break;
+           // Determine the CSS class for an endpoint in the given history
+           $scope.determineHistoryClass = function (historyEntry, endpoint) {
+               if (endpoint !== historyEntry['endpoint']) {
+                   // Not requesting status for this entry
+                   return 'sync-history-nop';
+               }
+               var status = historyEntry['status'];
+               switch (status) {
+                   case 'FINISHED':
+                       return 'sync-history-ok';
 
-            case 'NOT_EXPIRED':
-              return 'sync-history-ok';
-              break;
+                   case 'ERROR':
+                       return 'sync-history-fail';
 
-            case 'SYNC_ERROR':
-              return 'sync-history-fail';
-              break;
+                   case 'WARNING':
+                       return 'sync-history-warn';
 
-            case 'SYNC_WARNING':
-              return 'sync-history-warn';
-              break;
+                   case 'NOT_PROCESSED':
+                       return 'sync-history-na';
 
-            case 'NOT_PROCESSED':
-              return 'sync-history-nop';
-              break;
-
-            case 'NOT_ALLOWED':
-              return 'sync-history-na';
-              break;
-
-            default:
-              console.log('Received unexpected status "' + status + '" in sync history');
-            break;
-          }
-        };
-
-        // Decode history title
-        $scope.determineHistoryTitle = function (isChar, historyEntry, index) {
-          var statusPointerArray = isChar ? CapsuleerSyncTrackerStatusFieldList : CorporationSyncTrackerStatusFieldList;
-          var detailPointerArray = isChar ? CapsuleerSyncTrackerDetailFieldList : CorporationSyncTrackerDetailFieldList;
-          var status = historyEntry[statusPointerArray[index]];
-          switch (status) {
-            case 'UPDATED':
-              return 'Updated';
-              break;
-
-            case 'NOT_EXPIRED':
-              return 'Not Expired';
-              break;
-
-            case 'SYNC_ERROR':
-            case 'SYNC_WARNING':
-            case 'NOT_ALLOWED':
-              return historyEntry[detailPointerArray[index]];
-              break;
-
-            case 'NOT_PROCESSED':
-              return 'Not Processed';
-              break;
-
-            default:
-              console.log('Received unexpected status "' + status + '" in sync history');
-            break;
-          }
-        };
-
-        // Class and title decoding for ref data sync
-        $scope.determineRefHistoryClass = function (historyEntry, endpoint) {
-            if (endpoint !== historyEntry['endpoint']) {
-                // Not requesting status for this entry
-                return 'sync-history-nop';
-            }
-            var status = historyEntry['status'];
-          switch (status) {
-            case 'FINISHED':
-              return 'sync-history-ok';
-              break;
-
-            case 'ERROR':
-              return 'sync-history-fail';
-              break;
-
-            case 'WARNING':
-              return 'sync-history-warn';
-              break;
-
-            case 'NOT_PROCESSED':
-              return 'sync-history-na';
-              break;
-
-            default:
-              console.log('Received unexpected status "' + status + '" in sync history');
-            break;
-          }
-        };
-        $scope.determineRefHistoryTitle = function (historyEntry, endpoint) {
-            if (endpoint !== historyEntry['endpoint']) {
-                // Not requesting status for this entry
-                return "N/A";
-            }
-            return historyEntry['detail'];
-        };
-
-           // Get history element start time.
-           $scope.getScheduled = function (el) {
-               return el['scheduled'];
+                   default:
+                       console.log('Received unexpected status "' + status + '" in sync history');
+                       return 'sync-history-nop';
+               }
            };
+
+           // Determine HTML title for an endpoint in the given history
+           $scope.determineHistoryTitle = function (historyEntry, endpoint) {
+               if (endpoint !== historyEntry['endpoint']) {
+                   // Not requesting status for this entry
+                   return "N/A";
+               }
+               return historyEntry['detail'];
+           };
+
         // Get history element start time.
         $scope.getStartTime = function (el) {
           return el['syncStart'];
-        };
-        // Get history element end time.
-        $scope.getEndTime = function (el) {
-          return el['syncEnd'];
         };
 
         // Initialize

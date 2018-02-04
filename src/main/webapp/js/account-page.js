@@ -638,66 +638,48 @@
                     return;
                 }
                 $scope.syncHistory = [];
-                $scope.historyType = $scope.isChar ? CapsuleerSyncTrackerStatusFieldList : CorporationSyncTrackerStatusFieldList;
-                $scope.statusPointerArray = $scope.isChar ? CapsuleerSyncTrackerStatusFieldList : CorporationSyncTrackerStatusFieldList;
-                $scope.detailPointerArray = $scope.isChar ? CapsuleerSyncTrackerDetailFieldList : CorporationSyncTrackerDetailFieldList;
-                $scope.determineHistoryClass = function (historyEntry, index) {
-                    var status = historyEntry[$scope.statusPointerArray[index]];
+                $scope.endpointList = AccountSyncTrackerEndpoints;
+                // Get header window width
+                $scope.determineHeaderWidth = function() {
+                    return $scope.isChar ? 1390 : 1100;
+                };
+                // Determine whether this endpoint should be visible in the current view
+                $scope.determineHistoryHide = function(endpoint) {
+                    if ($scope.isChar) return endpoint.startsWith("CHAR_");
+                    return endpoint.startsWith("CORP_");
+                };
+                // Determine the CSS class for an endpoint in the given history
+                $scope.determineHistoryClass = function (historyEntry, endpoint) {
+                    if (endpoint !== historyEntry['endpoint']) {
+                        // Not requesting status for this entry
+                        return 'sync-history-nop';
+                    }
+                    var status = historyEntry['status'];
                     switch (status) {
-                        case 'UPDATED':
+                        case 'FINISHED':
                             return 'sync-history-ok';
-                            break;
 
-                        case 'NOT_EXPIRED':
-                            return 'sync-history-ok';
-                            break;
-
-                        case 'SYNC_ERROR':
+                        case 'ERROR':
                             return 'sync-history-fail';
-                            break;
 
-                        case 'SYNC_WARNING':
+                        case 'WARNING':
                             return 'sync-history-warn';
-                            break;
 
                         case 'NOT_PROCESSED':
                             return 'sync-history-nop';
-                            break;
-
-                        case 'NOT_ALLOWED':
-                            return 'sync-history-na';
-                            break;
 
                         default:
                             console.log('Received unexpected status "' + status + '" in sync history');
-                            break;
+                            return 'sync-history-nop';
                     }
                 };
-                $scope.determineHistoryTitle = function (historyEntry, index) {
-                    var status = historyEntry[$scope.statusPointerArray[index]];
-                    switch (status) {
-                        case 'UPDATED':
-                            return 'Updated';
-                            break;
-
-                        case 'NOT_EXPIRED':
-                            return 'Not Expired';
-                            break;
-
-                        case 'SYNC_ERROR':
-                        case 'SYNC_WARNING':
-                        case 'NOT_ALLOWED':
-                            return historyEntry[$scope.detailPointerArray[index]];
-                            break;
-
-                        case 'NOT_PROCESSED':
-                            return 'Not Processed';
-                            break;
-
-                        default:
-                            console.log('Received unexpected status "' + status + '" in sync history');
-                            break;
+                // Determine HTML title for an endpoint in the given history
+                $scope.determineHistoryTitle = function (historyEntry, endpoint) {
+                    if (endpoint !== historyEntry['endpoint']) {
+                        // Not requesting status for this entry
+                        return "N/A";
                     }
+                    return historyEntry['detail'];
                 };
                 // Get history element start time.
                 $scope.getStartTime = function (el) {
@@ -712,11 +694,10 @@
                 $scope.refreshHistory = function (opt_cb) {
                     $scope.loading = true;
                     var continuation = $scope.syncHistory.length == 0 ? -1 : $scope.syncHistory[$scope.syncHistory.length - 1].syncStart;
-                    var resource = $scope.isChar ? TrackerWSService.getCapHistory : TrackerWSService.getCorpHistory;
-                    resource($scope.accountID, continuation, maxresults).then(function (result) {
+                    TrackerWSService.getAccountHistory($scope.accountID, continuation, maxresults).then(function (result) {
                         $scope.$apply(function () {
                             $scope.loading = false;
-                            var toadd = [];
+                            var toAdd = [];
                             angular.forEach(result, function (el) {
                                 var found = false;
                                 for (var i = 0; i < $scope.syncHistory.length && !found; i++) {
@@ -725,9 +706,9 @@
                                         break;
                                     }
                                 }
-                                if (!found) toadd.push(el);
+                                if (!found) toAdd.push(el);
                             });
-                            $scope.syncHistory = $scope.syncHistory.concat(toadd);
+                            $scope.syncHistory = $scope.syncHistory.concat(toAdd);
                             $scope.syncHistory.sort(function (a, b) {
                                 return b.syncStart - a.syncStart;
                             });
@@ -742,48 +723,27 @@
                     });
                 };
                 // Load more history when we scroll to the bottom of the current view.
-                $scope.capHandleScroll = function () {
-		    if ($('#capHistoryScroll').scrollTop() > $scope.syncHistory.length * 22 / 2) {
-                        $('#capHistoryScroll').unbind('scroll');
-                        $scope.capLoadMoreHistory();
-                    }
-                };
-                $scope.corpHandleScroll = function () {
-		    if ($('#corpHistoryScroll').scrollTop() > $scope.syncHistory.length * 22 / 2) {
-                        $('#corpHistoryScroll').unbind('scroll');
-                        $scope.corpLoadMoreHistory();
+                $scope.accountHandleScroll = function () {
+                    if ($('#accountHistoryScroll').scrollTop() > $scope.syncHistory.length * 22 / 2) {
+                        $('#accountHistoryScroll').unbind('scroll');
+                        $scope.loadMoreHistory();
                     }
                 };
                 // Fix viewport size so scrolling works correctly.
-                var capFixHeight = function () {
-                    $('#capHistoryScroll').height($('#bottom-nav').offset().top - $('#capHistoryScroll').offset().top - 60);
-                };
-                var corpFixHeight = function () {
-                    $('#corpHistoryScroll').height($('#bottom-nav').offset().top - $('#corpHistoryScroll').offset().top - 60);
+                var fixHeight = function () {
+                    $('#accountHistoryScroll').height($('#bottom-nav').offset().top - $('#accountHistoryScroll').offset().top - 60);
                 };
                 // Load history when scroll reaches the end
-                $scope.capLoadMoreHistory = function () {
+                $scope.loadMoreHistory = function () {
                     $scope.refreshHistory(function () {
-                        capFixHeight();
-                        $('#capHistoryScroll').scroll($scope.capHandleScroll);
-                    });
-                };
-                $scope.corpLoadMoreHistory = function () {
-                    $scope.refreshHistory(function () {
-                        corpFixHeight();
-                        $('#corpHistoryScroll').scroll($scope.corpHandleScroll);
+                        fixHeight();
+                        $('#accountHistoryScroll').scroll($scope.accountHandleScroll);
                     });
                 };
                 // Init
-                if ($scope.isChar) {
-                    $('#capHistoryScroll').scroll($scope.capHandleScroll);
-                    $(window).resize(capFixHeight);
-                    $scope.capLoadMoreHistory();
-                } else {
-                    $('#corpHistoryScroll').scroll($scope.corpHandleScroll);
-                    $(window).resize(corpFixHeight);
-                    $scope.corpLoadMoreHistory();
-                }
+                $('#accountHistoryScroll').scroll($scope.accountHandleScroll);
+                $(window).resize(fixHeight);
+                $scope.loadMoreHistory();
             }]);
 
 

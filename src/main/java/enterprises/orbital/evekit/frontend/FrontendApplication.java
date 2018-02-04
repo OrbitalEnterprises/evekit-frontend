@@ -1,19 +1,18 @@
 package enterprises.orbital.evekit.frontend;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.ws.rs.core.Application;
-
 import enterprises.orbital.base.OrbitalProperties;
 import enterprises.orbital.base.PersistentProperty;
 import enterprises.orbital.db.DBPropertyProvider;
 import enterprises.orbital.evekit.account.EveKitUserAccountProvider;
 import enterprises.orbital.evekit.ws.account.AccountWS;
 import enterprises.orbital.evekit.ws.account.CredentialWS;
-import enterprises.orbital.evekit.ws.model.SyncTrackerWS;
+import enterprises.orbital.evekit.ws.model.ESISyncTrackerWS;
 import enterprises.orbital.oauth.AuthUtil;
+
+import javax.ws.rs.core.Application;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class FrontendApplication extends Application {
   // Property which holds the name of the persistence unit for properties
@@ -36,7 +35,7 @@ public class FrontendApplication extends Application {
     // Local resources
     resources.add(AccountWS.class);
     resources.add(CredentialWS.class);
-    resources.add(SyncTrackerWS.class);
+    resources.add(ESISyncTrackerWS.class);
     resources.add(AuthenticationWS.class);
     resources.add(ReleaseWS.class);
     resources.add(AdminWS.class);
