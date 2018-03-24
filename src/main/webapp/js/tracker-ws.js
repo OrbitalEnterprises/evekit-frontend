@@ -73,6 +73,7 @@ var AccountSyncTrackerEndpoints = [
     "CORP_FACILITIES",
     "CORP_MEDALS",
     "CORP_MEMBERSHIP",
+    "CORP_SHAREHOLDERS",
     "CORP_SHEET",
     "CORP_STARBASES",
     "CORP_STRUCTURES",
