@@ -61,22 +61,6 @@
                         });
                     });
                 };
-                // Send a synchronization request.
-                $scope.sendSyncRequest = function (acct) {
-                    var infoMsg = DialogService.simpleInfoMessage('Sending synchronization request...', 30);
-                    AccountWSService.requestSync(acct.userAccount.uid, acct.aid)
-                        .then(function (stat) {
-                            $scope.$apply(function () {
-                                DialogService.removeMessage(infoMsg);
-                                DialogService.simpleInfoMessage('Account scheduled for synchronization.  If the account has not already been synchronized recently, then account sync history will show sync status shortly.', 40);
-                            });
-                        }).catch(function (err) {
-                        $scope.$apply(function () {
-                            DialogService.removeMessage(infoMsg);
-                            DialogService.serverErrorMessage('sending sync request: ' + err.errorMessage, 10);
-                        });
-                    });
-                };
                 // Delete a sync account.
                 $scope.deleteAccount = function (acct) {
                     DialogService.yesNoDialog('warning', 'Really delete sync account?', false, function (answer) {
@@ -402,7 +386,7 @@
                 // Select all scopes
                 $scope.selectAllScopes = function () {
                     for (var i = 0; i < $scope.scopeList.length; i++) {
-                        $scope.currentScopeSelection[$scope.scopeList[i].name] = true;
+                        $scope.currentScopeSelection[$scope.scopeList[i].scope] = true;
                     }
                 };
                 // Verify new ESI credential selection
@@ -415,9 +399,9 @@
                     var info = DialogService.simpleInfoMessage('Adding ESI credential...');
                     var scopeRequest = [];
                     for (var i = 0; i < $scope.scopeList.length; i++) {
-                        var name = $scope.scopeList[i].name;
+                        var name = $scope.scopeList[i].scope;
                         if ($scope.currentScopeSelection[name]) {
-                            scopeRequest.push($scope.scopeList[i].scope);
+                            scopeRequest.push(name);
                         }
                     }
                     CredentialWSService.setESICredential($scope.newCredentialAccount.aid, scopeRequest.join(' ')).then(function (result) {
@@ -445,7 +429,7 @@
                     }
                     DialogService.yesNoDialog('warning', 'Are you sure you want to delete this credential?', false,
                         function (answer) {
-                            if (answer == 1) {
+                            if (answer === 1) {
                                 // Remove credential
                                 CredentialWSService.clearESICredential(account.aid).then(function () {
                                     $scope.reloadList();
@@ -530,7 +514,7 @@
                             for (var i = 0; i < selectedScopes.length; i++) {
                                 for (var j = 0; j < groups.length; j++) {
                                     if (selectedScopes[i] === groups[j].scope) {
-                                        $scope.currentScopeSelection[groups[j].name] = true;
+                                        $scope.currentScopeSelection[groups[j].scope] = true;
                                         break;
                                     }
                                 }

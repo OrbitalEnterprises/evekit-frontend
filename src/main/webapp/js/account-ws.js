@@ -50,15 +50,6 @@
                                 }).catch(handleRemoteResponse);
                         });
                 },
-                'requestSync': function (uid, aid) {
-                    return SwaggerService.getSwagger()
-                        .then(function (swg) {
-                            return swg.Account.requestSync({uid: uid, aid: aid}, {})
-                                .then(function (result) {
-                                    return true;
-                                }).catch(handleRemoteResponse);
-                        });
-                },
                 'getAccessKey': function (uid, aid, kid) {
                     return SwaggerService.getSwagger()
                         .then(function (swg) {
