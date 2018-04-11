@@ -36,7 +36,7 @@
                     return SwaggerService.getSwagger()
                         .then(function (swg) {
                             return swg.Account.deleteSyncAccount({uid: uid, aid: aid}, {})
-                                .then(function (result) {
+                                .then(function () {
                                     return true;
                                 }).catch(handleRemoteResponse);
                         });
@@ -45,7 +45,7 @@
                     return SwaggerService.getSwagger()
                         .then(function (swg) {
                             return swg.Account.restoreSyncAccount({uid: uid, aid: aid}, {})
-                                .then(function (result) {
+                                .then(function () {
                                     return true;
                                 }).catch(handleRemoteResponse);
                         });
@@ -72,7 +72,7 @@
                     return SwaggerService.getSwagger()
                         .then(function (swg) {
                             return swg.Account.deleteAccessKey({uid: uid, aid: aid, kid: kid}, {})
-                                .then(function (result) {
+                                .then(function () {
                                     return true;
                                 }).catch(handleRemoteResponse);
                         });
@@ -117,7 +117,7 @@
                     return SwaggerService.getSwagger()
                         .then(function (swg) {
                             return swg.Account.toggleAccountDisabled({uid: uid, aid: aid, disabled: dis}, {})
-                                .then(function (result) {
+                                .then(function () {
                                     return true;
                                 }).catch(handleRemoteResponse);
                         });
@@ -135,7 +135,7 @@
                     return SwaggerService.getSwagger()
                         .then(function (swg) {
                             return swg.Account.toggleActive({uid: uid, active: active}, {})
-                                .then(function (result) {
+                                .then(function () {
                                     return true;
                                 }).catch(handleRemoteResponse);
                         });
@@ -153,7 +153,7 @@
                     return SwaggerService.getSwagger()
                         .then(function (swg) {
                             return swg.Authentication.becomeUser({uid: uid}, {})
-                                .then(function (result) {
+                                .then(function () {
                                     return true;
                                 }).catch(handleRemoteResponse);
                         });
@@ -185,33 +185,10 @@
     accountWS.factory('CredentialWSService', ['SwaggerService',
         function (SwaggerService) {
             return {
-                'setXMLCredential': function (aid, key, charID, vcode) {
-                    return SwaggerService.getSwagger()
-                        .then(function (swg) {
-                            return swg.Credential.setXMLCredential({
-                                aid: aid,
-                                key: key,
-                                charID: charID,
-                                vcode: vcode
-                            }, {})
-                                .then(function (result) {
-                                    return result.obj;
-                                }).catch(handleRemoteResponse);
-                        });
-                },
                 'setESICredential': function (aid, scopes) {
                     return SwaggerService.getSwagger()
                         .then(function (swg) {
                             return swg.Credential.setESICredential({aid: aid, scopes: scopes}, {})
-                                .then(function (result) {
-                                    return result.obj;
-                                }).catch(handleRemoteResponse);
-                        });
-                },
-                'clearXMLCredential': function (aid) {
-                    return SwaggerService.getSwagger()
-                        .then(function (swg) {
-                            return swg.Credential.clearXMLCredential({aid: aid}, {})
                                 .then(function (result) {
                                     return result.obj;
                                 }).catch(handleRemoteResponse);

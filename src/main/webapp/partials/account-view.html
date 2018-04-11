@@ -28,9 +28,6 @@
                                             <span class="label label-danger" ng-hide="account.markedForDelete == -1" style="margin-left: 20px;">
                                                 {{'MARKED FOR DELETE (Estimated Delete Time:' + ((account.markedForDelete + (24 * 60 * 60 * 1000))|date:'yyyy-MM-dd HH:mm:ss':'UTC') + ')'}}
                                             </span>
-                                            <span class="label label-danger" ng-show="account.eveKey > 0 && account.expired" style="margin-left: 20px;" title="Contact key owner for renewal">
-                                                XML KEY EXPIRED
-                                            </span>
                                             <span class="label label-danger" ng-show="account.accessTokenExpirey > 0 && !account.valid" style="margin-left: 20px;" title="Re-authorize below">
                                                 ESI TOKEN INVALID
                                             </span>
@@ -81,38 +78,6 @@
                                                         <span class="label label-default">Credentials</span>
                                                     </h4>
                                                 </td>
-                                            </tr>
-                                            <tr>
-                                                <td nowrap align="center">
-                                                    <!-- Cred exists options -->
-                                                    <button type="button" class="btn btn-danger" ng-show="account.eveKey > 0" title="Remove Credential" ng-click="removeXMLCredentialDialog(account);">
-                                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-default" ng-show="account.eveKey > 0" title="Edit Credential" ng-click="modifyXMLCredentialDialog(account);">
-                                                        <i class="fa fa-wrench" aria-hidden="true"></i>
-                                                    </button>
-                                                    <!-- Cred does not exist options -->
-                                                    <button type="button" class="btn btn-success" ng-show="account.eveKey <= 0" title="Add Credential" ng-click="addXMLCredentialDialog(account);">
-                                                        <i class="fa fa-plus" aria-hidden="true"></i>
-                                                    </button>
-                                                </td>
-                                                <td nowrap style="vertical-align: middle">
-                                                    <span class="label label-info">XML API</span>
-                                                </td>
-                                                <td nowrap style="vertical-align: middle">
-                                                    <b ng-show="account.eveKey > 0">Key ID</b>
-                                                </td>
-                                                <td nowrap style="vertical-align: middle">
-                                                    <span ng-show="account.eveKey > 0">{{account.eveKey}}</span>
-                                                </td>
-                                                <td nowrap style="vertical-align: middle">
-                                                    <b ng-show="account.eveKey > 0">VCode</b>
-                                                </td>
-                                                <td nowrap style="vertical-align: middle">
-                                                    <span ng-show="account.eveKey > 0">{{account.eveVCode}}</span>
-                                                </td>
-                                                <td></td>
-                                                <td width="100%"></td>
                                             </tr>
                                             <tr>
                                                 <td nowrap align="center">
@@ -234,62 +199,6 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal"
                         ng-click="modifyAccount()" ng-disabled="isModifiedAccountInvalid()">SAVE CHANGES</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-<!-- Add/Modify XML Credential Dialog -->
-<div id="addXMLCredential" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addXMLCredentialModalLabel">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="changeXMLSelection(-1)">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="addXMLCredentialModalLabel">{{xmlFormType}} XML Credential</h4>
-            </div>
-            <div class="modal-body">
-                <form class="form-horizontal" role="form">
-                    <div class="form-group">
-                        <label class="col-sm-1 control-label" for="xml-add-keyid">Key ID</label>
-                        <div class="col-sm-2">
-                            <input id="xml-add-keyid" type="text" class="form-control" ng-model="newKeyID" placeholder="Enter Key ID" ng-change="resetXMLSelection()">
-                        </div>
-                        <label class="col-sm-1 control-label" for="xml-add-vcode">VCode</label>
-                        <div class="col-sm-8">
-                            <input id="xml-add-vcode" type="text" class="form-control" ng-model="newVCode" placeholder="Enter VCode" ng-change="resetXMLSelection()">
-                        </div>
-                    </div>
-                    Enter an XML API Key and Verification Code.  Use the "Refresh" button to retrieve accounts available using these credentials.
-                    Select an account and click "Add" to save your XML credential.
-                    <div class="form-group">
-                        <div class="row" ng-hide="accountChoices.length == 0">
-                            <div class="col-md-{{accountChoices.length == 3 ? 1 : (accountChoices.length == 2 ? 3 : 4)}}"></div>
-                            <div ng-repeat="acct in accountChoices" ng-class="getXMLSelectionClasses($index)">
-                                <table class="table">
-                                    <tr><td align="center">{{acct.eveCorporationName}}</td><td align="center">{{acct.eveCharacterName}}</td></tr>
-                                    <tr>
-                                        <td align="center"><img width="64px" height="64px" ng-src="https://image.eveonline.com/corporation/{{acct.eveCorporationID}}_128.png"></td>
-                                        <td align="center"><img width="64px" height="64px" ng-src="https://image.eveonline.com/character/{{acct.eveCharacterID}}_128.jpg"></td>
-                                    </tr>
-                                    <tr>
-                                        <td nowrap colspan="2" valign="middle" align="center">
-                                            <button type="button" class="btn btn-default" ng-click="changeXMLSelection($index)">SELECT</button>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div id="xml-account-modal-footer" class="modal-footer">
-                <button id="xml-account-selector" type="button" class="btn btn-default" ng-click="fetchXMLCharacters()">
-                    Refresh Account List
-                </button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal"
-                        ng-click="addXMLCredential()" ng-disabled="isXMLSelectionInvalid()">ADD CREDENTIAL</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

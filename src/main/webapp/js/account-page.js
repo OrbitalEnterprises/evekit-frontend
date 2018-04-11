@@ -1,6 +1,6 @@
 /* EveKit Account Page Module */
 (function () {
-    var eveKitAccount = angular.module('eveKitAccount', ['ngResource', 'ngSanitize', 'ngRoute', 'eveKitDialog', 'eveKitAccountWS', 'eveKitTrackerWS', 'eveKitServerServices', 'eveKitModeServices']);
+    var eveKitAccount = angular.module('eveKitAccount', ['ngResource', 'ngSanitize', 'ngRoute', 'eveKitDialog', 'eveKitAccountWS', 'eveKitTrackerWS', 'eveKitModeServices']);
 
     eveKitAccount.controller('AccountMainCtrl',
         ['$scope', 'ToolModeService',
@@ -10,8 +10,8 @@
             }]);
 
     eveKitAccount.controller('AccountViewCtrl',
-        ['$scope', '$timeout', '$location', '$window', 'DialogService', 'AccountWSService', 'APIKeyInfo', 'ToolModeService', 'CharacterInfo', 'CredentialWSService',
-            function ($scope, $timeout, $location, $window, DialogService, AccountWSService, APIKeyInfo, ToolModeService, CharacterInfo, CredentialWSService) {
+        ['$scope', '$timeout', '$location', '$window', 'DialogService', 'AccountWSService', 'ToolModeService', 'CredentialWSService',
+            function ($scope, $timeout, $location, $window, DialogService, AccountWSService, ToolModeService, CredentialWSService) {
                 ToolModeService.refresh(MODE_EVEKIT);
                 $scope.sectionName = "Account Sync : List";
                 $scope.accountlist = [];
@@ -26,33 +26,6 @@
                             $scope.loading = false;
                             $scope.accountlist = accts;
                         });
-                        // Check expiry info for each account
-                        var updater = function (el, i) {
-                            return function () {
-                                APIKeyInfo.get({keyID: el.eveKey, vCode: el.eveVCode},
-                                    angular.noop,
-                                    function (err) {
-                                        // Expired keys will report: 403 (Forbidden)
-                                        // <eveapi version="2">
-                                        //   <currentTime>2016-03-12 04:35:55</currentTime>
-                                        //   <error code="222">
-                                        //     Key has expired. Contact key owner for access renewal.
-                                        //   </error>
-                                        //   <cachedUntil>2016-03-13 04:35:55</cachedUntil>
-                                        // </eveapi>
-                                        if (angular.isDefined(err.data) && angular.isDefined(err.data.code) && (err.data.code == 222 || err.data.code == 220)) {
-                                            // Key expired or doesn't fullfill corporation requirements anymore
-                                            var newval = $.extend(true, {}, el);
-                                            newval['expired'] = true;
-                                            // Splice here is necessary to trigger angular update
-                                            $scope.accountlist.splice(i, 1, newval);
-                                        }
-                                    });
-                            };
-                        }
-                        for (var i = 0; i < accts.length; i++) {
-                            (updater(accts[i], i))();
-                        }
                     }).catch(function (err) {
                         $scope.$apply(function () {
                             $scope.loading = false;
@@ -64,9 +37,9 @@
                 // Delete a sync account.
                 $scope.deleteAccount = function (acct) {
                     DialogService.yesNoDialog('warning', 'Really delete sync account?', false, function (answer) {
-                        if (answer == 1) {
+                        if (answer === 1) {
                             var info = DialogService.simpleInfoMessage('Marking account for removal...');
-                            AccountWSService.deleteSyncAccount(acct.userAccount.uid, acct.aid).then(function (success) {
+                            AccountWSService.deleteSyncAccount(acct.userAccount.uid, acct.aid).then(function () {
                                 $scope.$apply(function () {
                                     DialogService.removeMessage(info);
                                     $scope.reloadList();
@@ -83,7 +56,7 @@
                 // Restore an account marked for deletion.
                 $scope.restoreAccount = function (acct) {
                     var info = DialogService.simpleInfoMessage('Marking account for restore...');
-                    AccountWSService.restoreSyncAccount(acct.userAccount.uid, acct.aid).then(function (success) {
+                    AccountWSService.restoreSyncAccount(acct.userAccount.uid, acct.aid).then(function () {
                         $scope.$apply(function () {
                             DialogService.removeMessage(info);
                             $scope.reloadList();
@@ -126,7 +99,7 @@
                 // Save new account
                 $scope.addAccount = function() {
                     var info = DialogService.simpleInfoMessage('Adding account...');
-                    AccountWSService.saveSyncAccount(-1, -1, $scope.newAccountName, $scope.newAccountType === 'CHARACTER').then(function (success) {
+                    AccountWSService.saveSyncAccount(-1, -1, $scope.newAccountName, $scope.newAccountType === 'CHARACTER').then(function () {
                         $scope.$apply(function () {
                             DialogService.removeMessage(info);
                             $scope.reloadList();
@@ -171,7 +144,7 @@
                 // Save modified account
                 $scope.modifyAccount = function() {
                     var info = DialogService.simpleInfoMessage('Saving account changes...');
-                    AccountWSService.saveSyncAccount(-1, $scope.accountToModify.aid, $scope.modifyAccountName, $scope.accountToModify.characterType).then(function (success) {
+                    AccountWSService.saveSyncAccount(-1, $scope.accountToModify.aid, $scope.modifyAccountName, $scope.accountToModify.characterType).then(function () {
                         $scope.$apply(function () {
                             DialogService.removeMessage(info);
                             $scope.reloadList();
@@ -183,155 +156,8 @@
                         });
                     });
                 };
-                // State for new xml credential form
-                $scope.newCredentialAccount = null;
-                $scope.xmlFormType = 'Add';
-                $scope.newKeyID = '';
-                $scope.newVCode = '';
-                $scope.accountChoices = [];
-                $scope.accountSelection = -1;
-                // Start the add XML credential dialog
-                $scope.addXMLCredentialDialog = function (account) {
-                    // Show an error if the account already has an XML credential.  The UI should normally
-                    // prevent this dialog from being invoked in this case.
-                    if (account.eveKey > 0) {
-                        DialogService.simpleErrorMessage("Account already has an XML credential.  You may either edit the existing credential, or remove it and replace it with a new one.");
-                        return;
-                    }
-                    $scope.xmlFormType = 'Add';
-                    $scope.newCredentialAccount = account;
-                    $scope.newKeyID = '';
-                    $scope.newVCode = '';
-                    $scope.accountChoices = [];
-                    $scope.accountSelection = -1;
-                    $('#addXMLCredential').modal({
-                        backdrop: 'static',
-                        keyboard: false
-                    });
-                };
-                // Start the modify XML credential dialog
-                $scope.modifyXMLCredentialDialog = function (account) {
-                    // Show an error if the account does not have an XML credential.  The UI should normally
-                    // prevent this dialog from being invoked in this case.
-                    if (account.eveKey <= 0) {
-                        DialogService.simpleErrorMessage("Account does not have an XML credential.  You must first create an XML credential.");
-                        return;
-                    }
-                    $scope.xmlFormType = 'Modify';
-                    $scope.newCredentialAccount = account;
-                    $scope.newKeyID = account.eveKey;
-                    $scope.newVCode = account.eveVCode;
-                    $scope.accountChoices = [];
-                    $scope.accountSelection = -1;
-                    CharacterInfo.list({keyID: $scope.newKeyID, vCode: $scope.newVCode}).$promise.then(function(lst) {
-                        if (lst.length == 0) {
-                            DialogService.serverErrorMessage('loading account selection from current credential.  Credential can not be modified at this time.', 10);
-                            return;
-                        }
-                        $scope.accountChoices = lst;
-                        for (var i = 0; i < lst.length; i++) {
-                            if (lst[i].eveCharacterID == account.eveCharacterID && lst[i].eveCorporationID == account.eveCorporationID) {
-                                $scope.accountSelection = i;
-                                break;
-                            }
-                        }
-                        if ($scope.accountSelection === -1) {
-                            DialogService.simpleErrorMessage("Account character and corporation could not be found using the current credential.  Credential can not be modified at this time", 10);
-                            return;
-                        }
-                        $('#addXMLCredential').modal({
-                            backdrop: 'static',
-                            keyboard: false
-                        });
-                    }).catch(function() {
-                        $scope.accountChoices = [];
-                        $scope.changeXMLSelection(-1);
-                        DialogService.connectionErrorMessage('loading account selection from current credential.  Credential can not be modified at this time.', 10);
-                        return;
-                    });
-                };
-                // Highlight character to be selected
-                $scope.changeXMLSelection = function (i) {
-                    $scope.accountSelection = i;
-                };
-                // Reset XML selections
-                $scope.resetXMLSelection = function() {
-                    $scope.accountChoices = [];
-                    $scope.accountSelection = -1;
-                };
-                // Change CSS class based on account selection
-                $scope.getXMLSelectionClasses = function (i) {
-                    var result = ['col-md-3'];
-                    if ($scope.accountSelection === i)
-                        result.push('selected-account');
-                    return result;
-                };
-                // Fetch character choices.
-                $scope.fetchXMLCharacters = function () {
-                    $scope.changeXMLSelection(-1);
-                    CharacterInfo.list({keyID: $scope.newKeyID, vCode: $scope.newVCode}).$promise.then(function(lst) {
-                        $scope.accountChoices = lst;
-                        $scope.changeXMLSelection(-1);
-                        if (lst.length === 0)
-                            DialogService.serverErrorMessage('loading character choices.  Please check key ID and VCode and try again', 10);
-                    }).catch(function() {
-                        $scope.accountChoices = [];
-                        $scope.changeXMLSelection(-1);
-                        DialogService.connectionErrorMessage('loading character choices.  Please check key ID and VCode and try again', 10);
-                    });
-                };
-                // Verify new XML credential selection
-                $scope.isXMLSelectionInvalid = function () {
-                    // Form is invalid if:
-                    // 1) key invalid; or,
-                    // 2) vcode invalid; or,
-                    // 3) no account selected.
-                    if (!validateKeyID($scope.newKeyID))
-                        return true;
-                    if (!validateVCode($scope.newVCode))
-                        return true;
-                    if ($scope.accountSelection === -1)
-                        return true;
-                    return false;
-                };
-                // Add new XML credential
-                $scope.addXMLCredential = function() {
-                    var info = DialogService.simpleInfoMessage('Adding XML credential...');
-                    CredentialWSService.setXMLCredential($scope.newCredentialAccount.aid, $scope.newKeyID, $scope.accountChoices[$scope.accountSelection].eveCharacterID, $scope.newVCode).then(function (success) {
-                        $scope.$apply(function () {
-                            DialogService.removeMessage(info);
-                            $scope.reloadList();
-                        });
-                    }).catch(function (err) {
-                        $scope.$apply(function () {
-                            DialogService.removeMessage(info);
-                            DialogService.serverErrorMessage('adding XML credential: ' + err.errorMessage, 10);
-                            $scope.reloadList();
-                        });
-                    });
-                };
-                // Verify then remove an XML credential
-                $scope.removeXMLCredentialDialog = function (account) {
-                    // Show an error if the account doesn't have an XML credential.  The UI should normally
-                    // prevent this dialog from being invoked in this case.
-                    if (account.eveKey <= 0) {
-                        DialogService.simpleErrorMessage("Account does not have an XML credential.");
-                        return;
-                    }
-                    DialogService.yesNoDialog('warning', 'Are you sure you want to delete this credential?', false,
-                        function (answer) {
-                            if (answer == 1) {
-                                // Remove credential
-                                CredentialWSService.clearXMLCredential(account.aid).then(function () {
-                                    $scope.reloadList();
-                                }).catch(function (err) {
-                                    DialogService.serverErrorMessage('removing XML credential: ' + err.errorMessage, 10);
-                                    $scope.reloadList();
-                                });
-                            }
-                        });
-                };
                 // State for new esi credential form
+                $scope.newCredentialAccount = null;
                 $scope.esiFormType = 'Add';
                 $scope.scopeList = [];
                 $scope.currentScopeSelection = {};
@@ -542,39 +368,13 @@
         return !/[^a-zA-Z0-9]/.test(str);
     };
 
-    var isNumeric = function (str) {
-        return !/[^0-9]/.test(str);
-    };
-
     var validateAccountName = function (name) {
-        if (!name || name.length == 0)
+        if (!name || name.length === 0)
             return false;
         for (var i = 0; i < name.length; i++) {
             if (isAlphaNumeric(name[i]))
                 continue;
             if (name[i] === '_')
-                continue;
-            return false;
-        }
-        return true;
-    };
-
-    var validateKeyID = function (name) {
-        if (!name || name.length == 0)
-            return false;
-        for (var i = 0; i < name.length; i++) {
-            if (isNumeric(name[i]))
-                continue;
-            return false;
-        }
-        return true;
-    };
-
-    var validateVCode = function (name) {
-        if (!name || name.length == 0)
-            return false;
-        for (var i = 0; i < name.length; i++) {
-            if (isAlphaNumeric(name[i]))
                 continue;
             return false;
         }
@@ -602,8 +402,6 @@
 
     // Validators
     eveKitAccount.directive('validateaccountname', [abstractValidator('validateaccountname', 'account-mod-name', validateAccountName)]);
-    eveKitAccount.directive('validatekeyid', [abstractValidator('validatekeyid', 'xml-add-keyid', validateKeyID)]);
-    eveKitAccount.directive('validatevcode', [abstractValidator('validatevcode', 'xml-add-vcode', validateVCode)]);
 
     eveKitAccount.controller('AccountHistoryCtrl',
         ['$scope', '$timeout', '$routeParams', '$location', 'DialogService', 'AccountWSService', 'TrackerWSService', 'ToolModeService',
@@ -612,9 +410,9 @@
                 $scope.sectionName = "Account Sync : History";
                 $scope.$location = $location;
                 $scope.accountID = angular.isDefined($routeParams.acctid) ? parseInt($routeParams.acctid) : -1;
-                $scope.isChar = angular.isDefined($routeParams.ischar) ? ($routeParams.ischar == 'true') : false;
+                $scope.isChar = angular.isDefined($routeParams.ischar) ? ($routeParams.ischar === 'true') : false;
                 $scope.accountName = angular.isDefined($routeParams.name) ? $routeParams.name : '';
-                if ($scope.accountID == -1) {
+                if ($scope.accountID === -1) {
                     // This should never happen.  Send us back to the view page.
                     DialogService.ackDialog('warning', 'Account ID is missing.  If this problem persists, please contact the site admin.', 10, function () {
                         $location.url('/account/view');
@@ -677,7 +475,7 @@
                 var maxresults = 100;
                 $scope.refreshHistory = function (opt_cb) {
                     $scope.loading = true;
-                    var continuation = $scope.syncHistory.length == 0 ? -1 : $scope.syncHistory[$scope.syncHistory.length - 1].syncStart;
+                    var continuation = $scope.syncHistory.length === 0 ? -1 : $scope.syncHistory[$scope.syncHistory.length - 1].syncStart;
                     TrackerWSService.getAccountHistory($scope.accountID, continuation, maxresults).then(function (result) {
                         $scope.$apply(function () {
                             $scope.loading = false;
@@ -685,7 +483,7 @@
                             angular.forEach(result, function (el) {
                                 var found = false;
                                 for (var i = 0; i < $scope.syncHistory.length && !found; i++) {
-                                    if ($scope.syncHistory[i].tid == el.tid) {
+                                    if ($scope.syncHistory[i].tid === el.tid) {
                                         found = true;
                                         break;
                                     }
@@ -708,14 +506,16 @@
                 };
                 // Load more history when we scroll to the bottom of the current view.
                 $scope.accountHandleScroll = function () {
-                    if ($('#accountHistoryScroll').scrollTop() > $scope.syncHistory.length * 22 / 2) {
-                        $('#accountHistoryScroll').unbind('scroll');
+                    var sel = $('#accountHistoryScroll');
+                    if (sel.scrollTop() > $scope.syncHistory.length * 22 / 2) {
+                        sel.unbind('scroll');
                         $scope.loadMoreHistory();
                     }
                 };
                 // Fix viewport size so scrolling works correctly.
                 var fixHeight = function () {
-                    $('#accountHistoryScroll').height($('#bottom-nav').offset().top - $('#accountHistoryScroll').offset().top - 60);
+                    var sel = $('#accountHistoryScroll');
+                    sel.height($('#bottom-nav').offset().top - sel.offset().top - 60);
                 };
                 // Load history when scroll reaches the end
                 $scope.loadMoreHistory = function () {
