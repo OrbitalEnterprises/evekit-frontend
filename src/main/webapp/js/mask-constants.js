@@ -33,6 +33,10 @@ evekit.CommonMaskConstants = {
       "Account Balance Access", "Allows view of current account balances."),
   'ACCESS_ASSETS' : new evekit.MaskConstant('ACCESS_ASSETS', "Asset Access",
       "Allows view of assets."),
+  'ACCESS_CHARACTER_SHEET' : new evekit.MaskConstant('ACCESS_CHARACTER_SHEET',
+      "Character Sheet Access", "Allows view of character sheet."),
+  'ACCESS_CORPORATION_SHEET' : new evekit.MaskConstant('ACCESS_CORPORATION_SHEET',
+      "Corporation Sheet Access", "Allows view of corporation sheet."),
   'ACCESS_CONTACT_LIST' : new evekit.MaskConstant('ACCESS_CONTACT_LIST',
       "Contact List Access", "Allows view of contact lists."),
   'ACCESS_BLUEPRINTS' : new evekit.MaskConstant('ACCESS_BLUEPRINTS', "Blueprint Access",
@@ -67,8 +71,6 @@ evekit.CharacterMaskConstants = {
   'ACCESS_CALENDAR_EVENT_ATTENDEES' : new evekit.MaskConstant(
       'ACCESS_CALENDAR_EVENT_ATTENDEES', "Calendar Event Attendee Access",
       "Allows view of attendee lists for character's calendar events."),
-  'ACCESS_CHARACTER_SHEET' : new evekit.MaskConstant('ACCESS_CHARACTER_SHEET',
-      "Character Sheet Access", "Allows view of character sheet."),
   'ACCESS_CHAT_CHANNELS' : new evekit.MaskConstant('ACCESS_CHAT_CHANNELS',
       "Chat Channels Access", "Allows view of character chat channels."),
   'ACCESS_CONTACT_NOTIFICATIONS' : new evekit.MaskConstant('ACCESS_CONTACT_NOTIFICATIONS',
@@ -95,8 +97,6 @@ evekit.CharacterMaskConstants = {
 evekit.CorporationMaskConstants = {
   'ACCESS_CONTAINER_LOG' : new evekit.MaskConstant('ACCESS_CONTAINER_LOG',
       "Container Log Access", "Allows view of container logs."),
-  'ACCESS_CORPORATION_SHEET' : new evekit.MaskConstant('ACCESS_CORPORATION_SHEET',
-      "Corporation Sheet Access", "Allows view of corporation sheet."),
   'ACCESS_CORPORATION_MEDALS' : new evekit.MaskConstant('ACCESS_CORPORATION_MEDALS',
       "Corporation Medals Access", "Allows view of medals defined for corporation."),
   'ACCESS_MEMBER_MEDALS' : new evekit.MaskConstant('ACCESS_MEMBER_MEDALS',
@@ -121,14 +121,15 @@ evekit.CorporationMaskConstants = {
 evekit.AllMaskConstants = {};
 
 (function() {
-  for ( var mask_prop in evekit.CommonMaskConstants) {
+  var mask_prop;
+  for ( mask_prop in evekit.CommonMaskConstants) {
     evekit.CharacterMaskConstants[mask_prop] = evekit.CommonMaskConstants[mask_prop];
     evekit.CorporationMaskConstants[mask_prop] = evekit.CommonMaskConstants[mask_prop];
   }
-  for ( var mask_prop in evekit.CharacterMaskConstants) {
+  for ( mask_prop in evekit.CharacterMaskConstants) {
     evekit.AllMaskConstants[mask_prop] = evekit.CharacterMaskConstants[mask_prop];
   }
-  for ( var mask_prop in evekit.CorporationMaskConstants) {
+  for ( mask_prop in evekit.CorporationMaskConstants) {
     evekit.AllMaskConstants[mask_prop] = evekit.CorporationMaskConstants[mask_prop];
   }
 })();
