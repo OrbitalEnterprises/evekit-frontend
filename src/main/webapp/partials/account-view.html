@@ -106,7 +106,7 @@
                                                     <span ng-class="{token_valid: account.valid, token_reauth: !account.valid}" ng-show="account.scopes != null">{{account.valid ? 'VALID' : 'NEEDS RE-AUTHORIZATION'}}</span>
                                                 </td>
                                                 <td nowrap style="vertical-align: middle">
-                                                    <b ng-show="account.scopes != null">Expiry</b>
+                                                    <b ng-show="account.scopes != null">Next Refresh Time</b>
                                                 </td>
                                                 <td nowrap style="vertical-align: middle">
                                                     <span ng-show="account.scopes != null">{{account.accessTokenExpiry != -1 ? (account.accessTokenExpiry|date:'yyyy-MM-dd HH:mm:ss':'UTC') : 'Invalid Token'}}</span>
