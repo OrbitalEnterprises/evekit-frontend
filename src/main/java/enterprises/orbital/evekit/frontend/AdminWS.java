@@ -1,5 +1,6 @@
 package enterprises.orbital.evekit.frontend;
 
+import enterprises.orbital.base.NoPersistentPropertyException;
 import enterprises.orbital.base.PersistentProperty;
 import enterprises.orbital.evekit.account.EveKitUserAccount;
 import enterprises.orbital.evekit.account.UserNotFoundException;
@@ -196,9 +197,9 @@ public class AdminWS {
           name = "uid",
           required = true,
           value = "UID of user for which properties will be returned") long uid) {
-    // Verify caller is an admin
+    // Verify caller is an admin or is the owner of uid
     EveKitUserAccount admin = (EveKitUserAccount) AuthUtil.getCurrentUser(request);
-    if (admin == null || !admin.isAdmin()) {
+    if (admin == null || (!admin.isAdmin() && admin.getID() != uid)) {
       ServiceError errMsg = new ServiceError(Status.UNAUTHORIZED.getStatusCode(), "Requestor not logged in or not an admin");
       return Response.status(Status.UNAUTHORIZED)
                      .entity(errMsg)
@@ -210,7 +211,7 @@ public class AdminWS {
       EveKitUserAccount.getAccount(uid);
 
       // Return list of properties
-      final List<PersistentProperty> result = new ArrayList<PersistentProperty>();
+      final List<PersistentProperty> result = new ArrayList<>();
       final String keyPrefix = "EveKitUserAccount." + String.valueOf(uid) + ".";
       for (PersistentProperty next : PersistentProperty.getAll()) {
         if (next.getPropertyName()
@@ -222,6 +223,69 @@ public class AdminWS {
       }
       return Response.ok()
                      .entity(result)
+                     .build();
+    } catch (UserNotFoundException e) {
+      ServiceError errMsg = new ServiceError(Status.NOT_FOUND.getStatusCode(), "No user with given UID found");
+      return Response.status(Status.NOT_FOUND)
+                     .entity(errMsg)
+                     .build();
+    } catch (IOException e) {
+      ServiceError errMsg = new ServiceError(
+          Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Error retrieving user properties, contact admin if this problem persists");
+      return Response.status(Status.INTERNAL_SERVER_ERROR)
+                     .entity(errMsg)
+                     .build();
+    }
+  }
+
+  @Path("/userprop/{uid}/{key}")
+  @GET
+  @ApiOperation(
+      value = "Return system property for the given uid")
+  @ApiResponses(
+      value = {
+          @ApiResponse(
+              code = 200,
+              message = "Requested property value.  Value is null if not found.",
+              response = PersistentProperty.class),
+          @ApiResponse(
+              code = 401,
+              message = "Requestor not logged in or not an admin",
+              response = ServiceError.class),
+          @ApiResponse(
+              code = 404,
+              message = "User with the given UID not found",
+              response = ServiceError.class),
+      })
+  public Response getUserProp(
+      @Context HttpServletRequest request,
+      @PathParam("uid") @ApiParam(
+          name = "uid",
+          required = true,
+          value = "UID of user for which property will be returned") long uid,
+      @PathParam("key") @ApiParam(
+          name = "key",
+          required = true,
+          value = "System property key") String key) {
+    // Verify caller is an admin or the owner of uid
+    EveKitUserAccount admin = (EveKitUserAccount) AuthUtil.getCurrentUser(request);
+    if (admin == null || (!admin.isAdmin() && admin.getID() != uid)) {
+      ServiceError errMsg = new ServiceError(Status.UNAUTHORIZED.getStatusCode(), "Requestor not logged in or not an admin");
+      return Response.status(Status.UNAUTHORIZED)
+                     .entity(errMsg)
+                     .build();
+    }
+    // Find target user
+    try {
+      // Return requested property value, or null if property not found
+      EveKitUserAccount target = EveKitUserAccount.getAccount(uid);
+      String result = PersistentProperty.getProperty(target, key);
+      return Response.ok()
+                     .entity(new PersistentProperty(key, result))
+                     .build();
+    } catch (NoPersistentPropertyException e) {
+      return Response.ok()
+                     .entity(new PersistentProperty(key, null))
                      .build();
     } catch (UserNotFoundException e) {
       ServiceError errMsg = new ServiceError(Status.NOT_FOUND.getStatusCode(), "No user with given UID found");
@@ -269,9 +333,9 @@ public class AdminWS {
           name = "value",
           required = true,
           value = "System property value") String value) {
-    // Verify caller is an admin
+    // Verify caller is an admin or owner of uid
     EveKitUserAccount admin = (EveKitUserAccount) AuthUtil.getCurrentUser(request);
-    if (admin == null || !admin.isAdmin()) {
+    if (admin == null || (!admin.isAdmin() && admin.getID() != uid)) {
       ServiceError errMsg = new ServiceError(Status.UNAUTHORIZED.getStatusCode(), "Requestor not logged in or not an admin");
       return Response.status(Status.UNAUTHORIZED)
                      .entity(errMsg)
@@ -325,9 +389,9 @@ public class AdminWS {
           name = "key",
           required = true,
           value = "System property key") String key) {
-    // Verify caller is an admin
+    // Verify caller is an admin or owner of uid
     EveKitUserAccount admin = (EveKitUserAccount) AuthUtil.getCurrentUser(request);
-    if (admin == null || !admin.isAdmin()) {
+    if (admin == null || (!admin.isAdmin() && admin.getID() != uid)) {
       ServiceError errMsg = new ServiceError(Status.UNAUTHORIZED.getStatusCode(), "Requestor not logged in or not an admin");
       return Response.status(Status.UNAUTHORIZED)
                      .entity(errMsg)

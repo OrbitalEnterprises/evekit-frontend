@@ -103,14 +103,17 @@
     initDisplay();
   }]);
 
-  eveKitMain.controller('MainAccountCtrl', ['$scope', 'UserCredentialsService', 'AccountWSService', 'DialogService', 'ToolModeService',
-                                            function($scope, UserCredentialsService, AccountWSService, DialogService, ToolModeService) {
+  eveKitMain.controller('MainAccountCtrl', ['$scope', 'UserCredentialsService', 'AccountWSService', 'DialogService', 'AdminWSService',
+                                            function($scope, UserCredentialsService, AccountWSService, DialogService, AdminWSService) {
     $scope.sectionName = "Main : Account Information";
     $scope.lastlogin = null;
     $scope.lastloginmethod = null;
     $scope.createdate = null;
     $scope.signonMethods = [{name: 'twitter', display: 'Twitter'}, {name: 'google', display: 'Google'}, {name: 'eve', display: 'EVE'}];
     $scope.signon = {};
+    $scope.tokenContactAddress = "";
+    $scope.expiredTokenContact = "";
+    $scope.uid = -1;
     $scope.loading = true;
     // Fetch user info directly in case this is a reload
     var userData = AccountWSService.getUser().then(function(userInfo) {
@@ -128,7 +131,7 @@
                   var nextMethod = $scope.signonMethods[i];
                   for(var j=0; j < sources.length; j++) {
                     var nextSource = sources[j];
-                    if (nextSource.source == nextMethod.name) {
+                    if (nextSource.source === nextMethod.name) {
                       result.signon[nextMethod.name] = {screenname : nextSource.screenName };
                     }
                   }
@@ -140,16 +143,44 @@
         });
       } else throw "User fetch failed";
     });
+    // Fetch expired contact info
+    $scope.fetchExpireContact = function(uid) {
+      AdminWSService.getUserProp(uid, "esiExpireContactAddress").then(function(result) {
+        $scope.$apply(function() {
+          $scope.expiredTokenContact = result.propertyValue === null ? '' : result.propertyValue;
+          $scope.tokenContactAddress = $scope.expiredTokenContact;
+        });
+      }).catch(function(msg) {
+        console.log(msg);
+          $scope.$apply(function() {
+              DialogService.simpleWarnMessage('Unable to retrieve expired ESI token contact address.  Reload to try again.', 10);
+          });
+      });
+    };
+    // Set or change expire contact
+    $scope.setExpireContact = function() {
+      AdminWSService.setUserProp($scope.uid, "esiExpireContactAddress", $scope.tokenContactAddress)
+          .catch(function() {
+            $scope.$apply(function() {
+                DialogService.simpleWarnMessage('Failed to set expired ESI token contact address.', 10);
+            });
+          })
+          .finally(function() {
+            $scope.fetchExpireContact($scope.uid);
+          });
+    };
     // Populate data for display
     userData.then(function(result) {
+      $scope.fetchExpireContact(result.user.uid);
       $scope.$apply(function() {
+        $scope.uid = result.user.uid;
         $scope.loading = false;
         $scope.lastlogin = result.user.last;
         $scope.lastloginmethod = result.source.source.substr(0, 1).toUpperCase() + result.source.source.substr(1);
         $scope.createdate = result.user.created;
         $scope.signon = result.signon;
       });
-    }).catch(function(msg) {
+    }).catch(function() {
       $scope.$apply(function() {
         $scope.loading = false;
         DialogService.simpleWarnMessage('Unable to retrieve account information.  Reload to try again.', 10);
@@ -159,7 +190,7 @@
     $scope.removeAuthSource = function(type) {
       DialogService.yesNoDialog('warning', 'Are you sure you want to remove the authentication source: ' + type + '?', false,
           function(choice) {
-        if (choice == 1) window.location = 'api/ws/v1/auth/remove/' + type + '?redirect=' + encodeURI(window.location);
+        if (choice === 1) window.location = 'api/ws/v1/auth/remove/' + type + '?redirect=' + encodeURI(window.location);
       });
     };
     // Add auth source handler

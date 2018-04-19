@@ -53,6 +53,15 @@ adminWS.factory('AdminWSService', ['SwaggerService',
           }).catch(handleRemoteResponse);
         });
       },
+        'getUserProp' : function(uid, key) {
+            return SwaggerService.getSwagger()
+                .then(function (swg) {
+                    return swg.Admin.getUserProp({uid: uid, key: key}, {})
+                        .then(function(result) {
+                            return result.obj;
+                        }).catch(handleRemoteResponse);
+                });
+        },
       'setUserProp' : function(uid, key, value) {
         return SwaggerService.getSwagger()
         .then(function (swg) {
