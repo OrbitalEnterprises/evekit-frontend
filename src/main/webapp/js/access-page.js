@@ -13,7 +13,7 @@
         $scope.corporationName = angular.isDefined($routeParams.corp) ? $routeParams.corp : '';
         $scope.characterID = angular.isDefined($routeParams.charid) ? parseInt($routeParams.charid) : -1;
         $scope.corporationID = angular.isDefined($routeParams.corpid) ? parseInt($routeParams.corpid) : -1;
-        if ($scope.accountID == -1) {
+        if ($scope.accountID === -1) {
           // This should never happen.  Send us back to the view page.
           DialogService.ackDialog('warning', 'Account ID is missing.  If this problem persists, please contact the site admin.', 20, function() {
             $location.url('/account/view');
