@@ -47,7 +47,6 @@ var AccountSyncTrackerEndpoints = [
 
     "CHAR_AGENTS",
     "CHAR_CALENDAR",
-    "CHAR_CHANNELS",
     "CHAR_CLONES",
     "CHAR_CORP_ROLES",
     "CHAR_FATIGUE",
