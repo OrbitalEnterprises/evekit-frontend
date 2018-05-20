@@ -75,6 +75,8 @@ evekit.CharacterMaskConstants = {
       "Allows view of attendee lists for character's calendar events."),
   'ACCESS_CHAT_CHANNELS' : new evekit.MaskConstant('ACCESS_CHAT_CHANNELS',
       "Chat Channels Access", "Allows view of character chat channels."),
+  'ACCESS_CHARACTER_FLEETS' : new evekit.MaskConstant('ACCESS_CHARACTER_FLEETS',
+      "Character Fleets Access", "Allows view of fleets character is a member of."),
   'ACCESS_CONTACT_NOTIFICATIONS' : new evekit.MaskConstant('ACCESS_CONTACT_NOTIFICATIONS',
       "Contact Notifications Access", "Allows view of character's contact notifications."),
   'ACCESS_FITTINGS' : new evekit.MaskConstant('ACCESS_FITTINGS', "Ship Fittings Access",
@@ -116,6 +118,8 @@ evekit.CorporationMaskConstants = {
       "Shareholder Access", "Allows view of list of corporation shareholders."),
   'ACCESS_STARBASE_LIST' : new evekit.MaskConstant('ACCESS_STARBASE_LIST',
       "Starbase List Access", "Allows view of list of corporation starbases."),
+  'ACCESS_STRUCTURES' : new evekit.MaskConstant('ACCESS_STRUCTURES',
+      "Structure List Access", "Allows view of corporation structures."),
   'ACCESS_CORPORATION_TITLES' : new evekit.MaskConstant('ACCESS_CORPORATION_TITLES',
       "Corporation Titles Access", "Allows view of corporation titles.")
 };
