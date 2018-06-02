@@ -423,7 +423,7 @@
                 $scope.endpointList = AccountSyncTrackerEndpoints;
                 // Get header window width
                 $scope.determineHeaderWidth = function() {
-                    return $scope.isChar ? 1400 : 1110;
+                    return $scope.isChar ? 1400 : 1130;
                 };
                 // Determine whether this endpoint should be visible in the current view
                 $scope.determineHistoryHide = function(endpoint) {
